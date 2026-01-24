@@ -35,10 +35,10 @@ defaults:
 # Giscus Comments Configuration
 giscus:
   enabled: true
-  repo: "your-org/third-spaces-gallery"  # UPDATE THIS
-  repo_id: "R_xxxxx"  # Get from giscus.app
-  category: "Design Feedback"
-  category_id: "DIC_xxxxx"  # Get from giscus.app
+  repo: "crypticpy/third-spaces-gallery"
+  repo_id: "R_kgDORAl5cQ"
+  category: "General"
+  category_id: "DIC_kwDORAl5cc4C1YgV"
   mapping: "pathname"
   strict: false
   reactions_enabled: true
