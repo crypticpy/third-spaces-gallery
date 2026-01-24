@@ -23,7 +23,7 @@ This gallery showcases design submissions from Austin youth through the **Create
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/third-spaces-gallery.git
+git clone https://github.com/crypticpy/third-spaces-gallery.git
 cd third-spaces-gallery
 
 # Install Ruby dependencies
@@ -51,7 +51,7 @@ third-spaces-gallery/
 │   ├── submission-card.html
 │   ├── vote-button.html
 │   └── feedback-prompt.html
-├── submissions/         # Youth design submissions
+├── _submissions/        # Youth design submissions (Jekyll collection)
 │   └── 2025/
 │       └── [slug]/
 │           └── index.md
@@ -97,7 +97,7 @@ supabase:
 
 ### Manually
 
-Create a new directory in `submissions/[year]/[slug]/` with an `index.md` file:
+Create a new directory in `_submissions/[year]/[slug]/` with an `index.md` file:
 
 ```yaml
 ---
@@ -118,7 +118,6 @@ votes:
   inclusive: 0
 created_at: 2025-01-24
 ---
-
 Full description of the design...
 ```
 
@@ -144,7 +143,7 @@ Update `_config.yml` with your GitHub repo details:
 
 ```yaml
 giscus:
-  repo: "your-org/third-spaces-gallery"
+  repo: "crypticpy/third-spaces-gallery"
   repo_id: "R_xxxxx"
   category: "Design Feedback"
   category_id: "DIC_xxxxx"

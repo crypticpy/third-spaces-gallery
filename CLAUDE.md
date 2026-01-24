@@ -46,7 +46,7 @@ npm run watch:css
 │   └── js/
 │       ├── voting.js  # Voting system
 │       └── filters.js # Gallery filters + feedback
-├── submissions/       # Youth design content
+├── _submissions/      # Youth design content (Jekyll collection)
 │   └── [year]/[slug]/index.md
 └── .github/
     ├── workflows/pages.yml        # Deploy workflow
@@ -92,7 +92,7 @@ Update UI (optimistic) → Sync to backend (if configured)
 
 ### Manually
 
-Create `submissions/[year]/[slug]/index.md`:
+Create `_submissions/[year]/[slug]/index.md`:
 
 ```yaml
 ---
@@ -166,7 +166,7 @@ colors: {
 
 ```yaml
 giscus:
-  repo: "your-org/third-spaces-gallery"
+  repo: "crypticpy/third-spaces-gallery"
   repo_id: "R_xxxxx"
   category: "Design Feedback"
   category_id: "DIC_xxxxx"
