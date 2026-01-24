@@ -1,0 +1,187 @@
+---
+layout: default
+title: Home
+---
+
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-brand-navy via-brand-indigo to-brand-sky py-16 lg:py-24">
+  <!-- Background pattern -->
+  <div class="absolute inset-0 opacity-10">
+    <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hero-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <circle cx="20" cy="20" r="2" fill="currentColor"/>
+        </pattern>
+      </defs>
+      <rect fill="url(#hero-pattern)" width="100%" height="100%"/>
+    </svg>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <!-- Badge -->
+      <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2
+                  text-sm font-medium text-white/90 backdrop-blur-sm">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-brand-gold"></span>
+        </span>
+        City of Austin • RIDP • Create to Code Challenge
+      </div>
+
+      <!-- Headline -->
+      <h1 class="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        Youth Design Gallery
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-brand-sky/90 lg:text-xl">
+        See what Austin youth imagine for the Third Spaces app.
+        <span class="text-white">Vote for designs you love</span> and help shape the future.
+      </p>
+
+      <!-- CTAs -->
+      <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a href="{{ '/designs/' | relative_url }}"
+           class="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4
+                  text-sm font-bold text-brand-indigo shadow-xl
+                  transition-all hover:-translate-y-1 hover:shadow-2xl">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          Explore Designs
+        </a>
+        <a href="{{ '/about/' | relative_url }}"
+           class="inline-flex items-center gap-2 rounded-full border-2 border-white/30
+                  bg-transparent px-6 py-3.5 text-sm font-semibold text-white
+                  transition-all hover:border-white/60 hover:bg-white/10">
+          Learn More
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave decoration -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg class="w-full text-surface-base" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 120L48 110C96 100 192 80 288 70C384 60 480 60 576 65C672 70 768 80 864 85C960 90 1056 90 1152 85C1248 80 1344 70 1392 65L1440 60V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0Z" fill="currentColor"/>
+    </svg>
+  </div>
+</section>
+
+<!-- Featured Designs -->
+<section class="py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between">
+      <div>
+        <h2 class="text-3xl font-bold text-brand-navy">Featured Designs</h2>
+        <p class="mt-2 text-brand-stone">Fresh ideas from Austin's creative youth</p>
+      </div>
+      <a href="{{ '/designs/' | relative_url }}"
+         class="hidden items-center gap-1 text-sm font-semibold text-brand-sky transition hover:text-brand-indigo sm:inline-flex">
+        See all
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Grid -->
+    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {% assign featured = site.submissions | sort: "created_at" | reverse | limit: 6 %}
+      {% for submission in featured %}
+        {% include submission-card.html submission=submission %}
+      {% endfor %}
+    </div>
+
+    <!-- Mobile see all link -->
+    <div class="mt-8 text-center sm:hidden">
+      <a href="{{ '/designs/' | relative_url }}"
+         class="inline-flex items-center gap-2 rounded-full bg-brand-sky/10 px-6 py-3
+                text-sm font-semibold text-brand-sky transition hover:bg-brand-sky/20">
+        See all designs
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- How it Works -->
+<section class="bg-surface-lightBlue py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold text-brand-navy">How It Works</h2>
+      <p class="mx-auto mt-2 max-w-xl text-brand-stone">
+        Get involved in shaping the Third Spaces app
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-8 sm:grid-cols-3">
+      <!-- Step 1 -->
+      <div class="text-center">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl
+                    bg-brand-sky shadow-lg shadow-brand-sky/25">
+          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          </svg>
+        </div>
+        <h3 class="mt-6 text-lg font-semibold text-brand-navy">Explore</h3>
+        <p class="mt-2 text-sm text-brand-stone">
+          Browse designs created by Austin youth for the Third Spaces app
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="text-center">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl
+                    bg-vote-favorite shadow-lg shadow-vote-favorite/25">
+          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <h3 class="mt-6 text-lg font-semibold text-brand-navy">Vote</h3>
+        <p class="mt-2 text-sm text-brand-stone">
+          Show love for designs you'd use, find creative, or think work for everyone
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="text-center">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl
+                    bg-brand-sea shadow-lg shadow-brand-sea/25">
+          <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
+        </div>
+        <h3 class="mt-6 text-lg font-semibold text-brand-navy">Share</h3>
+        <p class="mt-2 text-sm text-brand-stone">
+          Leave feedback and join the conversation to help improve designs
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 lg:py-24">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="overflow-hidden rounded-3xl bg-gradient-to-r from-brand-indigo to-brand-sky p-8 text-center text-white lg:p-16">
+      <h2 class="text-2xl font-bold sm:text-3xl lg:text-4xl">Are you an Austin youth with a design idea?</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-brand-sky/90">
+        Submit your own design for the Third Spaces app. Your ideas could help shape how Austin youth discover amazing places!
+      </p>
+      <a href="https://github.com/your-org/third-spaces-gallery/issues/new?template=new-submission.yml"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4
+                text-sm font-bold text-brand-indigo shadow-xl
+                transition-all hover:-translate-y-1 hover:shadow-2xl">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Submit Your Design
+      </a>
+    </div>
+  </div>
+</section>

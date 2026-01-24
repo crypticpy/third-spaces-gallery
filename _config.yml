@@ -1,0 +1,88 @@
+# Third Spaces Youth Design Gallery
+# Jekyll Configuration
+
+title: "Third Spaces Gallery"
+description: "Youth-designed features for Austin's Third Spaces app"
+tagline: "Designs by Austin youth, voted on by you"
+url: "" # Set to your GitHub Pages URL
+baseurl: "/third-spaces-gallery"
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+exclude:
+  - README.md
+  - CLAUDE.md
+  - node_modules/
+  - package*.json
+  - tailwind.config.js
+  - scripts/
+
+# Collections
+collections:
+  submissions:
+    output: true
+    permalink: /designs/:path/
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: "submissions"
+    values:
+      layout: "submission"
+
+# Giscus Comments Configuration
+giscus:
+  enabled: true
+  repo: "your-org/third-spaces-gallery"  # UPDATE THIS
+  repo_id: "R_xxxxx"  # Get from giscus.app
+  category: "Design Feedback"
+  category_id: "DIC_xxxxx"  # Get from giscus.app
+  mapping: "pathname"
+  strict: false
+  reactions_enabled: true
+  emit_metadata: false
+  input_position: "top"
+  theme: "light"
+  lang: "en"
+  loading: "lazy"
+
+# Site data
+vote_categories:
+  - id: favorite
+    label: "I'd use this"
+    voted_label: "You love this!"
+    emoji: "💖"
+    color: "vote-favorite"
+  - id: innovative
+    label: "Super creative"
+    voted_label: "You dig it!"
+    emoji: "✨"
+    color: "brand-gold"
+  - id: inclusive
+    label: "Works for everyone"
+    voted_label: "Respect!"
+    emoji: "🌍"
+    color: "brand-sea"
+
+# Feature categories
+feature_categories:
+  - id: discovery
+    label: "Discovery"
+    icon: "search"
+  - id: navigation
+    label: "Navigation"
+    icon: "map"
+  - id: feedback
+    label: "Feedback"
+    icon: "star"
+  - id: ai
+    label: "AI Assistant"
+    icon: "sparkles"
+  - id: accessibility
+    label: "Accessibility"
+    icon: "accessibility"
+  - id: communication
+    label: "Communication"
+    icon: "message-circle"

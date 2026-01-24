@@ -1,0 +1,30 @@
+# Feature categories for filtering
+- id: discovery
+  label: "Discovery"
+  icon: "search"
+  description: "Finding places based on interests"
+
+- id: navigation
+  label: "Navigation"
+  icon: "map"
+  description: "Getting directions and routes"
+
+- id: feedback
+  label: "Feedback"
+  icon: "star"
+  description: "Ratings and reviews"
+
+- id: ai
+  label: "AI Assistant"
+  icon: "sparkles"
+  description: "Smart recommendations"
+
+- id: accessibility
+  label: "Accessibility"
+  icon: "accessibility"
+  description: "Inclusive design for all users"
+
+- id: communication
+  label: "Communication"
+  icon: "message-circle"
+  description: "Messaging and social features"

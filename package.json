@@ -1,0 +1,19 @@
+{
+  "name": "third-spaces-gallery",
+  "version": "1.0.0",
+  "description": "Youth Design Gallery for the Third Spaces app",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./assets/css/main.css -o ./assets/css/output.css --minify",
+    "watch:css": "npx tailwindcss -i ./assets/css/main.css -o ./assets/css/output.css --watch",
+    "build": "npm run build:css && bundle exec jekyll build",
+    "serve": "npm run watch:css & bundle exec jekyll serve --livereload",
+    "dev": "npm run serve"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "@tailwindcss/typography": "^0.5.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,126 @@
+name: "✨ Add a new design"
+description: "Submit a youth design to the Third Spaces Gallery"
+title: "[Design] "
+labels: ["new-submission", "needs-review"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎨 Add your design to the gallery!
+
+        Fill out the info below and we'll create a page for your design.
+
+        ---
+
+  - type: input
+    id: title
+    attributes:
+      label: "Design Title"
+      description: "What's your design called?"
+      placeholder: "Third Spaces Explorer"
+    validations:
+      required: true
+
+  - type: input
+    id: designer
+    attributes:
+      label: "Designer Name(s)"
+      description: "Who made this? (First name + last initial is fine)"
+      placeholder: "Emma G. & Emilia B."
+    validations:
+      required: true
+
+  - type: input
+    id: school
+    attributes:
+      label: "School"
+      description: "What school are you from?"
+      placeholder: "Rawson Saunders School"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: grade
+    attributes:
+      label: "Grade Level"
+      description: "What grade are you in?"
+      options:
+        - "Elementary (K-5)"
+        - "Middle School (6-8)"
+        - "High School (9-12)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Quick Summary"
+      description: "In 1-2 sentences, what does your design do?"
+      placeholder: "An app that helps kids find fun places near them based on their interests."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: features
+    attributes:
+      label: "What features does your design focus on?"
+      description: "Check all that apply"
+      options:
+        - label: "🔍 Discovery & Search (finding places)"
+        - label: "🗺️ Maps & Navigation (getting there)"
+        - label: "⭐ Ratings & Feedback (sharing experiences)"
+        - label: "🤖 AI Assistant (smart help)"
+        - label: "♿ Accessibility (works for everyone)"
+        - label: "💬 Communication (messaging, sharing)"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Tell us more!"
+      description: "What inspired your design? What problem does it solve? How does it work?"
+      placeholder: |
+        We noticed that kids often don't know about cool places in their neighborhood...
+
+        Our app lets you:
+        - Pick your interests (gaming, sports, art, etc.)
+        - See places nearby on a map
+        - Get directions by walking, bus, or car
+        - Rate places and see what other kids think
+    validations:
+      required: false
+
+  - type: input
+    id: demo_url
+    attributes:
+      label: "Demo Link (optional)"
+      description: "Link to Figma, Canva, or other interactive prototype"
+      placeholder: "https://figma.com/..."
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## 📸 Screenshots
+
+        After submitting this form, **upload your screenshots** by dragging them into a comment below.
+
+        Tips:
+        - Include 2-5 screenshots showing different screens
+        - Name them clearly (screen1.png, screen2.png, etc.)
+        - Make sure they're easy to read!
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: "Permission"
+      description: "We need your OK to show your work"
+      options:
+        - label: "I have permission to share this design publicly"
+          required: true
+        - label: "I understand my first name and school may be displayed"
+          required: true

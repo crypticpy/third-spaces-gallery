@@ -1,0 +1,85 @@
+{% comment %}
+  Vote Button Component
+  Usage: {% include vote-button.html submission_id="slug" category="favorite" count=42 size="md" %}
+  Sizes: sm, md, lg
+{% endcomment %}
+
+{% assign categories = "favorite:I'd use this:You love this!:💖:vote-favorite,innovative:Super creative:You dig it!:✨:brand-gold,inclusive:Works for everyone:Respect!:🌍:brand-sea" | split: "," %}
+
+{% for cat in categories %}
+  {% assign parts = cat | split: ":" %}
+  {% if parts[0] == include.category %}
+    {% assign cat_id = parts[0] %}
+    {% assign cat_label = parts[1] %}
+    {% assign cat_voted = parts[2] %}
+    {% assign cat_emoji = parts[3] %}
+    {% assign cat_color = parts[4] %}
+  {% endif %}
+{% endfor %}
+
+{% assign size_classes = "px-4 py-3 text-sm gap-2.5" %}
+{% if include.size == "sm" %}
+  {% assign size_classes = "px-3 py-2 text-xs gap-2" %}
+{% elsif include.size == "lg" %}
+  {% assign size_classes = "px-5 py-4 text-base gap-3" %}
+{% endif %}
+
+<button type="button"
+        class="vote-btn group flex w-full items-center justify-between
+               rounded-xl border border-brand-sky/15 bg-white
+               font-semibold text-brand-navy
+               transition-all duration-200
+               hover:-translate-y-0.5 hover:shadow-md
+               focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-{{ cat_color }}/30
+               {{ size_classes }}
+               {% if cat_color == 'vote-favorite' %}
+               hover:border-pink-300 hover:bg-pink-50/50
+               aria-pressed:bg-pink-100 aria-pressed:border-pink-300
+               {% elsif cat_color == 'brand-gold' %}
+               hover:border-amber-300 hover:bg-amber-50/50
+               aria-pressed:bg-amber-100 aria-pressed:border-amber-300
+               {% elsif cat_color == 'brand-sea' %}
+               hover:border-emerald-300 hover:bg-emerald-50/50
+               aria-pressed:bg-emerald-100 aria-pressed:border-emerald-300
+               {% endif %}
+               aria-pressed:cursor-default aria-pressed:hover:translate-y-0"
+        data-vote-btn
+        data-vote-category="{{ cat_id }}"
+        aria-pressed="false"
+        aria-label="Vote {{ cat_label }} for this design">
+
+  <span class="flex items-center gap-2">
+    <span class="inline-flex h-8 w-8 items-center justify-center
+                 rounded-full text-lg
+                 transition-transform duration-200
+                 group-hover:scale-110
+                 {% if cat_color == 'vote-favorite' %}
+                 bg-pink-100 group-aria-pressed:bg-pink-200
+                 {% elsif cat_color == 'brand-gold' %}
+                 bg-amber-100 group-aria-pressed:bg-amber-200
+                 {% elsif cat_color == 'brand-sea' %}
+                 bg-emerald-100 group-aria-pressed:bg-emerald-200
+                 {% endif %}"
+          data-vote-emoji
+          aria-hidden="true">
+      {{ cat_emoji }}
+    </span>
+    <span data-vote-label>{{ cat_label }}</span>
+  </span>
+
+  <span class="vote-count inline-flex min-w-[2.5rem] items-center justify-center
+               rounded-full px-2.5 py-1
+               text-sm font-bold tabular-nums
+               transition-all duration-200
+               {% if cat_color == 'vote-favorite' %}
+               bg-pink-100/50 group-aria-pressed:bg-pink-200 group-aria-pressed:text-pink-700
+               {% elsif cat_color == 'brand-gold' %}
+               bg-amber-100/50 group-aria-pressed:bg-amber-200 group-aria-pressed:text-amber-700
+               {% elsif cat_color == 'brand-sea' %}
+               bg-emerald-100/50 group-aria-pressed:bg-emerald-200 group-aria-pressed:text-emerald-700
+               {% endif %}"
+        data-vote-count
+        aria-label="{{ include.count | default: 0 }} votes">
+    {{ include.count | default: 0 }}
+  </span>
+</button>

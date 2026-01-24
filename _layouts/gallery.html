@@ -1,0 +1,109 @@
+---
+layout: default
+---
+
+<div class="py-8 lg:py-12">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <header class="mb-8 text-center lg:mb-12">
+      <h1 class="text-3xl font-bold text-brand-navy sm:text-4xl lg:text-5xl">
+        {{ page.title | default: "Youth Design Gallery" }}
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-brand-stone">
+        {{ page.description | default: "Explore designs created by Austin youth for the Third Spaces app. Vote for your favorites!" }}
+      </p>
+    </header>
+
+    <!-- Filters -->
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <!-- Feature filter chips -->
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by feature">
+        <button type="button"
+                class="filter-chip rounded-full border-2 border-brand-sky/30 bg-white
+                       px-4 py-2 text-sm font-semibold text-brand-navy
+                       transition-all hover:border-brand-sky hover:bg-brand-sky/10
+                       aria-pressed:border-brand-sky aria-pressed:bg-brand-sky aria-pressed:text-white"
+                data-filter="all"
+                aria-pressed="true">
+          All Designs
+        </button>
+        {% for feature in site.feature_categories %}
+        <button type="button"
+                class="filter-chip rounded-full border-2 border-brand-sky/30 bg-white
+                       px-4 py-2 text-sm font-semibold text-brand-navy
+                       transition-all hover:border-brand-sky hover:bg-brand-sky/10
+                       aria-pressed:border-brand-sky aria-pressed:bg-brand-sky aria-pressed:text-white"
+                data-filter="{{ feature.id }}"
+                aria-pressed="false">
+          {{ feature.label }}
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- Sort dropdown -->
+      <div class="relative">
+        <label for="sort-select" class="sr-only">Sort designs</label>
+        <select id="sort-select"
+                class="appearance-none rounded-lg border border-brand-sky/20 bg-white
+                       py-2 pl-4 pr-10 text-sm font-medium text-brand-navy
+                       focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20"
+                data-sort>
+          <option value="recent">Most Recent</option>
+          <option value="popular">Most Popular</option>
+          <option value="innovative">Most Creative</option>
+          <option value="inclusive">Most Inclusive</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+          <svg class="h-4 w-4 text-brand-stone" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results count -->
+    <p class="mb-6 text-sm text-brand-stone" data-results-count>
+      Showing <span class="font-semibold text-brand-navy">{{ site.submissions | size }}</span> designs
+    </p>
+
+    <!-- Grid -->
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-submissions-grid>
+      {% assign sorted_submissions = site.submissions | sort: "created_at" | reverse %}
+      {% for submission in sorted_submissions %}
+        {% include submission-card.html submission=submission %}
+      {% endfor %}
+    </div>
+
+    <!-- Empty state -->
+    <div class="hidden py-16 text-center" data-empty-state>
+      <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-brand-sky/10">
+        <svg class="h-8 w-8 text-brand-sky" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-brand-navy">No designs found</h3>
+      <p class="mt-2 text-brand-stone">Try a different filter or check back later!</p>
+    </div>
+
+    <!-- Call to action -->
+    <div class="mt-16 rounded-2xl bg-gradient-to-r from-brand-indigo to-brand-sky p-8 text-center text-white lg:p-12">
+      <h2 class="text-2xl font-bold sm:text-3xl">Got a design idea?</h2>
+      <p class="mx-auto mt-3 max-w-xl text-brand-sky/90">
+        Austin youth are invited to submit their own designs for the Third Spaces app. Your ideas could help shape the future!
+      </p>
+      <a href="https://github.com/your-org/third-spaces-gallery/issues/new?template=new-submission.yml"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="mt-6 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4
+                text-sm font-bold text-brand-indigo shadow-xl
+                transition-all hover:-translate-y-1 hover:shadow-2xl">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Submit Your Design
+      </a>
+    </div>
+  </div>
+</div>
+
+{{ content }}

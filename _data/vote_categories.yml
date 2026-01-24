@@ -1,0 +1,24 @@
+# Vote categories configuration
+- id: favorite
+  label: "I'd use this"
+  voted_label: "You love this!"
+  emoji: "💖"
+  voted_emoji: "✓"
+  color: "vote-favorite"
+  description: "This design solves a real problem for me"
+
+- id: innovative
+  label: "Super creative"
+  voted_label: "You dig it!"
+  emoji: "✨"
+  voted_emoji: "✓"
+  color: "brand-gold"
+  description: "This is a fresh, original idea"
+
+- id: inclusive
+  label: "Works for everyone"
+  voted_label: "Respect!"
+  emoji: "🌍"
+  voted_emoji: "✓"
+  color: "brand-sea"
+  description: "This considers all types of users"
