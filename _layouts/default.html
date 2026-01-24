@@ -29,20 +29,33 @@
   <!-- Header -->
   <header class="sticky top-0 z-40 border-b border-brand-sky/10 bg-white/95 backdrop-blur-sm">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-      <!-- Logo -->
-      <a href="{{ '/' | relative_url }}" class="flex items-center gap-3 group">
-        <div class="flex h-10 w-10 items-center justify-center rounded-xl
-                    bg-gradient-to-br from-brand-sky to-brand-indigo
-                    shadow-lg shadow-brand-sky/25 transition-transform group-hover:scale-105">
-          <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-          </svg>
+      <!-- City of Austin + Site Logo -->
+      <div class="flex items-center gap-4">
+        <!-- City of Austin branding -->
+        <div class="flex items-center gap-2 border-r border-brand-sky/20 pr-4">
+          <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-navy">
+            <span class="text-sm font-bold text-white">ATX</span>
+          </div>
+          <div class="hidden sm:block">
+            <p class="text-xs font-semibold text-brand-navy leading-tight">City of Austin</p>
+            <p class="text-[10px] text-brand-stone leading-tight">RIDP</p>
+          </div>
         </div>
-        <div class="hidden sm:block">
-          <span class="block text-lg font-bold text-brand-navy">Third Spaces</span>
-          <span class="block text-xs text-brand-stone">Youth Design Gallery</span>
-        </div>
-      </a>
+        <!-- Site Logo -->
+        <a href="{{ '/' | relative_url }}" class="flex items-center gap-2 group">
+          <div class="flex h-8 w-8 items-center justify-center rounded-lg
+                      bg-gradient-to-br from-brand-sky to-brand-indigo
+                      shadow-md shadow-brand-sky/25 transition-transform group-hover:scale-105">
+            <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+          </div>
+          <div class="hidden md:block">
+            <span class="block text-base font-bold text-brand-navy leading-tight">Third Spaces</span>
+            <span class="block text-[10px] text-brand-stone leading-tight">Youth Design Gallery</span>
+          </div>
+        </a>
+      </div>
 
       <!-- Nav -->
       <nav class="flex items-center gap-6">

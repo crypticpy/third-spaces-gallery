@@ -32,9 +32,9 @@ defaults:
     values:
       layout: "submission"
 
-# Giscus Comments Configuration
+# Giscus Comments Configuration (disabled - requires login)
 giscus:
-  enabled: true
+  enabled: false
   repo: "crypticpy/third-spaces-gallery"
   repo_id: "R_kgDORAl5cQ"
   category: "General"

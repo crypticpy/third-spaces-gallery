@@ -104,44 +104,6 @@ layout: default
         </div>
         {% endif %}
 
-        <!-- Comments section -->
-        {% if site.giscus.enabled %}
-        <section class="mt-12 border-t border-brand-sky/10 pt-8" id="comments">
-          <div class="mb-6 flex items-center justify-between">
-            <h2 class="text-2xl font-semibold text-brand-navy">Join the convo</h2>
-            <span class="text-sm text-brand-stone">Sign in with GitHub to comment</span>
-          </div>
-
-          <div class="rounded-xl border border-brand-sky/10 bg-white p-4">
-            <script src="https://giscus.app/client.js"
-                    data-repo="{{ site.giscus.repo }}"
-                    data-repo-id="{{ site.giscus.repo_id }}"
-                    data-category="{{ site.giscus.category }}"
-                    data-category-id="{{ site.giscus.category_id }}"
-                    data-mapping="{{ site.giscus.mapping }}"
-                    data-strict="{{ site.giscus.strict }}"
-                    data-reactions-enabled="{{ site.giscus.reactions_enabled }}"
-                    data-emit-metadata="{{ site.giscus.emit_metadata }}"
-                    data-input-position="{{ site.giscus.input_position }}"
-                    data-theme="{{ site.giscus.theme }}"
-                    data-lang="{{ site.giscus.lang }}"
-                    data-loading="{{ site.giscus.loading }}"
-                    crossorigin="anonymous"
-                    async>
-            </script>
-          </div>
-
-          <noscript>
-            <p class="mt-4 rounded-lg bg-brand-gold/10 p-4 text-sm text-brand-navy">
-              JavaScript is required to load comments.
-              <a href="https://github.com/{{ site.giscus.repo }}/discussions"
-                 class="text-brand-sky hover:underline">
-                View discussions on GitHub
-              </a>
-            </p>
-          </noscript>
-        </section>
-        {% endif %}
       </div>
 
       <!-- Right column: Sidebar -->
