@@ -116,8 +116,13 @@
     <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
   </div>
 
+  <!-- Supabase (for centralized voting + feedback) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="{{ '/assets/js/supabase-config.js' | relative_url }}"></script>
+
   <!-- Scripts -->
   <script src="{{ '/assets/js/voting.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/feedback.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/filters.js' | relative_url }}" defer></script>
 </body>
 </html>
