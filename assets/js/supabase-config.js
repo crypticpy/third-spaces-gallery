@@ -6,7 +6,7 @@
 
 // Replace these with your actual Supabase credentials
 const SUPABASE_URL = "https://xnmwjuckcxhfzalbzbch.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY_HERE"; // Get from Supabase Dashboard > Settings > API
+const SUPABASE_ANON_KEY = "sb_publishable_SIpA3TU8L5MRdozJ0rZPPQ_a5AjWrns"; // Publishable key (new format)
 
 // Initialize Supabase client
 let supabaseClient = null;
@@ -22,5 +22,5 @@ function getSupabase() {
 window.ThirdSpacesSupabase = {
   getClient: getSupabase,
   url: SUPABASE_URL,
-  isConfigured: () => SUPABASE_ANON_KEY !== "YOUR_ANON_KEY_HERE",
+  isConfigured: () => SUPABASE_ANON_KEY.startsWith("sb_publishable_"),
 };
