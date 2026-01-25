@@ -350,6 +350,7 @@ class ImmersiveGallery {
                     data-submission-id="${submission.id}"
                     aria-label="Vote I'd use this">
               <span class="vote-emoji">💖</span>
+              <span class="vote-label">I'd use this</span>
               <span class="vote-count" data-vote-count="favorite">${submission.votes?.favorite || 0}</span>
             </button>
             <button type="button"
@@ -358,6 +359,7 @@ class ImmersiveGallery {
                     data-submission-id="${submission.id}"
                     aria-label="Vote Creative">
               <span class="vote-emoji">✨</span>
+              <span class="vote-label">Creative</span>
               <span class="vote-count" data-vote-count="innovative">${submission.votes?.innovative || 0}</span>
             </button>
             <button type="button"
@@ -366,6 +368,7 @@ class ImmersiveGallery {
                     data-submission-id="${submission.id}"
                     aria-label="Vote For everyone">
               <span class="vote-emoji">🌍</span>
+              <span class="vote-label">For everyone</span>
               <span class="vote-count" data-vote-count="inclusive">${submission.votes?.inclusive || 0}</span>
             </button>
           </div>
@@ -430,7 +433,35 @@ class ImmersiveGallery {
               : ""
           }
 
+          <!-- Quick Feedback Tags -->
+          <div class="details-feedback" data-feedback-section data-submission-id="${submission.id}">
+            <p class="feedback-label">What do you think?</p>
+            <div class="feedback-tags">
+              <button type="button" class="feedback-tag" data-feedback-tag="easy-to-use">
+                👍 Easy to use
+              </button>
+              <button type="button" class="feedback-tag" data-feedback-tag="looks-great">
+                🎨 Looks great
+              </button>
+              <button type="button" class="feedback-tag" data-feedback-tag="solves-problem">
+                💡 Solves a problem
+              </button>
+              <button type="button" class="feedback-tag" data-feedback-tag="would-share">
+                📤 Would share
+              </button>
+            </div>
+            <p class="feedback-thanks" data-feedback-thanks hidden>Thanks for your feedback! 🎉</p>
+          </div>
+
           <div class="details-actions">
+            <button type="button"
+                    class="details-btn details-btn-remix"
+                    data-add-remix
+                    data-submission-id="${submission.id}"
+                    data-submission-title="${this.escapeHtml(submission.title)}">
+              <span aria-hidden="true">🎨</span>
+              Add to Remix
+            </button>
             <a href="${submission.url}" class="details-btn details-btn-primary">
               View Full Page
               <span aria-hidden="true">→</span>
@@ -598,8 +629,104 @@ class ImmersiveGallery {
       }
     });
 
+    // Feedback tag clicks (delegated)
+    this.designStack?.addEventListener("click", (e) => {
+      const tag = e.target.closest("[data-feedback-tag]");
+      if (tag) {
+        this.handleFeedbackTag(tag);
+      }
+
+      const remixBtn = e.target.closest("[data-add-remix]");
+      if (remixBtn) {
+        this.handleAddToRemix(remixBtn);
+      }
+    });
+
     // Touch event handling for overscroll loop detection
     this.setupTouchLoopDetection();
+  }
+
+  /**
+   * Handle feedback tag click
+   */
+  handleFeedbackTag(tag) {
+    const section = tag.closest("[data-feedback-section]");
+    const submissionId = section?.dataset.submissionId;
+    const tagValue = tag.dataset.feedbackTag;
+
+    if (!submissionId || !tagValue) return;
+
+    // Toggle selected state
+    tag.classList.toggle("selected");
+
+    // Store feedback in localStorage
+    const feedbackKey = `tsg_feedback_${submissionId}`;
+    const existing = JSON.parse(localStorage.getItem(feedbackKey) || "[]");
+
+    if (tag.classList.contains("selected")) {
+      if (!existing.includes(tagValue)) {
+        existing.push(tagValue);
+      }
+    } else {
+      const idx = existing.indexOf(tagValue);
+      if (idx > -1) existing.splice(idx, 1);
+    }
+
+    localStorage.setItem(feedbackKey, JSON.stringify(existing));
+
+    // Show thanks message briefly if any tags selected
+    const thanks = section?.querySelector("[data-feedback-thanks]");
+    if (thanks && existing.length > 0) {
+      thanks.hidden = false;
+      setTimeout(() => {
+        thanks.hidden = true;
+      }, 2000);
+    }
+
+    console.log("[ImmersiveGallery] Feedback:", submissionId, existing);
+  }
+
+  /**
+   * Handle Add to Remix button click
+   */
+  handleAddToRemix(btn) {
+    const submissionId = btn.dataset.submissionId;
+    const submissionTitle = btn.dataset.submissionTitle;
+
+    if (!submissionId) return;
+
+    // Get current remix from localStorage
+    const remixKey = "tsg_remix";
+    const remix = JSON.parse(localStorage.getItem(remixKey) || "[]");
+
+    // Check if already in remix
+    const existingIdx = remix.findIndex((r) => r.id === submissionId);
+
+    if (existingIdx > -1) {
+      // Remove from remix
+      remix.splice(existingIdx, 1);
+      btn.classList.remove("in-remix");
+      btn.innerHTML = '<span aria-hidden="true">🎨</span> Add to Remix';
+    } else {
+      // Add to remix
+      remix.push({
+        id: submissionId,
+        title: submissionTitle,
+        addedAt: Date.now(),
+      });
+      btn.classList.add("in-remix");
+      btn.innerHTML = '<span aria-hidden="true">✓</span> In Your Remix';
+    }
+
+    localStorage.setItem(remixKey, JSON.stringify(remix));
+
+    // Update remix count in header if visible
+    const remixTotal = document.querySelector("[data-remix-total]");
+    if (remixTotal) {
+      remixTotal.textContent = remix.length;
+    }
+
+    console.log("[ImmersiveGallery] Remix:", remix.length, "items");
   }
 
   /**
