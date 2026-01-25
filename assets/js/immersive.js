@@ -226,15 +226,7 @@ class ImmersiveGallery {
       totalEl.textContent = total;
     }
 
-    // Start at the first real slide (skip the clone at beginning)
-    requestAnimationFrame(() => {
-      const firstReal = this.designStack.querySelector(
-        '[data-design-index="0"]',
-      );
-      if (firstReal) {
-        firstReal.scrollIntoView({ behavior: "instant", block: "start" });
-      }
-    });
+    // Initial scroll position is set in activate() when gallery becomes visible
   }
 
   /**
@@ -934,6 +926,19 @@ class ImmersiveGallery {
 
     // Save preference
     localStorage.setItem("tsg_view_mode", "immersive");
+
+    // Scroll to first real slide (skip clone at beginning)
+    // Must happen after container is visible for scroll to work
+    requestAnimationFrame(() => {
+      const firstReal = this.designStack?.querySelector(
+        '[data-design-index="0"]',
+      );
+      if (firstReal) {
+        firstReal.scrollIntoView({ behavior: "instant", block: "start" });
+        this.currentDesignIndex = 0;
+        this.updateCounter();
+      }
+    });
 
     console.log("[ImmersiveGallery] Activated");
   }
