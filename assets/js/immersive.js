@@ -929,7 +929,8 @@ class ImmersiveGallery {
 
     // Scroll to first real slide (skip clone at beginning)
     // Must happen after container is visible for scroll to work
-    requestAnimationFrame(() => {
+    // Use setTimeout to ensure layout is complete
+    setTimeout(() => {
       const firstReal = this.designStack?.querySelector(
         '[data-design-index="0"]',
       );
@@ -938,7 +939,7 @@ class ImmersiveGallery {
         this.currentDesignIndex = 0;
         this.updateCounter();
       }
-    });
+    }, 50);
 
     console.log("[ImmersiveGallery] Activated");
   }
