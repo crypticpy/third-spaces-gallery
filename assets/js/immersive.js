@@ -86,6 +86,9 @@ class ImmersiveGallery {
     // Bind events
     this.bindEvents();
 
+    // Set initializing flag before observers to prevent clone jumps
+    this.isInitializing = true;
+
     // Set up scroll observers
     this.setupScrollObservers();
 
@@ -930,7 +933,6 @@ class ImmersiveGallery {
     // Scroll to first real slide (skip clone at beginning)
     // Must happen after container is visible for scroll to work
     // Use setTimeout to ensure layout is complete
-    this.isInitializing = true;
     setTimeout(() => {
       const firstReal = this.designStack?.querySelector(
         '[data-design-index="0"]',
@@ -940,7 +942,7 @@ class ImmersiveGallery {
         this.currentDesignIndex = 0;
         this.updateCounter();
       }
-      // Clear flag after scroll settles
+      // Clear flag after scroll settles to enable clone jump behavior
       setTimeout(() => {
         this.isInitializing = false;
       }, 100);
