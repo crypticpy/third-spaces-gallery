@@ -694,7 +694,7 @@ img {
   align-items: center;
   -webkit-justify-content: center;
   justify-content: center;
-  padding: 4rem 1rem 10rem;
+  padding: 4rem 1rem 13rem; /* Increased bottom padding for vote buttons */
 }
 
 .screen-image-container {
@@ -725,10 +725,13 @@ img {
 /* Details slide */
 .details-slide {
   background: linear-gradient(135deg, rgba(68, 73, 156, 0.3) 0%, rgba(0, 156, 222, 0.2) 100%); /* brand gradient */
-  padding: 5rem 1.5rem 11rem;
+  padding: 5rem 1.5rem 14rem; /* Increased bottom padding for vote buttons */
+  -webkit-align-items: flex-start;
   align-items: flex-start;
+  -webkit-justify-content: flex-start;
   justify-content: flex-start;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .details-content {
@@ -935,13 +938,13 @@ img {
   margin: 0.25rem 0 0;
 }
 
-/* Quick vote buttons */
+/* Quick vote buttons - minimal style without boxes */
 .quick-votes {
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: center;
   justify-content: center;
-  gap: 0.375rem;
+  gap: 1.25rem;
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 }
@@ -954,14 +957,10 @@ img {
   -webkit-align-items: center;
   align-items: center;
   gap: 0.125rem;
-  padding: 0.5rem 0.625rem;
-  min-width: 4.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0.75rem;
-  color: #fff;
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.75rem;
   cursor: pointer;
   -webkit-transition: all 0.2s;
@@ -971,39 +970,43 @@ img {
 
 .quick-vote-btn:hover,
 .quick-vote-btn:active {
-  background: rgba(255, 255, 255, 0.2);
-  -webkit-transform: scale(1.02);
-  transform: scale(1.02);
+  color: #fff;
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .quick-vote-btn:active {
-  -webkit-transform: scale(0.98);
-  transform: scale(0.98);
+  -webkit-transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 .quick-vote-btn[aria-pressed="true"],
 .quick-vote-btn.is-voted {
-  background: #44499C; /* brand-indigo */
-  border-color: #009CDE; /* brand-sky border */
-  color: #fff;
+  color: #009CDE; /* brand-sky when voted */
 }
 
 .vote-emoji {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
 .vote-label {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 500;
-  opacity: 0.85;
+  opacity: 0.7;
   white-space: nowrap;
+  margin-top: 0.125rem;
 }
 
 .vote-count {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+.quick-vote-btn.is-voted .vote-emoji {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 /* Screen dots */
