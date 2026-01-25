@@ -37,13 +37,13 @@
       <!-- Austin + Site Logo -->
       <div class="flex items-center gap-4">
         <!-- Austin branding -->
-        <div class="flex items-center gap-2 border-r border-brand-sky/20 pr-4">
+        <div class="flex items-center gap-2 border-r border-brand-sky/20 pr-4 dark:border-gray-700">
           <img src="{{ '/assets/images/coa-seal.png' | relative_url }}"
                alt="City of Austin"
                class="h-10 w-10 object-contain">
           <div class="hidden sm:block">
-            <p class="text-xs font-bold text-brand-navy leading-tight">Austin</p>
-            <p class="text-[10px] text-brand-stone leading-tight">RIDP</p>
+            <p class="text-xs font-bold text-brand-navy dark:text-white leading-tight">Austin</p>
+            <p class="text-[10px] text-brand-stone dark:text-gray-400 leading-tight">RIDP</p>
           </div>
         </div>
         <!-- Site Logo - More playful -->
@@ -55,7 +55,7 @@
             <span class="text-lg">🏛️</span>
           </div>
           <div class="hidden md:block">
-            <span class="block text-base font-extrabold text-brand-navy leading-tight tracking-tight">Third Spaces</span>
+            <span class="block text-base font-extrabold text-brand-navy dark:text-white leading-tight tracking-tight">Third Spaces</span>
             <span class="block text-[11px] font-medium text-brand-sky leading-tight">Youth Design Gallery</span>
           </div>
         </a>
@@ -65,12 +65,12 @@
       <nav class="flex items-center gap-2">
         <a href="{{ '/designs/' | relative_url }}"
            class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                  {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5{% endif %}">
+                  {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
           All Designs
         </a>
         <a href="{{ '/about/' | relative_url }}"
            class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                  {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5{% endif %}">
+                  {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
           About
         </a>
         <!-- Theme Toggle -->
@@ -103,8 +103,8 @@
                alt="City of Austin"
                class="h-14 w-14 object-contain">
           <div>
-            <p class="text-base font-bold text-brand-navy">Austin</p>
-            <p class="text-sm text-brand-stone">Resident Data Impact Project</p>
+            <p class="text-base font-bold text-brand-navy dark:text-white">Austin</p>
+            <p class="text-sm text-brand-stone dark:text-gray-400">Resident Data Impact Project</p>
           </div>
         </div>
 
@@ -112,23 +112,27 @@
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a href="{{ '/about/' | relative_url }}"
              class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
-                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all
+                    dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
             About
           </a>
           <a href="{{ '/privacy/' | relative_url }}"
              class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
-                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all
+                    dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
             Privacy
           </a>
           <a href="https://github.com/crypticpy/third-spaces-gallery"
              target="_blank" rel="noopener noreferrer"
              class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
-                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all
+                    dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
             GitHub
           </a>
           <button type="button"
                   class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
-                         hover:bg-red-50 hover:text-red-600 transition-all"
+                         hover:bg-red-50 hover:text-red-600 transition-all
+                         dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400"
                   data-clear-vote-data>
             Clear My Data
           </button>
@@ -136,10 +140,10 @@
 
         <!-- Copyright - More playful -->
         <div class="text-center md:text-right">
-          <p class="text-sm font-medium text-brand-navy">
+          <p class="text-sm font-medium text-brand-navy dark:text-white">
             Made with 💖 by Austin Youth
           </p>
-          <p class="text-xs text-brand-stone mt-1">
+          <p class="text-xs text-brand-stone dark:text-gray-400 mt-1">
             &copy; {{ 'now' | date: "%Y" }} Austin
           </p>
         </div>
