@@ -21,11 +21,11 @@ class ImmersiveGallery {
     this.currentDesignIndex = 0;
     this.currentScreenIndexes = {}; // Track per-design screen position
 
-    // Filter state
+    // Filter state - default to shuffle for fair random order
     this.filters = {
       collection: "all",
       features: [],
-      sort: "recent",
+      sort: "shuffle",
     };
 
     // UI state
@@ -114,9 +114,22 @@ class ImmersiveGallery {
 
     try {
       this.submissions = JSON.parse(jsonScript.textContent);
+      // Shuffle for random order on each load - no design gets favoritism
+      this.shuffleArray(this.submissions);
     } catch (e) {
       console.error("[ImmersiveGallery] Failed to parse submissions JSON:", e);
     }
+  }
+
+  /**
+   * Fisher-Yates shuffle for random order
+   */
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 
   /**
@@ -143,6 +156,11 @@ class ImmersiveGallery {
    * Sort submissions based on current sort setting
    */
   sortSubmissions(submissions) {
+    // For shuffle, return copy of pre-shuffled array (shuffled at load time)
+    if (this.filters.sort === "shuffle") {
+      return [...submissions];
+    }
+
     return [...submissions].sort((a, b) => {
       switch (this.filters.sort) {
         case "popular": {
@@ -444,6 +462,105 @@ class ImmersiveGallery {
           break;
       }
     });
+
+    // Touch event handling for overscroll loop detection
+    this.setupTouchLoopDetection();
+  }
+
+  /**
+   * Clean up existing observers and listeners
+   */
+  cleanupObservers() {
+    if (this.designObserver) {
+      this.designObserver.disconnect();
+      this.designObserver = null;
+    }
+
+    this.screenObservers.forEach((observer) => observer.disconnect());
+    this.screenObservers.clear();
+  }
+
+  /**
+   * Set up touch event detection for overscroll looping
+   * Detects swipe-up at top and swipe-left at left edge
+   */
+  setupTouchLoopDetection() {
+    if (!this.designStack) return;
+
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+
+    // Vertical overscroll detection on design stack
+    this.designStack.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+      },
+      { passive: true },
+    );
+
+    this.designStack.addEventListener(
+      "touchend",
+      (e) => {
+        if (!this.isActive) return;
+
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaY = touchStartY - touchEndY;
+        const elapsed = Date.now() - touchStartTime;
+
+        // Detect upward swipe at top (delta > 50px, quick swipe < 300ms)
+        if (deltaY < -50 && elapsed < 300 && this.designStack.scrollTop <= 5) {
+          const total = this.filteredSubmissions.length;
+          const lastSlide = this.designStack.querySelector(
+            `[data-design-index="${total - 1}"]`,
+          );
+          if (lastSlide) {
+            lastSlide.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      },
+      { passive: true },
+    );
+
+    // Horizontal overscroll detection on each screen track
+    this.designStack
+      .querySelectorAll("[data-screen-track]")
+      .forEach((track) => {
+        track.addEventListener(
+          "touchstart",
+          (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartTime = Date.now();
+          },
+          { passive: true },
+        );
+
+        track.addEventListener(
+          "touchend",
+          (e) => {
+            if (!this.isActive) return;
+
+            const touchEndX = e.changedTouches[0].clientX;
+            const deltaX = touchStartX - touchEndX;
+            const elapsed = Date.now() - touchStartTime;
+
+            // Detect leftward swipe at left edge (loop to end)
+            if (deltaX < -50 && elapsed < 300 && track.scrollLeft <= 5) {
+              const screens = track.querySelectorAll("[data-screen-slide]");
+              const lastScreen = screens[screens.length - 1];
+              if (lastScreen) {
+                lastScreen.scrollIntoView({
+                  behavior: "smooth",
+                  inline: "start",
+                });
+              }
+            }
+          },
+          { passive: true },
+        );
+      });
   }
 
   /**
@@ -451,6 +568,9 @@ class ImmersiveGallery {
    */
   setupScrollObservers() {
     if (!this.designStack) return;
+
+    // Clean up existing observers
+    this.cleanupObservers();
 
     // Observer for vertical design scrolling
     this.designObserver = new IntersectionObserver(
@@ -473,6 +593,114 @@ class ImmersiveGallery {
         this.designObserver.observe(slide);
         this.setupScreenObserver(slide);
       });
+
+    // Set up scroll end detection for infinite looping
+    this.setupInfiniteScrollDetection();
+  }
+
+  /**
+   * Set up scroll end detection for infinite looping on swipe
+   */
+  setupInfiniteScrollDetection() {
+    if (!this.designStack) return;
+
+    let verticalScrollTimeout = null;
+
+    // Detect vertical scroll end for design looping
+    this.designStack.addEventListener("scroll", () => {
+      clearTimeout(verticalScrollTimeout);
+      verticalScrollTimeout = setTimeout(() => {
+        this.checkVerticalBoundaryAndLoop();
+      }, 150); // Debounce scroll end
+    });
+
+    // Set up horizontal scroll detection for each screen track
+    this.designStack
+      .querySelectorAll("[data-screen-track]")
+      .forEach((track) => {
+        let horizontalScrollTimeout = null;
+        track.addEventListener("scroll", () => {
+          clearTimeout(horizontalScrollTimeout);
+          horizontalScrollTimeout = setTimeout(() => {
+            this.checkHorizontalBoundaryAndLoop(track);
+          }, 150);
+        });
+      });
+  }
+
+  /**
+   * Check if at vertical boundary and loop
+   */
+  checkVerticalBoundaryAndLoop() {
+    if (!this.designStack || !this.isActive) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = this.designStack;
+    const total = this.filteredSubmissions.length;
+
+    // At bottom - loop to top
+    if (
+      scrollTop + clientHeight >= scrollHeight - 10 &&
+      this.currentDesignIndex === total - 1
+    ) {
+      // Small delay to let scroll-snap settle
+      setTimeout(() => {
+        const firstSlide = this.designStack.querySelector(
+          '[data-design-index="0"]',
+        );
+        if (firstSlide) {
+          firstSlide.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+
+    // At top with overscroll detection - loop to bottom
+    // We need touch event detection for upward overscroll since scroll position can't go negative
+    // This is handled via touch events in bindEvents()
+
+    this._lastDesignIndex = this.currentDesignIndex;
+  }
+
+  /**
+   * Check if at horizontal boundary and loop within a screen track
+   */
+  checkHorizontalBoundaryAndLoop(track) {
+    if (!track || !this.isActive) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = track;
+    const screens = track.querySelectorAll("[data-screen-slide]");
+    const total = screens.length;
+    if (total === 0) return;
+
+    const slide = track.closest("[data-design-slide]");
+    const designIndex = parseInt(slide?.dataset.designIndex, 10);
+    const currentScreen = this.currentScreenIndexes[designIndex] || 0;
+
+    // At right edge - loop to first screen
+    if (
+      scrollLeft + clientWidth >= scrollWidth - 10 &&
+      currentScreen === total - 1
+    ) {
+      setTimeout(() => {
+        screens[0]?.scrollIntoView({ behavior: "smooth", inline: "start" });
+      }, 100);
+    }
+
+    // At left edge - loop to last screen
+    if (scrollLeft <= 10 && currentScreen === 0) {
+      // Store last screen index to detect intentional leftward swipe
+      const lastScreenIndex = this._lastScreenIndexes?.[designIndex];
+      if (lastScreenIndex === 0) {
+        setTimeout(() => {
+          screens[total - 1]?.scrollIntoView({
+            behavior: "smooth",
+            inline: "start",
+          });
+        }, 100);
+      }
+    }
+
+    this._lastScreenIndexes = this._lastScreenIndexes || {};
+    this._lastScreenIndexes[designIndex] = currentScreen;
   }
 
   /**
@@ -550,27 +778,28 @@ class ImmersiveGallery {
   }
 
   /**
-   * Navigate designs (vertical)
+   * Navigate designs (vertical) with infinite loop
    */
   navigateDesign(direction) {
-    const newIndex = Math.max(
-      0,
-      Math.min(
-        this.filteredSubmissions.length - 1,
-        this.currentDesignIndex + direction,
-      ),
-    );
+    const total = this.filteredSubmissions.length;
+    if (total === 0) return;
 
-    if (newIndex !== this.currentDesignIndex) {
-      const slide = this.designStack.querySelector(
-        `[data-design-index="${newIndex}"]`,
-      );
-      slide?.scrollIntoView({ behavior: "smooth", block: "start" });
+    // Wrap around for infinite looping
+    let newIndex = this.currentDesignIndex + direction;
+    if (newIndex >= total) {
+      newIndex = 0; // Loop to start
+    } else if (newIndex < 0) {
+      newIndex = total - 1; // Loop to end
     }
+
+    const slide = this.designStack.querySelector(
+      `[data-design-index="${newIndex}"]`,
+    );
+    slide?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   /**
-   * Navigate screens (horizontal) within current design
+   * Navigate screens (horizontal) within current design with infinite loop
    */
   navigateScreen(direction) {
     const currentSlide = this.designStack.querySelector(
@@ -580,21 +809,24 @@ class ImmersiveGallery {
 
     const track = currentSlide.querySelector("[data-screen-track]");
     const screens = track?.querySelectorAll("[data-screen-slide]");
-    if (!screens) return;
+    if (!screens || screens.length === 0) return;
 
     const currentScreen =
       this.currentScreenIndexes[this.currentDesignIndex] || 0;
-    const newScreen = Math.max(
-      0,
-      Math.min(screens.length - 1, currentScreen + direction),
-    );
+    const total = screens.length;
 
-    if (newScreen !== currentScreen) {
-      screens[newScreen].scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-      });
+    // Wrap around for infinite looping
+    let newScreen = currentScreen + direction;
+    if (newScreen >= total) {
+      newScreen = 0; // Loop to first screen
+    } else if (newScreen < 0) {
+      newScreen = total - 1; // Loop to last screen (details)
     }
+
+    screens[newScreen].scrollIntoView({
+      behavior: "smooth",
+      inline: "start",
+    });
   }
 
   /**
@@ -700,7 +932,15 @@ class ImmersiveGallery {
     });
     chip.classList.add("active");
     chip.setAttribute("aria-checked", "true");
-    this.filters.sort = chip.dataset.sortFilter;
+
+    const newSort = chip.dataset.sortFilter;
+
+    // Re-shuffle when explicitly selecting shuffle (fresh random order)
+    if (newSort === "shuffle") {
+      this.shuffleArray(this.submissions);
+    }
+
+    this.filters.sort = newSort;
   }
 
   /**
@@ -710,6 +950,7 @@ class ImmersiveGallery {
     this.applyFilters();
     this.renderDesigns();
     this.setupScrollObservers();
+    this.setupTouchLoopDetection(); // Re-setup touch detection for new DOM
     this.currentDesignIndex = 0;
     this.updateCounter();
 
