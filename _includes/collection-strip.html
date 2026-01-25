@@ -1,0 +1,46 @@
+{% comment %}
+  Collection Strip Component
+  A horizontal, mobile-first, keyboard-accessible strip for curated gallery views.
+  Dispatches 'tsg:collection-change' event when selection changes.
+{% endcomment %}
+
+<section class="mt-6 mb-2" aria-label="Collections" data-collection-strip>
+  <div class="flex items-baseline justify-between gap-4 mb-3">
+    <h2 class="text-sm font-bold text-brand-navy dark:text-gray-100 uppercase tracking-wide">
+      Collections
+    </h2>
+    <p class="text-xs text-brand-stone dark:text-gray-400 truncate max-w-[200px] sm:max-w-none"
+       id="tsg-collection-desc"
+       aria-live="polite"></p>
+  </div>
+
+  <div class="relative">
+    <!-- Scroll fade indicators -->
+    <div class="pointer-events-none absolute left-0 top-0 bottom-2 w-4 bg-gradient-to-r from-white dark:from-gray-900 to-transparent z-10 opacity-0 transition-opacity"
+         data-scroll-fade-left></div>
+    <div class="pointer-events-none absolute right-0 top-0 bottom-2 w-4 bg-gradient-to-l from-white dark:from-gray-900 to-transparent z-10"
+         data-scroll-fade-right></div>
+
+    <!-- Tab list -->
+    <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide scroll-smooth"
+         role="tablist"
+         aria-label="Design collections"
+         data-collection-tablist>
+      {% for c in site.data.collections %}
+        <button type="button"
+                class="tsg-chip tsg-collection-tab shrink-0 transition-all duration-200
+                       hover:scale-105 active:scale-95"
+                role="tab"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+                data-collection-id="{{ c.id }}"
+                {% if c.sort %}data-collection-sort="{{ c.sort }}"{% endif %}
+                data-collection-desc="{{ c.description | escape }}"
+                {% if c.ids %}data-collection-ids="{{ c.ids | join: ',' }}"{% endif %}>
+          {% if c.icon %}<span aria-hidden="true">{{ c.icon }}</span>{% endif %}
+          <span>{{ c.label }}</span>
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+</section>

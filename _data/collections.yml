@@ -1,0 +1,34 @@
+# Collection Strip - Curated Views
+# These drive the horizontal collection tabs above the gallery grid
+
+- id: all
+  label: All
+  icon: "🗂️"
+  description: Browse everything.
+  sort: recent
+
+- id: fresh
+  label: Fresh drops
+  icon: "🆕"
+  description: Newest designs first.
+  sort: recent
+
+- id: inclusive
+  label: Most inclusive
+  icon: "🌍"
+  description: Highest "Works for everyone" votes.
+  sort: inclusive
+
+- id: youth
+  label: Youth picks
+  icon: "⭐"
+  description: Hand-picked by youth curators.
+  ids:
+    - "2025/community-hub"
+    - "2025/access-all"
+
+- id: needs-love
+  label: Needs love
+  icon: "🫶"
+  description: Great ideas that haven't gotten many votes yet.
+  sort: least_total

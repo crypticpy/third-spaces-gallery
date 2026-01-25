@@ -13,11 +13,40 @@ feature_focus:
   - discovery
   - ai
 
+# Legacy format (kept for backward compatibility)
 images:
   - /assets/images/submissions/2025/vibe-finder/screen1.svg
   - /assets/images/submissions/2025/vibe-finder/screen2.svg
+
+# Enhanced screen format with metadata
+screens:
+  - src: /assets/images/submissions/2025/vibe-finder/screen1.svg
+    alt: "Mood selection interface with creative, focused, playful, social, and chill options"
+    caption: "Tell the app how you're feeling"
+  - src: /assets/images/submissions/2025/vibe-finder/screen2.svg
+    alt: "AI-powered suggestions showing matching places"
+    caption: "Get personalized spot recommendations"
+
+cover_image: /assets/images/submissions/2025/vibe-finder/thumb.svg
 thumbnail: /assets/images/submissions/2025/vibe-finder/thumb.svg
 thumbnail_alt: "Vibe Finder app showing mood selection bubbles"
+
+creator_note: "I built Vibe Finder because sometimes I just want to go somewhere that matches my energy. I don't always have a plan - I just know how I'm feeling. This app gets that."
+
+# Remixable features for the Remix Engine
+features:
+  - id: feat_vibe_finder_moods
+    name: "Mood Selection"
+    icon: "🎭"
+  - id: feat_vibe_finder_ai
+    name: "AI Suggestions"
+    icon: "🤖"
+  - id: feat_vibe_finder_weather
+    name: "Weather-Aware"
+    icon: "🌤️"
+  - id: feat_vibe_finder_patterns
+    name: "Learn My Patterns"
+    icon: "📊"
 
 links:
   demo_url: null

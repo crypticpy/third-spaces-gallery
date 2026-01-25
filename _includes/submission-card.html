@@ -1,15 +1,25 @@
 {% comment %}
-  Submission Card Component - Playful Youth-Friendly Design
+  Submission Card Component - Playful Youth-Friendly Design with Quick Look
   Usage: {% include submission-card.html submission=submission %}
+
+  Features:
+  - Cover image with designer badge
+  - Labeled vote stats matching detail page
+  - Quick Look button for modal preview
+  - JSON payload for zero-latency modal data
 {% endcomment %}
 
-<article class="submission-card group relative overflow-hidden rounded-3xl
+{% assign design_id = include.submission.year | append: '/' | append: include.submission.slug %}
+<article class="submission-card tsg-card group relative overflow-hidden rounded-3xl
                 bg-white border-2 border-brand-sky/10
                 shadow-lg shadow-brand-indigo/5
                 transition-all duration-300 ease-out
                 hover:-translate-y-2 hover:rotate-[0.5deg]
                 hover:shadow-xl hover:shadow-brand-sky/15
-                hover:border-brand-sky/30"
+                hover:border-brand-sky/30
+                dark:bg-gray-900 dark:border-gray-700 dark:hover:border-brand-sky/50"
+         data-design-card
+         data-design-id="{{ design_id }}"
          data-submission-id="{{ include.submission.slug }}"
          data-submission-features="{{ include.submission.feature_focus | join: ',' }}"
          data-submission-votes-favorite="{{ include.submission.votes.favorite | default: 0 }}"
@@ -17,19 +27,20 @@
          data-submission-votes-inclusive="{{ include.submission.votes.inclusive | default: 0 }}"
          data-submission-date="{{ include.submission.created_at }}">
 
-  <!-- Image -->
+  <!-- Cover Image -->
   <a href="{{ include.submission.url | relative_url }}"
      class="block relative aspect-[16/10] overflow-hidden">
-    {% if include.submission.thumbnail %}
+    {% assign cover_img = include.submission.cover_image | default: include.submission.thumbnail %}
+    {% if cover_img %}
     <img class="h-full w-full object-cover transition-transform duration-500
                 group-hover:scale-105"
-         src="{{ include.submission.thumbnail | relative_url }}"
+         src="{{ cover_img | relative_url }}"
          alt="{{ include.submission.thumbnail_alt | default: include.submission.title }}"
          loading="lazy"
          decoding="async">
     {% else %}
     <div class="h-full w-full bg-gradient-to-br from-brand-sky/20 to-brand-indigo/20
-                flex items-center justify-center">
+                flex items-center justify-center dark:from-brand-sky/10 dark:to-brand-indigo/10">
       <svg class="h-16 w-16 text-brand-sky/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
       </svg>
@@ -59,11 +70,12 @@
   <div class="p-5">
     <a href="{{ include.submission.url | relative_url }}" class="block">
       <h3 class="text-lg font-semibold text-brand-navy line-clamp-2
-                 group-hover:text-brand-indigo transition-colors">
+                 group-hover:text-brand-indigo transition-colors
+                 dark:text-gray-100 dark:group-hover:text-brand-sky">
         {{ include.submission.title }}
       </h3>
       {% if include.submission.summary %}
-      <p class="mt-2 text-sm text-brand-stone line-clamp-2">
+      <p class="mt-2 text-sm text-brand-stone line-clamp-2 dark:text-gray-400">
         {{ include.submission.summary }}
       </p>
       {% endif %}
@@ -76,62 +88,68 @@
         {% assign feature_data = site.feature_categories | where: "id", feature | first %}
         <span class="inline-flex items-center gap-1 rounded-full
                      bg-brand-sky/10 px-2 py-0.5
-                     text-[10px] font-semibold uppercase tracking-wide text-brand-indigo">
+                     text-[10px] font-semibold uppercase tracking-wide text-brand-indigo
+                     dark:bg-brand-sky/20 dark:text-brand-sky">
           {{ feature_data.label | default: feature }}
         </span>
       {% endfor %}
     </div>
     {% endif %}
 
-    <!-- Playful vote buttons -->
-    <div class="mt-5 grid grid-cols-3 gap-3">
-      <!-- Favorite -->
-      <button type="button"
-              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
-                     rounded-2xl border-2 border-vote-favorite/20 bg-vote-favorite/5
-                     py-3 text-xs font-bold text-brand-navy
-                     transition-all duration-300 ease-out
-                     hover:border-vote-favorite/50 hover:bg-vote-favorite/15 hover:scale-105
-                     active:scale-95"
-              data-vote-btn
-              data-vote-category="favorite"
-              aria-pressed="false"
-              title="I'd use this!">
-        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-wiggle" data-vote-emoji>💖</span>
-        <span class="font-extrabold tabular-nums text-vote-favorite" data-vote-count>{{ include.submission.votes.favorite | default: 0 }}</span>
-      </button>
-
-      <!-- Innovative -->
-      <button type="button"
-              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
-                     rounded-2xl border-2 border-brand-gold/20 bg-brand-gold/5
-                     py-3 text-xs font-bold text-brand-navy
-                     transition-all duration-300 ease-out
-                     hover:border-brand-gold/50 hover:bg-brand-gold/15 hover:scale-105
-                     active:scale-95"
-              data-vote-btn
-              data-vote-category="innovative"
-              aria-pressed="false"
-              title="Super creative!">
-        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-sparkle" data-vote-emoji>✨</span>
-        <span class="font-extrabold tabular-nums text-brand-orange" data-vote-count>{{ include.submission.votes.innovative | default: 0 }}</span>
-      </button>
-
-      <!-- Inclusive -->
-      <button type="button"
-              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
-                     rounded-2xl border-2 border-brand-sea/20 bg-brand-sea/5
-                     py-3 text-xs font-bold text-brand-navy
-                     transition-all duration-300 ease-out
-                     hover:border-brand-sea/50 hover:bg-brand-sea/15 hover:scale-105
-                     active:scale-95"
-              data-vote-btn
-              data-vote-category="inclusive"
-              aria-pressed="false"
-              title="Works for everyone!">
-        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-bounce" data-vote-emoji>🌍</span>
-        <span class="font-extrabold tabular-nums text-brand-sea" data-vote-count>{{ include.submission.votes.inclusive | default: 0 }}</span>
-      </button>
-    </div>
+    <!-- LABELED Vote Stats (matching detail page) -->
+    <ul class="mt-4 flex flex-wrap gap-3 text-sm">
+      <li class="flex items-center gap-1.5">
+        <span aria-hidden="true">💖</span>
+        <span class="font-bold tabular-nums text-vote-favorite" data-vote-count>{{ include.submission.votes.favorite | default: 0 }}</span>
+        <span class="text-brand-stone text-xs dark:text-gray-500">I'd use this</span>
+      </li>
+      <li class="flex items-center gap-1.5">
+        <span aria-hidden="true">✨</span>
+        <span class="font-bold tabular-nums text-brand-orange" data-vote-count>{{ include.submission.votes.innovative | default: 0 }}</span>
+        <span class="text-brand-stone text-xs dark:text-gray-500">Creative</span>
+      </li>
+      <li class="flex items-center gap-1.5">
+        <span aria-hidden="true">🌍</span>
+        <span class="font-bold tabular-nums text-brand-sea" data-vote-count>{{ include.submission.votes.inclusive | default: 0 }}</span>
+        <span class="text-brand-stone text-xs dark:text-gray-500">For everyone</span>
+      </li>
+    </ul>
   </div>
+
+  <!-- Card Actions (Quick Look + Open) -->
+  <div class="flex gap-2 border-t border-brand-sky/10 p-3 dark:border-gray-700">
+    <button type="button"
+            class="tsg-chip flex-1 justify-center hover:bg-brand-sky/20"
+            data-quicklook>
+      <span aria-hidden="true">👀</span>
+      <span>Quick Look</span>
+    </button>
+    <a class="tsg-chip justify-center hover:bg-brand-indigo/20"
+       href="{{ include.submission.url | relative_url }}">
+      <span aria-hidden="true">↗</span>
+      <span>Open</span>
+    </a>
+  </div>
+
+  <!-- JSON payload for Quick Look modal (zero network latency) -->
+  <script type="application/json" data-design-json>
+  {
+    "title": {{ include.submission.title | jsonify }},
+    "summary": {{ include.submission.summary | jsonify }},
+    "url": {{ include.submission.url | relative_url | jsonify }},
+    "designer": {{ include.submission.designer | jsonify }},
+    "grade": {{ include.submission.grade | jsonify }},
+    "feature_focus": {{ include.submission.feature_focus | jsonify }},
+    "votes": {
+      "favorite": {{ include.submission.votes.favorite | default: 0 }},
+      "innovative": {{ include.submission.votes.innovative | default: 0 }},
+      "inclusive": {{ include.submission.votes.inclusive | default: 0 }}
+    },
+    "demo_url": {{ include.submission.links.demo_url | jsonify }},
+    "screens": {% if include.submission.screens %}{{ include.submission.screens | jsonify }}{% elsif include.submission.images %}[{% for img in include.submission.images %}{"src": {{ img | relative_url | jsonify }}, "alt": {{ include.submission.title | append: " screen" | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% else %}[]{% endif %},
+    "cover_image": {{ include.submission.cover_image | default: include.submission.thumbnail | relative_url | jsonify }},
+    "creator_note": {{ include.submission.creator_note | jsonify }},
+    "voteKey": {{ include.submission.slug | jsonify }}
+  }
+  </script>
 </article>

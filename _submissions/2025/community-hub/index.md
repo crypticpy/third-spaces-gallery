@@ -14,11 +14,40 @@ feature_focus:
   - discovery
   - feedback
 
+# Legacy format (kept for backward compatibility)
 images:
   - /assets/images/submissions/2025/community-hub/screen1.svg
   - /assets/images/submissions/2025/community-hub/screen2.svg
+
+# Enhanced screen format with metadata
+screens:
+  - src: /assets/images/submissions/2025/community-hub/screen1.svg
+    alt: "Interest-based groups showing robotics, basketball, and art clubs"
+    caption: "Join groups based on your interests"
+  - src: /assets/images/submissions/2025/community-hub/screen2.svg
+    alt: "Event planning interface with RSVP system"
+    caption: "Plan events and see who's coming"
+
+cover_image: /assets/images/submissions/2025/community-hub/thumb.svg
 thumbnail: /assets/images/submissions/2025/community-hub/thumb.svg
 thumbnail_alt: "Community Hub app showing group chats and event planning features"
+
+creator_note: "We noticed kids often go to the same places but never meet each other. We wanted to change that by making it easy to find others who share your interests before you even show up."
+
+# Remixable features for the Remix Engine
+features:
+  - id: feat_community_hub_groups
+    name: "Interest Groups"
+    icon: "👥"
+  - id: feat_community_hub_events
+    name: "Event Planning"
+    icon: "📅"
+  - id: feat_community_hub_chat
+    name: "Safe Messaging"
+    icon: "💬"
+  - id: feat_community_hub_moderation
+    name: "Staff Moderation"
+    icon: "🛡️"
 
 links:
   demo_url: "https://www.figma.com/example-link-2"

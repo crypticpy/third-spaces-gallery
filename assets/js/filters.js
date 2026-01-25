@@ -3,6 +3,7 @@
  *
  * Client-side filtering by feature category and sorting by various criteria.
  * Updates URL state for shareable filtered views.
+ * Integrates with Collection Strip via tsg:collection-change event.
  */
 
 class GalleryFilters {
@@ -15,6 +16,10 @@ class GalleryFilters {
 
     this.currentFilter = "all";
     this.currentSort = "recent";
+
+    // Collection state
+    this.activeCollection = "all";
+    this.collectionIds = null; // null = no restriction, array = only show these IDs
   }
 
   init() {
@@ -30,11 +35,37 @@ class GalleryFilters {
     }
 
     this.bindEvents();
+    this.bindCollectionEvents();
     this.updateFilterUI();
     this.updateSortUI();
     this.applyFiltersAndSort();
 
     console.log("[GalleryFilters] Initialized");
+  }
+
+  /**
+   * Listen for collection changes from the Collection Strip
+   */
+  bindCollectionEvents() {
+    window.addEventListener("tsg:collection-change", (e) => {
+      this.activeCollection = e.detail?.id || "all";
+      const ids = e.detail?.ids || [];
+      this.collectionIds = ids.length ? ids : null;
+
+      // If collection has a sort preference, apply it
+      if (e.detail?.sort) {
+        this.currentSort = e.detail.sort;
+        this.updateSortUI();
+      }
+
+      // Re-apply filters
+      this.applyFiltersAndSort();
+
+      console.log(
+        "[GalleryFilters] Collection changed:",
+        this.activeCollection,
+      );
+    });
   }
 
   bindEvents() {
@@ -86,12 +117,22 @@ class GalleryFilters {
       this.grid.querySelectorAll("[data-submission-id]"),
     );
 
-    // Filter
+    // Start with all cards
     let visibleCards = cards;
+
+    // Apply feature filter
     if (this.currentFilter !== "all") {
-      visibleCards = cards.filter((card) => {
+      visibleCards = visibleCards.filter((card) => {
         const features = card.dataset.submissionFeatures?.split(",") || [];
         return features.includes(this.currentFilter);
+      });
+    }
+
+    // Apply collection ID filter (for curated collections like "Youth picks")
+    if (this.collectionIds && this.collectionIds.length > 0) {
+      visibleCards = visibleCards.filter((card) => {
+        const designId = card.dataset.designId || "";
+        return this.collectionIds.includes(designId);
       });
     }
 
@@ -113,8 +154,9 @@ class GalleryFilters {
     // Update results count
     this.updateResultsCount(visibleCards.length);
 
-    // Show/hide empty state
+    // Show/hide empty state using is-visible class (CSS controls display)
     if (this.emptyState) {
+      this.emptyState.classList.toggle("is-visible", visibleCards.length === 0);
       this.emptyState.classList.toggle("hidden", visibleCards.length > 0);
     }
   }
@@ -140,6 +182,12 @@ class GalleryFilters {
           const bInclusive =
             parseInt(b.dataset.submissionVotesInclusive, 10) || 0;
           return bInclusive - aInclusive;
+        }
+        case "least_total": {
+          // Sort by fewest total votes first (needs love)
+          const aTotal = this.getTotalVotes(a);
+          const bTotal = this.getTotalVotes(b);
+          return aTotal - bTotal;
         }
         case "recent":
         default: {

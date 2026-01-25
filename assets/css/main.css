@@ -7,14 +7,55 @@
 
 /* Base styles */
 @layer base {
+  /* CSS Tokens for theming */
+  :root {
+    /* Semantic tokens (RGB for Tailwind alpha support) */
+    --bg: 247 246 245;
+    --fg: 34 37 78;
+    --surface: 255 255 255;
+    --surface2: 220 242 253;
+    --border: 198 197 196;
+    --accent: 0 156 222;
+    --accent2: 68 73 156;
+    --good: 0 159 77;
+    --warn: 255 198 0;
+    --error: 248 49 37;
+  }
+
+  /* Chill theme (default light) */
+  [data-theme="chill"] {
+    --bg: 248 250 242;
+    --fg: 34 37 78;
+    --surface: 255 255 255;
+    --surface2: 236 253 245;
+    --border: 209 250 229;
+    --accent: 79 119 45;
+    --accent2: 34 197 94;
+  }
+
+  /* Hype theme (dark/neon) */
+  [data-theme="hype"],
+  .dark {
+    --bg: 15 15 15;
+    --fg: 226 232 240;
+    --surface: 23 23 23;
+    --surface2: 38 38 38;
+    --border: 64 64 64;
+    --accent: 204 255 0;
+    --accent2: 0 255 136;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: light dark;
   }
 
   body {
     font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    background: rgb(var(--bg));
+    color: rgb(var(--fg));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -23,9 +64,9 @@
     letter-spacing: -0.02em;
   }
 
-  /* Focus styles for accessibility */
+  /* Enhanced focus styles for accessibility (3px solid for visibility) */
   :focus-visible {
-    outline: 2px solid #009CDE;
+    outline: 3px solid rgb(var(--accent, 0 156 222));
     outline-offset: 2px;
   }
 
@@ -33,10 +74,48 @@
   ::selection {
     background-color: rgba(0, 156, 222, 0.2);
   }
+
+  /* Empty state - hidden by default, shown via JS */
+  [data-empty-state] {
+    display: none;
+  }
+
+  [data-empty-state].is-visible {
+    display: block;
+  }
 }
 
 /* Component styles */
 @layer components {
+  /* Design System Card */
+  .tsg-card {
+    @apply rounded-2xl border;
+    border-color: rgb(var(--border, 198 197 196));
+    background: rgb(var(--surface, 255 255 255));
+    box-shadow: 0 4px 20px rgba(34, 37, 78, 0.08);
+    transition: all 0.3s ease;
+  }
+
+  .tsg-card:hover {
+    box-shadow: 0 12px 32px rgba(34, 37, 78, 0.12);
+  }
+
+  /* Design System Chip/Pill */
+  .tsg-chip {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors;
+    border-color: rgb(var(--border, 198 197 196));
+    background: rgb(var(--surface2, 220 242 253));
+  }
+
+  .tsg-chip:hover {
+    @apply border-brand-sky bg-brand-sky/10;
+  }
+
+  .tsg-chip:focus-visible {
+    outline: 3px solid rgb(var(--accent, 0 156 222));
+    outline-offset: 2px;
+  }
+
   /* Vote button states */
   .vote-btn.is-voted {
     cursor: default;
@@ -49,6 +128,19 @@
   /* Filter chips */
   .filter-chip[aria-pressed="true"] {
     @apply border-brand-sky bg-brand-sky text-white;
+  }
+
+  /* Collection tab - active state */
+  .tsg-collection-tab[aria-selected="true"] {
+    background: rgb(var(--accent, 0 156 222));
+    color: rgb(255 255 255);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.3);
+  }
+
+  .dark .tsg-collection-tab[aria-selected="true"] {
+    background: rgb(var(--accent, 204 255 0));
+    color: rgb(15 15 15);
   }
 
   /* Feedback tags */
@@ -187,6 +279,10 @@
   animation: bump 300ms ease-out;
 }
 
+.animate-pulse-once {
+  animation: pulse-once 600ms ease-out;
+}
+
 @keyframes pop {
   0% { transform: scale(1); }
   50% { transform: scale(1.15); }
@@ -197,6 +293,24 @@
   0% { transform: scale(1); }
   30% { transform: scale(1.3); }
   100% { transform: scale(1); }
+}
+
+@keyframes pulse-once {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Remix button states */
+[data-remix-add].is-added {
+  @apply bg-brand-sea/20 border-brand-sea text-brand-sea;
+}
+
+[data-remix-add].is-added:hover {
+  @apply bg-red-50 border-red-300 text-red-600;
+}
+
+.dark [data-remix-add].is-added:hover {
+  @apply bg-red-900/30 border-red-700 text-red-400;
 }
 
 /* Vote button specific animations */

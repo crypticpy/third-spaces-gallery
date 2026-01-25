@@ -1,0 +1,159 @@
+{% comment %}
+  Quick Look Modal Component
+  A mobile-native bottom sheet (swipeable preview + vote) that opens from gallery cards.
+  Desktop: centered modal. Mobile: bottom sheet.
+{% endcomment %}
+
+<!-- Quick Look Modal -->
+<div id="quicklook-modal"
+     class="fixed inset-0 z-50 hidden"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="quicklook-title"
+     aria-describedby="quicklook-summary">
+
+  <!-- Backdrop -->
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+       data-ql-backdrop></div>
+
+  <!-- Panel container: bottom sheet on mobile, centered on desktop -->
+  <div class="relative flex h-full w-full items-end justify-center sm:items-center sm:p-6">
+    <div class="relative w-full max-w-3xl max-h-[90vh] overflow-hidden rounded-t-3xl sm:rounded-2xl
+                bg-white dark:bg-gray-900
+                border border-brand-sky/10 dark:border-gray-700
+                shadow-2xl"
+         data-ql-panel>
+
+      <!-- Header -->
+      <header class="flex items-start gap-3 border-b border-brand-sky/10 dark:border-gray-700 p-4">
+        <div class="min-w-0 flex-1">
+          <h2 id="quicklook-title"
+              class="truncate text-xl font-bold text-brand-navy dark:text-gray-100"
+              data-ql-title>
+            Quick Look
+          </h2>
+          <p class="mt-1 text-sm text-brand-stone dark:text-gray-400" data-ql-meta></p>
+        </div>
+        <button type="button"
+                class="tsg-chip"
+                data-ql-close
+                aria-label="Close quick look">
+          <span aria-hidden="true">✕</span>
+          <span class="hidden sm:inline">Close</span>
+        </button>
+      </header>
+
+      <!-- Body -->
+      <div class="grid gap-5 overflow-auto p-4 sm:grid-cols-2 sm:gap-6"
+           style="max-height: calc(90vh - 80px);">
+
+        <!-- Preview column (Screen carousel) -->
+        <section aria-label="Design preview" class="min-w-0">
+          <div class="relative">
+            <!-- Horizontal snap track (native swipe) -->
+            <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-hide"
+                 data-ql-track
+                 tabindex="0"
+                 aria-roledescription="carousel"
+                 aria-label="Preview screens">
+              <!-- Screens injected by JS -->
+            </div>
+
+            <!-- Prev/Next arrows (desktop) -->
+            <button type="button"
+                    class="tsg-chip absolute left-2 top-1/2 -translate-y-1/2 hidden sm:inline-flex opacity-80 hover:opacity-100"
+                    data-ql-prev
+                    aria-label="Previous screen">
+              <span aria-hidden="true">←</span>
+            </button>
+            <button type="button"
+                    class="tsg-chip absolute right-2 top-1/2 -translate-y-1/2 hidden sm:inline-flex opacity-80 hover:opacity-100"
+                    data-ql-next
+                    aria-label="Next screen">
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <!-- Dots indicator -->
+          <div class="mt-2 flex items-center justify-center gap-2" data-ql-dots aria-label="Screen dots"></div>
+
+          <p class="mt-2 text-xs text-brand-stone dark:text-gray-500 text-center">
+            Tip: swipe to see screens (or use ← → on desktop)
+          </p>
+        </section>
+
+        <!-- Info / actions column -->
+        <section aria-label="Design info" class="min-w-0">
+          <!-- Summary -->
+          <p id="quicklook-summary"
+             class="text-base leading-relaxed text-brand-stone dark:text-gray-300"
+             data-ql-summary></p>
+
+          <!-- Tags -->
+          <ul class="mt-4 flex flex-wrap gap-2" data-ql-tags></ul>
+
+          <!-- Vote bar -->
+          <div class="mt-4" data-ql-vote-container data-submission-id="">
+            <p class="text-sm font-semibold text-brand-navy dark:text-gray-100">Show some love</p>
+            <div class="mt-2 grid gap-2">
+              <!-- Favorite -->
+              <button type="button"
+                      class="tsg-chip justify-between hover:bg-vote-favorite/10"
+                      data-vote-btn
+                      data-vote-category="favorite"
+                      aria-pressed="false">
+                <span class="flex items-center gap-2">
+                  <span aria-hidden="true">💖</span>
+                  <span>I'd use this</span>
+                </span>
+                <span class="font-semibold tabular-nums text-vote-favorite" data-vote-count>0</span>
+              </button>
+
+              <!-- Innovative -->
+              <button type="button"
+                      class="tsg-chip justify-between hover:bg-brand-gold/10"
+                      data-vote-btn
+                      data-vote-category="innovative"
+                      aria-pressed="false">
+                <span class="flex items-center gap-2">
+                  <span aria-hidden="true">✨</span>
+                  <span>Super creative</span>
+                </span>
+                <span class="font-semibold tabular-nums text-brand-orange" data-vote-count>0</span>
+              </button>
+
+              <!-- Inclusive -->
+              <button type="button"
+                      class="tsg-chip justify-between hover:bg-brand-sea/10"
+                      data-vote-btn
+                      data-vote-category="inclusive"
+                      aria-pressed="false">
+                <span class="flex items-center gap-2">
+                  <span aria-hidden="true">🌍</span>
+                  <span>Works for everyone</span>
+                </span>
+                <span class="font-semibold tabular-nums text-brand-sea" data-vote-count>0</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-5 flex flex-wrap gap-2">
+            <a class="tsg-chip hover:bg-brand-indigo/10" href="#" data-ql-open>
+              <span aria-hidden="true">↗</span> Open full design
+            </a>
+            <a class="tsg-chip hidden hover:bg-brand-sea/10" href="#" target="_blank" rel="noopener" data-ql-demo>
+              <span aria-hidden="true">▶</span> Try demo
+            </a>
+            <button type="button" class="tsg-chip hover:bg-brand-purple/10" data-ql-share>
+              <span aria-hidden="true">⤴</span> Share
+            </button>
+          </div>
+
+          <!-- Toast / status -->
+          <div class="mt-3 text-sm text-brand-stone dark:text-gray-400" aria-live="polite" data-ql-toast></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

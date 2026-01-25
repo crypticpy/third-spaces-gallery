@@ -34,3 +34,6 @@ coa-branding/
 
 # Supabase local config
 supabase/.temp/
+
+# Planning docs
+Phase2/

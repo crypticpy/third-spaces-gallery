@@ -8,14 +8,14 @@ layout: default
     <nav class="mb-6" aria-label="Breadcrumb">
       <ol class="flex items-center gap-2 text-sm">
         <li>
-          <a href="{{ '/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition">Home</a>
+          <a href="{{ '/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition dark:text-gray-400 dark:hover:text-white">Home</a>
         </li>
-        <li class="text-brand-cloud">/</li>
+        <li class="text-brand-cloud dark:text-gray-600">/</li>
         <li>
-          <a href="{{ '/designs/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition">Designs</a>
+          <a href="{{ '/designs/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition dark:text-gray-400 dark:hover:text-white">Designs</a>
         </li>
-        <li class="text-brand-cloud">/</li>
-        <li class="text-brand-navy font-medium" aria-current="page">{{ page.title }}</li>
+        <li class="text-brand-cloud dark:text-gray-600">/</li>
+        <li class="text-brand-navy font-medium dark:text-gray-100" aria-current="page">{{ page.title }}</li>
       </ol>
     </nav>
 
@@ -32,27 +32,28 @@ layout: default
               {% assign feature_data = site.feature_categories | where: "id", feature | first %}
               <span class="inline-flex items-center gap-1.5 rounded-full
                            bg-brand-sky/10 px-3 py-1
-                           text-xs font-semibold uppercase tracking-wide text-brand-indigo">
+                           text-xs font-semibold uppercase tracking-wide text-brand-indigo
+                           dark:bg-brand-sky/20 dark:text-brand-sky">
                 {{ feature_data.label | default: feature }}
               </span>
             {% endfor %}
           </div>
           {% endif %}
 
-          <h1 class="text-3xl font-bold text-brand-navy sm:text-4xl lg:text-5xl">
+          <h1 class="text-3xl font-bold text-brand-navy sm:text-4xl lg:text-5xl dark:text-gray-100">
             {{ page.title }}
           </h1>
 
           <!-- Designer info -->
           <div class="mt-4 flex flex-wrap items-center gap-4 text-sm">
-            <span class="inline-flex items-center gap-2 text-brand-stone">
+            <span class="inline-flex items-center gap-2 text-brand-stone dark:text-gray-400">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
               </svg>
-              Made by <strong class="text-brand-navy">{{ page.designer }}</strong>
+              Made by <strong class="text-brand-navy dark:text-white">{{ page.designer }}</strong>
             </span>
             {% if page.school %}
-            <span class="inline-flex items-center gap-2 text-brand-stone">
+            <span class="inline-flex items-center gap-2 text-brand-stone dark:text-gray-400">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               </svg>
@@ -61,7 +62,8 @@ layout: default
             {% endif %}
             {% if page.grade %}
             <span class="rounded-full bg-brand-gold/20 px-3 py-1
-                         text-xs font-bold uppercase tracking-wide text-brand-navy">
+                         text-xs font-bold uppercase tracking-wide text-brand-navy
+                         dark:bg-brand-gold/30 dark:text-brand-gold">
               {{ page.grade }}
             </span>
             {% endif %}
@@ -70,38 +72,134 @@ layout: default
 
         <!-- Summary -->
         {% if page.summary %}
-        <p class="text-lg text-brand-stone leading-relaxed">
+        <p class="text-lg text-brand-stone leading-relaxed dark:text-gray-300">
           {{ page.summary }}
         </p>
         {% endif %}
 
-        <!-- Image gallery -->
-        {% if page.images and page.images.size > 0 %}
-        <div class="space-y-4">
-          <h2 class="text-xl font-semibold text-brand-navy">Design Screens</h2>
-          <div class="grid gap-4 sm:grid-cols-2">
-            {% for image in page.images %}
-            <figure class="overflow-hidden rounded-xl border border-brand-sky/10 bg-white
-                          shadow-[0_4px_20px_rgba(34,37,78,0.08)]">
-              <a href="{{ image | relative_url }}"
-                 target="_blank"
-                 class="block aspect-[4/3] overflow-hidden">
-                <img src="{{ image | relative_url }}"
-                     alt="Screen from {{ page.title }}"
-                     class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
-                     loading="lazy">
-              </a>
-            </figure>
-            {% endfor %}
+        <!-- Creator Note (Designer's Voice) -->
+        {% if page.creator_note %}
+        <blockquote class="relative rounded-2xl border-l-4 border-brand-sky bg-brand-light-blue/30 p-6
+                          dark:bg-brand-sky/10 dark:border-brand-sky/50">
+          <span class="absolute -top-3 -left-2 text-4xl text-brand-sky/50" aria-hidden="true">"</span>
+          <p class="text-brand-navy italic leading-relaxed dark:text-gray-200">
+            {{ page.creator_note }}
+          </p>
+          <cite class="mt-3 block text-sm font-medium text-brand-stone not-italic dark:text-gray-400">
+            — {{ page.designer }}
+          </cite>
+        </blockquote>
+        {% endif %}
+
+        <!-- Screen Carousel (horizontal swipe) -->
+        {% if page.screens.size > 0 or page.images.size > 0 %}
+        <section class="space-y-4" aria-label="Design screens">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold text-brand-navy dark:text-gray-100">Design Screens</h2>
+            <p class="text-sm text-brand-stone dark:text-gray-500">
+              Swipe to explore <span class="hidden sm:inline">or use ← → keys</span>
+            </p>
           </div>
-        </div>
+
+          <!-- Carousel track -->
+          <div class="relative">
+            <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide"
+                 tabindex="0"
+                 aria-roledescription="carousel"
+                 aria-label="Screen carousel"
+                 data-screen-track>
+              {% if page.screens.size > 0 %}
+                {% for screen in page.screens %}
+                <figure class="snap-start shrink-0 w-[85%] sm:w-[420px]">
+                  <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
+                              shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <a href="{{ screen.src | relative_url }}"
+                       target="_blank"
+                       class="block overflow-hidden">
+                      <img src="{{ screen.src | relative_url }}"
+                           alt="{{ screen.alt | default: page.title | append: ' screen' }}"
+                           class="w-full object-contain transition-transform duration-300 hover:scale-105"
+                           loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                           decoding="async">
+                    </a>
+                  </div>
+                  {% if screen.caption %}
+                  <figcaption class="mt-2 text-sm text-brand-stone dark:text-gray-400 text-center">
+                    {{ screen.caption }}
+                  </figcaption>
+                  {% endif %}
+                </figure>
+                {% endfor %}
+              {% else %}
+                {% for image in page.images %}
+                <figure class="snap-start shrink-0 w-[85%] sm:w-[420px]">
+                  <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
+                              shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <a href="{{ image | relative_url }}"
+                       target="_blank"
+                       class="block overflow-hidden">
+                      <img src="{{ image | relative_url }}"
+                           alt="Screen {{ forloop.index }} from {{ page.title }}"
+                           class="w-full object-contain transition-transform duration-300 hover:scale-105"
+                           loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                           decoding="async">
+                    </a>
+                  </div>
+                </figure>
+                {% endfor %}
+              {% endif %}
+            </div>
+
+            <!-- Carousel dots indicator -->
+            {% assign screen_count = page.screens.size | default: page.images.size %}
+            {% if screen_count > 1 %}
+            <div class="mt-3 flex items-center justify-center gap-2" aria-label="Screen indicators">
+              {% for i in (1..screen_count) %}
+              <span class="h-2 w-2 rounded-full bg-brand-cloud dark:bg-gray-600
+                          {% if forloop.first %}bg-brand-sky dark:bg-brand-sky{% endif %}"
+                    data-dot-index="{{ forloop.index0 }}"></span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </section>
         {% endif %}
 
         <!-- Description/content -->
         {% if content and content != "" %}
-        <div class="prose prose-brand max-w-none">
+        <div class="prose prose-brand max-w-none dark:prose-invert">
           {{ content }}
         </div>
+        {% endif %}
+
+        <!-- Remixable Features Section -->
+        {% if page.features and page.features.size > 0 %}
+        <section class="mt-8 rounded-2xl border-2 border-dashed border-brand-purple/30 bg-brand-purple/5 p-6
+                        dark:border-brand-purple/50 dark:bg-brand-purple/10" aria-label="Features to remix">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-2xl" aria-hidden="true">🎨</span>
+            <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
+          </div>
+          <p class="text-sm text-brand-stone dark:text-gray-400 mb-4">
+            Love a feature? Add it to your remix and build your dream app!
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {% for feature in page.features %}
+            <button type="button"
+                    class="tsg-chip transition-all hover:bg-brand-purple/20 hover:border-brand-purple"
+                    data-remix-add="{{ feature.id }}"
+                    data-remix-name="{{ feature.name }}"
+                    data-remix-icon="{{ feature.icon | default: '🎯' }}"
+                    data-remix-source="{{ page.slug }}"
+                    data-remix-source-title="{{ page.title }}"
+                    aria-pressed="false">
+              <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
+              <span data-remix-label>Add to Remix</span>
+              <span class="font-medium">{{ feature.name }}</span>
+            </button>
+            {% endfor %}
+          </div>
+        </section>
         {% endif %}
 
       </div>
@@ -109,10 +207,12 @@ layout: default
       <!-- Right column: Sidebar -->
       <aside class="space-y-6 lg:sticky lg:top-24 lg:self-start">
         <!-- Thumbnail/Hero image -->
-        {% if page.thumbnail %}
+        {% if page.thumbnail or page.cover_image %}
+        {% assign hero_img = page.cover_image | default: page.thumbnail %}
         <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
-                    shadow-[0_8px_30px_rgba(34,37,78,0.12)]">
-          <img src="{{ page.thumbnail | relative_url }}"
+                    shadow-[0_8px_30px_rgba(34,37,78,0.12)]
+                    dark:border-gray-700 dark:bg-gray-800">
+          <img src="{{ hero_img | relative_url }}"
                alt="{{ page.thumbnail_alt | default: page.title }}"
                class="aspect-[16/10] w-full object-cover">
         </div>
@@ -120,9 +220,10 @@ layout: default
 
         <!-- Voting panel -->
         <div class="rounded-2xl border border-brand-sky/10 bg-white p-6
-                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]"
+                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]
+                    dark:border-gray-700 dark:bg-gray-800"
              data-submission-id="{{ page.slug }}">
-          <h3 class="mb-4 text-lg font-semibold text-brand-navy">Show some love</h3>
+          <h3 class="mb-4 text-lg font-semibold text-brand-navy dark:text-gray-100">Show some love</h3>
 
           <div class="space-y-3">
             {% include vote-button.html
@@ -151,15 +252,17 @@ layout: default
         <!-- Links -->
         {% if page.links.demo_url %}
         <div class="rounded-2xl border border-brand-sky/10 bg-white p-6
-                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]">
-          <h3 class="mb-4 text-lg font-semibold text-brand-navy">Try it out</h3>
+                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]
+                    dark:border-gray-700 dark:bg-gray-800">
+          <h3 class="mb-4 text-lg font-semibold text-brand-navy dark:text-gray-100">Try it out</h3>
           <a href="{{ page.links.demo_url }}"
              target="_blank"
              rel="noopener noreferrer"
              class="inline-flex w-full items-center justify-center gap-2 rounded-xl
                     bg-brand-indigo px-4 py-3 text-sm font-semibold text-white
                     shadow-lg shadow-brand-indigo/25 transition-all
-                    hover:-translate-y-0.5 hover:bg-brand-navy hover:shadow-xl">
+                    hover:-translate-y-0.5 hover:bg-brand-navy hover:shadow-xl
+                    dark:bg-brand-sky dark:shadow-brand-sky/25 dark:hover:bg-brand-indigo">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
             </svg>
@@ -170,13 +273,16 @@ layout: default
 
         <!-- Share -->
         <div class="rounded-2xl border border-brand-sky/10 bg-white p-6
-                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]">
-          <h3 class="mb-4 text-lg font-semibold text-brand-navy">Share this design</h3>
+                    shadow-[0_4px_20px_rgba(34,37,78,0.08)]
+                    dark:border-gray-700 dark:bg-gray-800">
+          <h3 class="mb-4 text-lg font-semibold text-brand-navy dark:text-gray-100">Share this design</h3>
           <div class="flex gap-2">
             <button onclick="navigator.clipboard.writeText(window.location.href); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy link', 2000)"
                     class="flex-1 rounded-lg border border-brand-sky/20 bg-white px-4 py-2
                            text-sm font-medium text-brand-navy transition
-                           hover:border-brand-sky hover:bg-brand-sky/5">
+                           hover:border-brand-sky hover:bg-brand-sky/5
+                           dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                           dark:hover:border-brand-sky dark:hover:bg-brand-sky/10">
               Copy link
             </button>
             <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}%20-%20Check%20out%20this%20youth%20design!&url={{ page.url | absolute_url | url_encode }}"
@@ -184,7 +290,9 @@ layout: default
                rel="noopener noreferrer"
                class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
                       bg-white px-3 py-2 text-brand-navy transition
-                      hover:border-brand-sky hover:bg-brand-sky/5"
+                      hover:border-brand-sky hover:bg-brand-sky/5
+                      dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                      dark:hover:border-brand-sky dark:hover:bg-brand-sky/10"
                title="Share on Twitter">
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -196,3 +304,91 @@ layout: default
     </div>
   </div>
 </article>
+
+<!-- Screen carousel keyboard navigation -->
+<script>
+(function() {
+  const track = document.querySelector('[data-screen-track]');
+  if (!track) return;
+
+  const dots = document.querySelectorAll('[data-dot-index]');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Update active dot based on scroll position
+  const updateDots = () => {
+    const figures = track.querySelectorAll('figure');
+    if (!figures.length || !dots.length) return;
+
+    const scrollLeft = track.scrollLeft;
+    let activeIndex = 0;
+    let minDist = Infinity;
+
+    figures.forEach((fig, i) => {
+      const dist = Math.abs(fig.offsetLeft - scrollLeft);
+      if (dist < minDist) {
+        minDist = dist;
+        activeIndex = i;
+      }
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-brand-sky', i === activeIndex);
+      dot.classList.toggle('dark:bg-brand-sky', i === activeIndex);
+      dot.classList.toggle('bg-brand-cloud', i !== activeIndex);
+      dot.classList.toggle('dark:bg-gray-600', i !== activeIndex);
+    });
+  };
+
+  // Scroll to specific index
+  const scrollToIndex = (idx) => {
+    const figures = track.querySelectorAll('figure');
+    if (!figures.length) return;
+
+    const clamped = Math.max(0, Math.min(idx, figures.length - 1));
+    const target = figures[clamped];
+    if (!target) return;
+
+    target.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'start'
+    });
+  };
+
+  // Keyboard navigation
+  track.addEventListener('keydown', (e) => {
+    const figures = track.querySelectorAll('figure');
+    if (!figures.length) return;
+
+    const scrollLeft = track.scrollLeft;
+    let currentIndex = 0;
+    let minDist = Infinity;
+
+    figures.forEach((fig, i) => {
+      const dist = Math.abs(fig.offsetLeft - scrollLeft);
+      if (dist < minDist) {
+        minDist = dist;
+        currentIndex = i;
+      }
+    });
+
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      scrollToIndex(currentIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      scrollToIndex(currentIndex + 1);
+    }
+  });
+
+  // Track scroll for dot updates
+  let raf = 0;
+  track.addEventListener('scroll', () => {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(updateDots);
+  }, { passive: true });
+
+  // Initial state
+  updateDots();
+})();
+</script>

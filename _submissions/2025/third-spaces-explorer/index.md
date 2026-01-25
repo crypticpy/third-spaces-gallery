@@ -14,11 +14,40 @@ feature_focus:
   - navigation
   - feedback
 
+# Legacy format (kept for backward compatibility)
 images:
   - /assets/images/submissions/2025/third-spaces-explorer/screen1.svg
   - /assets/images/submissions/2025/third-spaces-explorer/screen2.svg
+
+# Enhanced screen format with metadata
+screens:
+  - src: /assets/images/submissions/2025/third-spaces-explorer/screen1.svg
+    alt: "Colorful map showing nearby places with fun icons"
+    caption: "See all the cool places around you"
+  - src: /assets/images/submissions/2025/third-spaces-explorer/screen2.svg
+    alt: "Interest selection with gaming, sports, art, and music options"
+    caption: "Pick what you're interested in"
+
+cover_image: /assets/images/submissions/2025/third-spaces-explorer/thumb.svg
 thumbnail: /assets/images/submissions/2025/third-spaces-explorer/thumb.svg
 thumbnail_alt: "Third Spaces Explorer app showing a colorful map with nearby places"
+
+creator_note: "We wanted to make an app that even younger kids could use to find fun places. The big colorful icons make it super easy to see what each place has!"
+
+# Remixable features for the Remix Engine
+features:
+  - id: feat_explorer_interests
+    name: "Interest Matching"
+    icon: "🎯"
+  - id: feat_explorer_map
+    name: "Fun Icon Map"
+    icon: "🗺️"
+  - id: feat_explorer_reviews
+    name: "Kid Reviews"
+    icon: "⭐"
+  - id: feat_explorer_events
+    name: "Event Alerts"
+    icon: "🔔"
 
 links:
   demo_url: "https://www.figma.com/example-link"

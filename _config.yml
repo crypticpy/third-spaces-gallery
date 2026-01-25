@@ -23,6 +23,8 @@ collections:
   submissions:
     output: true
     permalink: /designs/:path/
+  features:
+    output: false
 
 # Default front matter
 defaults:

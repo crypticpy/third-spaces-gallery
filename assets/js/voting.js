@@ -7,12 +7,14 @@
  * Spam prevention layers:
  * 1. localStorage persistence (tracks user's own votes)
  * 2. Cookie backup
- * 3. Browser fingerprinting
+ * 3. Random device ID (privacy-first, not fingerprinting)
  * 4. Rate limiting
  * 5. Honeypot field
  * 6. Time-based validation
  * 7. Supabase unique constraint (prevents duplicate votes)
  */
+
+const DEVICE_KEY = "tsg_device_id";
 
 const VOTE_CONFIG = {
   categories: [
@@ -49,15 +51,15 @@ class VotingSystem {
     this.config = { ...VOTE_CONFIG, ...config };
     this.state = this.loadState();
     this.componentLoadTime = Date.now();
-    this.fingerprint = null;
+    this.deviceId = null;
     this.supabase = null;
     this.realtimeChannel = null;
   }
 
   async init() {
-    // Generate fingerprint
-    this.fingerprint = await this.generateFingerprint();
-    this.state.fingerprint = this.fingerprint;
+    // Generate or retrieve device ID (privacy-first, no fingerprinting)
+    this.deviceId = this.getOrCreateDeviceId();
+    this.state.deviceId = this.deviceId;
     this.saveState();
 
     // Initialize Supabase if configured
@@ -94,7 +96,7 @@ class VotingSystem {
 
     return {
       votes: {},
-      fingerprint: null,
+      deviceId: null,
       rateLimit: { count: 0, windowStart: new Date().toISOString() },
     };
   }
@@ -129,39 +131,46 @@ class VotingSystem {
     }
   }
 
-  async generateFingerprint() {
-    const components = [];
-    try {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      ctx.textBaseline = "top";
-      ctx.font = "14px Arial";
-      ctx.fillText("fp", 2, 2);
-      components.push(canvas.toDataURL().slice(-50));
-    } catch (e) {
-      components.push("no-canvas");
+  /**
+   * Get or create a random device ID (privacy-first approach)
+   * This replaces browser fingerprinting with a random UUID stored locally.
+   * Users can clear this anytime via "Clear My Data" in the footer.
+   */
+  getOrCreateDeviceId() {
+    let id = localStorage.getItem(DEVICE_KEY);
+    if (!id) {
+      // Generate a random UUID
+      id =
+        crypto?.randomUUID?.() ||
+        `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      localStorage.setItem(DEVICE_KEY, id);
     }
+    return id;
+  }
 
-    components.push(`${screen.width}x${screen.height}`);
-    components.push(Intl.DateTimeFormat().resolvedOptions().timeZone);
-    components.push(navigator.language);
-    components.push(navigator.hardwareConcurrency || 0);
+  /**
+   * Clear all user data (votes, device ID, cookies)
+   * Called from "Clear My Data" button in footer
+   */
+  clearAllData() {
+    // Clear localStorage
+    localStorage.removeItem(this.config.storageKey);
+    localStorage.removeItem(DEVICE_KEY);
 
-    const data = components.join("|");
+    // Clear cookie
+    document.cookie = `${this.config.cookieKey}=; max-age=0; path=/`;
 
-    try {
-      const hashBuffer = await crypto.subtle.digest(
-        "SHA-256",
-        new TextEncoder().encode(data),
-      );
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("")
-        .slice(0, 16);
-    } catch (e) {
-      return btoa(data).slice(0, 16);
-    }
+    // Reset state
+    this.state = {
+      votes: {},
+      deviceId: null,
+      rateLimit: { count: 0, windowStart: new Date().toISOString() },
+    };
+
+    this.showMessage("Your vote data has been cleared", "success");
+
+    // Reload after a brief delay
+    setTimeout(() => location.reload(), 1500);
   }
 
   // Load centralized vote counts from Supabase
@@ -245,6 +254,7 @@ class VotingSystem {
   }
 
   bindEvents() {
+    // Vote button clicks
     document.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-vote-btn]");
       if (!btn) return;
@@ -257,6 +267,20 @@ class VotingSystem {
         this.handleVote(submissionId, category, btn);
       }
     });
+
+    // "Clear My Data" button
+    const clearBtn = document.querySelector("[data-clear-vote-data]");
+    if (clearBtn) {
+      clearBtn.addEventListener("click", () => {
+        if (
+          confirm(
+            "This will clear all your votes and data. Are you sure you want to continue?",
+          )
+        ) {
+          this.clearAllData();
+        }
+      });
+    }
   }
 
   async handleVote(submissionId, category, button) {
@@ -312,7 +336,7 @@ class VotingSystem {
       const { error } = await this.supabase.from("votes").insert({
         submission_id: submissionId,
         category: category,
-        voter_fingerprint: this.fingerprint,
+        voter_device_id: this.deviceId,
       });
 
       if (error) {
@@ -333,7 +357,10 @@ class VotingSystem {
   }
 
   validateHoneypot() {
-    const honeypot = document.getElementById("website");
+    // Check both old and new honeypot field names for compatibility
+    const honeypot =
+      document.getElementById("hp_website") ||
+      document.getElementById("website");
     return !honeypot || honeypot.value === "";
   }
 
@@ -448,12 +475,45 @@ class VotingSystem {
     }, 3000);
   }
 
+  /**
+   * Hydrate vote buttons in a container (e.g., Quick Look modal)
+   * Call this after dynamically adding vote buttons to the DOM
+   */
+  hydrate(container = document) {
+    container.querySelectorAll("[data-submission-id]").forEach((el) => {
+      const submissionId = el.dataset.submissionId;
+      const votes = this.state.votes[submissionId]?.categories || {};
+
+      Object.entries(votes).forEach(([category, voted]) => {
+        if (voted) {
+          const btn = el.querySelector(`[data-vote-category="${category}"]`);
+          if (btn) {
+            this.updateButton(btn, category, true);
+          }
+        }
+      });
+    });
+  }
+
   destroy() {
     if (this.realtimeChannel) {
       this.supabase.removeChannel(this.realtimeChannel);
     }
   }
 }
+
+// Expose for external use (e.g., Quick Look modal)
+window.TSGVoting = window.TSGVoting || {};
+window.TSGVoting.hydrate = (container) => {
+  if (window.votingSystem) {
+    window.votingSystem.hydrate(container);
+  }
+};
+window.TSGVoting.clearAllData = () => {
+  if (window.votingSystem) {
+    window.votingSystem.clearAllData();
+  }
+};
 
 // Initialize on DOM ready
 document.addEventListener("DOMContentLoaded", () => {
