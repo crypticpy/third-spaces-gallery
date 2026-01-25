@@ -49,7 +49,7 @@
   </div>
 
   <!-- Onboarding overlay (shown on first visit) -->
-  <div class="onboarding-overlay" data-onboarding hidden onclick="window.immersiveGallery?.dismissOnboarding()">
+  <div class="onboarding-overlay" id="onboarding-overlay" data-onboarding hidden>
     <div class="onboarding-content">
       <!-- Swipe instructions -->
       <div class="onboarding-instructions">
@@ -87,9 +87,28 @@
       </div>
 
       <!-- Single dismiss button -->
-      <button type="button" class="onboarding-dismiss" onclick="window.immersiveGallery?.dismissOnboarding()">Got it!</button>
+      <button type="button" class="onboarding-dismiss" id="onboarding-dismiss-btn">Got it!</button>
     </div>
   </div>
+
+  <!-- Standalone onboarding dismiss script -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('onboarding-overlay');
+    var btn = document.getElementById('onboarding-dismiss-btn');
+
+    function dismiss() {
+      if (overlay) {
+        overlay.hidden = true;
+        overlay.style.display = 'none';
+      }
+      try { localStorage.setItem('tsg_onboarding_complete', 'true'); } catch(e) {}
+    }
+
+    if (overlay) overlay.addEventListener('click', dismiss);
+    if (btn) btn.addEventListener('click', function(e) { e.stopPropagation(); dismiss(); });
+  })();
+  </script>
 
   <!-- Global footer - votes and screen navigation -->
   <footer class="immersive-footer" data-immersive-footer>
