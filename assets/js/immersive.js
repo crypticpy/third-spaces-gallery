@@ -719,11 +719,9 @@ class ImmersiveGallery {
       this.navigateDesign(1);
     });
 
-    // Onboarding dismiss button
-    this.onboarding?.addEventListener("click", (e) => {
-      if (e.target.closest("[data-onboarding-dismiss]")) {
-        this.dismissOnboarding();
-      }
+    // Onboarding dismiss - click button OR anywhere on overlay
+    this.onboarding?.addEventListener("click", () => {
+      this.dismissOnboarding();
     });
 
     // Feedback tag clicks (delegated)
