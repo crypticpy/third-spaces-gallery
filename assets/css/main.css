@@ -545,21 +545,36 @@ img {
   right: 0;
   bottom: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.9);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.onboarding-content {
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
   -webkit-align-items: center;
   align-items: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  padding: 2rem;
+  gap: 1.5rem;
+  max-width: 320px;
 }
 
-.onboarding-step {
+.onboarding-row {
+  display: -webkit-flex;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.onboarding-item {
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
@@ -567,18 +582,19 @@ img {
   -webkit-align-items: center;
   align-items: center;
   text-align: center;
-  max-width: 280px;
 }
 
 .onboarding-animation {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 1.5rem;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 0.75rem;
   position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
 }
 
 .onboarding-hand {
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -618,71 +634,58 @@ img {
   50% { transform: translate(20%, -50%); }
 }
 
-.onboarding-text {
-  font-size: 1.125rem;
-  color: #fff;
-  margin: 0 0 1.5rem;
-  line-height: 1.5;
+.onboarding-label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  line-height: 1.4;
 }
 
-.onboarding-text strong {
+.onboarding-label strong {
   color: #009CDE;
+}
+
+.onboarding-votes-section {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
 }
 
 .onboarding-votes-preview {
   display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .onboarding-vote {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-size: 0.9375rem;
-  color: #fff;
+  font-size: 1.5rem;
 }
 
-.onboarding-next {
+.onboarding-dismiss {
   background: #009CDE;
   color: #fff;
   border: none;
-  padding: 0.75rem 2rem;
+  padding: 0.875rem 2.5rem;
   border-radius: 2rem;
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 600;
   cursor: pointer;
   -webkit-transition: background 0.2s, transform 0.15s;
   transition: background 0.2s, transform 0.15s;
+  margin-top: 0.5rem;
 }
 
-.onboarding-next:active {
+.onboarding-dismiss:active {
   -webkit-transform: scale(0.95);
   transform: scale(0.95);
-}
-
-.onboarding-start {
-  background: #009F4D;
-}
-
-.onboarding-skip {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.7);
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.onboarding-skip:active {
-  background: rgba(255, 255, 255, 0.1);
+  background: #0080b3;
 }
 
 /* Vertical design stack */

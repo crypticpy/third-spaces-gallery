@@ -53,7 +53,6 @@ class ImmersiveGallery {
     // Auto-hide timers for nav arrows
     this.navArrowTimer = null;
     this.uiVisible = true;
-    this.onboardingStep = 1;
   }
 
   /**
@@ -294,56 +293,14 @@ class ImmersiveGallery {
   checkOnboarding() {
     const hasSeenOnboarding = localStorage.getItem("tsg_onboarding_complete");
     if (!hasSeenOnboarding && this.onboarding) {
-      this.showOnboarding();
+      this.onboarding.hidden = false;
     }
   }
 
   /**
-   * Show onboarding overlay
+   * Dismiss onboarding overlay
    */
-  showOnboarding() {
-    if (!this.onboarding) return;
-    this.onboarding.hidden = false;
-    this.onboardingStep = 1;
-    this.showOnboardingStep(1);
-  }
-
-  /**
-   * Show a specific onboarding step
-   */
-  showOnboardingStep(step) {
-    if (!this.onboarding) return;
-
-    // Hide all steps
-    this.onboarding.querySelectorAll("[data-onboarding-step]").forEach((el) => {
-      el.hidden = true;
-    });
-
-    // Show current step
-    const stepEl = this.onboarding.querySelector(
-      `[data-onboarding-step="${step}"]`,
-    );
-    if (stepEl) {
-      stepEl.hidden = false;
-    }
-  }
-
-  /**
-   * Advance to next onboarding step or complete
-   */
-  nextOnboardingStep() {
-    this.onboardingStep++;
-    if (this.onboardingStep > 3) {
-      this.completeOnboarding();
-    } else {
-      this.showOnboardingStep(this.onboardingStep);
-    }
-  }
-
-  /**
-   * Complete onboarding and hide overlay
-   */
-  completeOnboarding() {
+  dismissOnboarding() {
     if (this.onboarding) {
       this.onboarding.hidden = true;
     }
@@ -762,13 +719,10 @@ class ImmersiveGallery {
       this.navigateDesign(1);
     });
 
-    // Onboarding buttons
+    // Onboarding dismiss button
     this.onboarding?.addEventListener("click", (e) => {
-      if (e.target.closest("[data-onboarding-next]")) {
-        this.nextOnboardingStep();
-      }
-      if (e.target.closest("[data-onboarding-skip]")) {
-        this.completeOnboarding();
+      if (e.target.closest("[data-onboarding-dismiss]")) {
+        this.dismissOnboarding();
       }
     });
 
