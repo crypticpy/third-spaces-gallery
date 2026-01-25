@@ -1,0 +1,167 @@
+{% comment %}
+  Immersive Gallery - Full-screen swipe-based design viewer
+
+  Mobile/tablet: Shows by default
+  Desktop: Opt-in via "Immersive View" button
+
+  Vertical swipe: Navigate between designs
+  Horizontal swipe: Navigate screens + details within each design
+{% endcomment %}
+
+<div class="immersive-gallery" data-immersive-gallery hidden>
+  <!-- Minimal header overlay -->
+  <header class="immersive-header">
+    <div class="immersive-counter">
+      <span data-current-design>1</span>
+      <span class="immersive-counter-sep">/</span>
+      <span data-total-designs>{{ site.submissions | size }}</span>
+    </div>
+
+    <div class="immersive-actions">
+      <button type="button"
+              class="immersive-btn"
+              data-filter-toggle
+              aria-label="Filter designs"
+              aria-expanded="false"
+              aria-controls="immersive-filter-panel">
+        <span aria-hidden="true">🔍</span>
+      </button>
+      <button type="button"
+              class="immersive-btn immersive-exit"
+              data-exit-immersive
+              aria-label="Exit immersive view">
+        <span aria-hidden="true">✕</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Vertical design stack (populated by JS) -->
+  <div class="design-stack" data-design-stack>
+    <!-- Slides injected here from submission JSON data -->
+  </div>
+
+  <!-- Swipe hint (shown briefly on first load) -->
+  <div class="swipe-hint" data-swipe-hint hidden>
+    <div class="swipe-hint-content">
+      <div class="swipe-hint-icon">↕</div>
+      <span>Swipe up/down for more designs</span>
+    </div>
+  </div>
+
+  <!-- Filter panel (bottom sheet) -->
+  <div class="filter-panel" id="immersive-filter-panel" data-filter-panel hidden>
+    <header class="filter-panel-header">
+      <h3>Filter Designs</h3>
+      <button type="button"
+              class="filter-panel-close"
+              data-close-filter
+              aria-label="Close filter panel">
+        ✕
+      </button>
+    </header>
+
+    <div class="filter-panel-body">
+      <!-- Collection tabs -->
+      <div class="filter-section">
+        <h4 class="filter-section-title">Collections</h4>
+        <div class="filter-chips" role="radiogroup" aria-label="Collection filter">
+          <button type="button"
+                  class="filter-chip-immersive active"
+                  data-collection-filter="all"
+                  role="radio"
+                  aria-checked="true">
+            All
+          </button>
+          {% for collection in site.data.collections %}
+          <button type="button"
+                  class="filter-chip-immersive"
+                  data-collection-filter="{{ collection.id }}"
+                  role="radio"
+                  aria-checked="false">
+            {{ collection.icon }} {{ collection.label }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Feature filters -->
+      <div class="filter-section">
+        <h4 class="filter-section-title">Features</h4>
+        <div class="filter-chips" role="group" aria-label="Feature filter">
+          {% for feature in site.feature_categories %}
+          <button type="button"
+                  class="filter-chip-immersive"
+                  data-feature-filter="{{ feature.id }}"
+                  aria-pressed="false">
+            {{ feature.label }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Sort -->
+      <div class="filter-section">
+        <h4 class="filter-section-title">Sort By</h4>
+        <div class="filter-chips" role="radiogroup" aria-label="Sort order">
+          <button type="button"
+                  class="filter-chip-immersive active"
+                  data-sort-filter="recent"
+                  role="radio"
+                  aria-checked="true">
+            Recent
+          </button>
+          <button type="button"
+                  class="filter-chip-immersive"
+                  data-sort-filter="popular"
+                  role="radio"
+                  aria-checked="false">
+            Popular
+          </button>
+          <button type="button"
+                  class="filter-chip-immersive"
+                  data-sort-filter="innovative"
+                  role="radio"
+                  aria-checked="false">
+            Creative
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="filter-panel-footer">
+      <button type="button"
+              class="filter-apply-btn"
+              data-apply-filter>
+        Show Designs
+      </button>
+    </footer>
+  </div>
+
+  <!-- Submission data for JS (embedded JSON) -->
+  <script type="application/json" data-submissions-json>
+  [
+    {% for submission in site.submissions %}
+    {
+      "id": {{ submission.slug | jsonify }},
+      "designId": "{{ submission.year }}/{{ submission.slug }}",
+      "title": {{ submission.title | jsonify }},
+      "designer": {{ submission.designer | jsonify }},
+      "grade": {{ submission.grade | jsonify }},
+      "summary": {{ submission.summary | jsonify }},
+      "creatorNote": {{ submission.creator_note | jsonify }},
+      "url": {{ submission.url | relative_url | jsonify }},
+      "featureFocus": {{ submission.feature_focus | jsonify }},
+      "screens": {% if submission.screens %}[{% for screen in submission.screens %}{"src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: submission.title | append: " screen" | jsonify }}, "caption": {{ screen.caption | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% elsif submission.images %}[{% for img in submission.images %}{"src": {{ img | relative_url | jsonify }}, "alt": {{ submission.title | append: " screen" | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% else %}[]{% endif %},
+      "coverImage": {{ submission.cover_image | default: submission.thumbnail | relative_url | jsonify }},
+      "votes": {
+        "favorite": {{ submission.votes.favorite | default: 0 }},
+        "innovative": {{ submission.votes.innovative | default: 0 }},
+        "inclusive": {{ submission.votes.inclusive | default: 0 }}
+      },
+      "demoUrl": {{ submission.links.demo_url | jsonify }},
+      "createdAt": {{ submission.created_at | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+  </script>
+</div>
