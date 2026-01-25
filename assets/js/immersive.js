@@ -294,6 +294,13 @@ class ImmersiveGallery {
     const hasSeenOnboarding = localStorage.getItem("tsg_onboarding_complete");
     if (!hasSeenOnboarding && this.onboarding) {
       this.onboarding.hidden = false;
+
+      // Bind dismiss handler directly (belt and suspenders)
+      const dismissHandler = () => {
+        this.dismissOnboarding();
+        this.onboarding.removeEventListener("click", dismissHandler);
+      };
+      this.onboarding.addEventListener("click", dismissHandler);
     }
   }
 
@@ -305,6 +312,7 @@ class ImmersiveGallery {
       this.onboarding.hidden = true;
     }
     localStorage.setItem("tsg_onboarding_complete", "true");
+    console.log("[ImmersiveGallery] Onboarding dismissed");
   }
 
   /**
