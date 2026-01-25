@@ -340,20 +340,12 @@ class ImmersiveGallery {
         this.toggleFilterPanel();
       });
 
-    // Close filter
-    document
-      .querySelector("[data-close-filter]")
-      ?.addEventListener("click", () => {
+    // Click outside filter panel to close (on the design stack area)
+    this.designStack?.addEventListener("click", (e) => {
+      if (this.isFilterOpen && !e.target.closest("[data-filter-panel]")) {
         this.closeFilterPanel();
-      });
-
-    // Apply filters
-    document
-      .querySelector("[data-apply-filter]")
-      ?.addEventListener("click", () => {
-        this.applyFiltersFromUI();
-        this.closeFilterPanel();
-      });
+      }
+    });
 
     // Exit immersive (desktop)
     document
@@ -369,8 +361,24 @@ class ImmersiveGallery {
         this.activate();
       });
 
-    // Filter chip clicks
+    // Filter panel clicks (delegated for all interactions)
     this.filterPanel?.addEventListener("click", (e) => {
+      // Close button - check first!
+      if (e.target.closest("[data-close-filter]")) {
+        e.stopPropagation();
+        this.closeFilterPanel();
+        return;
+      }
+
+      // Apply button
+      if (e.target.closest("[data-apply-filter]")) {
+        e.stopPropagation();
+        this.applyFiltersFromUI();
+        this.closeFilterPanel();
+        return;
+      }
+
+      // Filter chips
       const chip = e.target.closest(
         "[data-collection-filter], [data-feature-filter], [data-sort-filter]",
       );
