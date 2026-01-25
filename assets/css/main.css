@@ -162,17 +162,8 @@
   transform: scale(0.95);
 }
 
-/* Smooth image loading */
+/* Smooth image loading - native lazy loading handles this */
 img {
-  transition: opacity 0.3s ease;
-}
-
-img[loading="lazy"] {
-  opacity: 0;
-}
-
-img[loading="lazy"].loaded,
-img:not([loading="lazy"]) {
   opacity: 1;
 }
 
