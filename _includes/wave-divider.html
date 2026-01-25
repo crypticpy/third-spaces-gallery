@@ -1,0 +1,26 @@
+{% comment %}
+  Playful Wave Divider - Youth-friendly flowing design
+  Usage: {% include wave-divider.html color="brand-cream" position="bottom" %}
+{% endcomment %}
+
+{% assign wave_color = include.color | default: "surface-base" %}
+{% assign position = include.position | default: "bottom" %}
+
+<div class="absolute {{ position }}-0 left-0 right-0 overflow-hidden leading-none {% if position == 'top' %}rotate-180{% endif %}">
+  <svg class="relative block w-full h-16 md:h-24" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="wave-gradient-{{ include.id | default: 'default' }}" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#009CDE;stop-opacity:0.1" />
+        <stop offset="50%" style="stop-color:#44499C;stop-opacity:0.05" />
+        <stop offset="100%" style="stop-color:#009F4D;stop-opacity:0.1" />
+      </linearGradient>
+    </defs>
+    <!-- Main wave (solid) -->
+    <path d="M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z"
+          class="fill-{{ wave_color }}"/>
+    <!-- Accent wave (subtle gradient) -->
+    <path d="M0,80 C200,40 400,100 600,60 C800,20 1000,100 1200,60 L1200,120 L0,120 Z"
+          fill="url(#wave-gradient-{{ include.id | default: 'default' }})"
+          opacity="0.5"/>
+  </svg>
+</div>

@@ -6,10 +6,10 @@
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
 
-  <!-- Fonts -->
+  <!-- Fonts - Geist (CoA Brand Typeface) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="{{ '/assets/css/output.css' | relative_url }}">
@@ -26,8 +26,8 @@
     Skip to content
   </a>
 
-  <!-- Header -->
-  <header class="sticky top-0 z-40 border-b border-brand-sky/10 bg-white/95 backdrop-blur-sm">
+  <!-- Header - Clean & Friendly -->
+  <header class="sticky top-0 z-40 border-b border-brand-sky/10 bg-white/95 backdrop-blur-md shadow-sm">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
       <!-- City of Austin + Site Logo -->
       <div class="flex items-center gap-4">
@@ -37,36 +37,35 @@
                alt="City of Austin Seal"
                class="h-10 w-10 object-contain">
           <div class="hidden sm:block">
-            <p class="text-xs font-semibold text-brand-navy leading-tight">City of Austin</p>
+            <p class="text-xs font-bold text-brand-navy leading-tight">City of Austin</p>
             <p class="text-[10px] text-brand-stone leading-tight">RIDP</p>
           </div>
         </div>
-        <!-- Site Logo -->
-        <a href="{{ '/' | relative_url }}" class="flex items-center gap-2 group">
-          <div class="flex h-8 w-8 items-center justify-center rounded-lg
-                      bg-gradient-to-br from-brand-sky to-brand-indigo
-                      shadow-md shadow-brand-sky/25 transition-transform group-hover:scale-105">
-            <svg class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-            </svg>
+        <!-- Site Logo - More playful -->
+        <a href="{{ '/' | relative_url }}" class="flex items-center gap-3 group">
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl
+                      bg-gradient-to-br from-brand-sky via-brand-indigo to-brand-purple
+                      shadow-lg shadow-brand-sky/30 transition-all duration-300
+                      group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-xl">
+            <span class="text-lg">🏛️</span>
           </div>
           <div class="hidden md:block">
-            <span class="block text-base font-bold text-brand-navy leading-tight">Third Spaces</span>
-            <span class="block text-[10px] text-brand-stone leading-tight">Youth Design Gallery</span>
+            <span class="block text-base font-extrabold text-brand-navy leading-tight tracking-tight">Third Spaces</span>
+            <span class="block text-[11px] font-medium text-brand-sky leading-tight">Youth Design Gallery</span>
           </div>
         </a>
       </div>
 
-      <!-- Nav -->
-      <nav class="flex items-center gap-6">
+      <!-- Nav - Friendlier buttons -->
+      <nav class="flex items-center gap-2">
         <a href="{{ '/designs/' | relative_url }}"
-           class="text-sm font-medium text-brand-stone transition hover:text-brand-navy
-                  {% if page.url contains '/designs' %}text-brand-navy{% endif %}">
+           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
+                  {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5{% endif %}">
           All Designs
         </a>
         <a href="{{ '/about/' | relative_url }}"
-           class="text-sm font-medium text-brand-stone transition hover:text-brand-navy
-                  {% if page.url contains '/about' %}text-brand-navy{% endif %}">
+           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
+                  {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5{% endif %}">
           About
         </a>
       </nav>
@@ -78,34 +77,50 @@
     {{ content }}
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-brand-sky/10 bg-white">
+  <!-- Footer - Friendly & Fun -->
+  <footer class="border-t-2 border-brand-sky/10 bg-gradient-to-b from-white to-brand-light-blue/20">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div class="flex flex-col items-center justify-between gap-6 md:flex-row">
+      <div class="flex flex-col items-center justify-between gap-8 md:flex-row">
         <!-- City of Austin branding -->
         <div class="flex items-center gap-4">
           <img src="{{ '/assets/images/coa-seal.png' | relative_url }}"
                alt="City of Austin Seal"
-               class="h-12 w-12 object-contain">
+               class="h-14 w-14 object-contain">
           <div>
-            <p class="text-sm font-semibold text-brand-navy">City of Austin</p>
-            <p class="text-xs text-brand-stone">Resident Data Impact Project</p>
+            <p class="text-base font-bold text-brand-navy">City of Austin</p>
+            <p class="text-sm text-brand-stone">Resident Data Impact Project</p>
           </div>
         </div>
 
         <!-- Links -->
-        <div class="flex flex-wrap items-center justify-center gap-6 text-sm">
-          <a href="{{ '/about/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition">About</a>
-          <a href="{{ '/privacy/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition">Privacy</a>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="{{ '/about/' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+            About
+          </a>
+          <a href="{{ '/privacy/' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+            Privacy
+          </a>
           <a href="https://github.com/crypticpy/third-spaces-gallery"
              target="_blank" rel="noopener noreferrer"
-             class="text-brand-stone hover:text-brand-navy transition">GitHub</a>
+             class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
+                    hover:bg-brand-sky/10 hover:text-brand-navy transition-all">
+            GitHub
+          </a>
         </div>
 
-        <!-- Copyright -->
-        <p class="text-xs text-brand-cloud">
-          &copy; {{ 'now' | date: "%Y" }} City of Austin. Made with 💖 by Austin youth.
-        </p>
+        <!-- Copyright - More playful -->
+        <div class="text-center md:text-right">
+          <p class="text-sm font-medium text-brand-navy">
+            Made with 💖 by Austin Youth
+          </p>
+          <p class="text-xs text-brand-stone mt-1">
+            &copy; {{ 'now' | date: "%Y" }} City of Austin
+          </p>
+        </div>
       </div>
     </div>
   </footer>

@@ -1,15 +1,15 @@
 {% comment %}
-  Submission Card Component
+  Submission Card Component - Playful Youth-Friendly Design
   Usage: {% include submission-card.html submission=submission %}
 {% endcomment %}
 
-<article class="submission-card group relative overflow-hidden rounded-2xl
-                bg-white border border-brand-sky/10
-                shadow-[0_4px_20px_rgba(34,37,78,0.08)]
-                transition-all duration-300
-                hover:-translate-y-1
-                hover:shadow-[0_12px_32px_rgba(34,37,78,0.12)]
-                hover:border-brand-sky/20"
+<article class="submission-card group relative overflow-hidden rounded-3xl
+                bg-white border-2 border-brand-sky/10
+                shadow-lg shadow-brand-indigo/5
+                transition-all duration-300 ease-out
+                hover:-translate-y-2 hover:rotate-[0.5deg]
+                hover:shadow-xl hover:shadow-brand-sky/15
+                hover:border-brand-sky/30"
          data-submission-id="{{ include.submission.slug }}"
          data-submission-features="{{ include.submission.feature_focus | join: ',' }}"
          data-submission-votes-favorite="{{ include.submission.votes.favorite | default: 0 }}"
@@ -83,54 +83,54 @@
     </div>
     {% endif %}
 
-    <!-- Compact vote buttons -->
-    <div class="mt-4 grid grid-cols-3 gap-2">
+    <!-- Playful vote buttons -->
+    <div class="mt-5 grid grid-cols-3 gap-3">
       <!-- Favorite -->
       <button type="button"
-              class="vote-btn-compact flex flex-col items-center gap-1
-                     rounded-lg border border-brand-sky/10 bg-brand-sky/5
-                     py-2 text-xs font-medium text-brand-navy
-                     transition-all duration-200
-                     hover:border-vote-favorite/30 hover:bg-vote-favorite/10
-                     aria-pressed:bg-vote-favorite/20 aria-pressed:border-vote-favorite/40"
+              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
+                     rounded-2xl border-2 border-vote-favorite/20 bg-vote-favorite/5
+                     py-3 text-xs font-bold text-brand-navy
+                     transition-all duration-300 ease-out
+                     hover:border-vote-favorite/50 hover:bg-vote-favorite/15 hover:scale-105
+                     active:scale-95"
               data-vote-btn
               data-vote-category="favorite"
               aria-pressed="false"
-              title="I'd use this">
-        <span class="text-base transition-transform duration-200 group-hover:scale-110" data-vote-emoji>💖</span>
-        <span class="font-bold tabular-nums" data-vote-count>{{ include.submission.votes.favorite | default: 0 }}</span>
+              title="I'd use this!">
+        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-wiggle" data-vote-emoji>💖</span>
+        <span class="font-extrabold tabular-nums text-vote-favorite" data-vote-count>{{ include.submission.votes.favorite | default: 0 }}</span>
       </button>
 
       <!-- Innovative -->
       <button type="button"
-              class="vote-btn-compact flex flex-col items-center gap-1
-                     rounded-lg border border-brand-sky/10 bg-brand-sky/5
-                     py-2 text-xs font-medium text-brand-navy
-                     transition-all duration-200
-                     hover:border-brand-gold/30 hover:bg-brand-gold/10
-                     aria-pressed:bg-brand-gold/20 aria-pressed:border-brand-gold/40"
+              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
+                     rounded-2xl border-2 border-brand-gold/20 bg-brand-gold/5
+                     py-3 text-xs font-bold text-brand-navy
+                     transition-all duration-300 ease-out
+                     hover:border-brand-gold/50 hover:bg-brand-gold/15 hover:scale-105
+                     active:scale-95"
               data-vote-btn
               data-vote-category="innovative"
               aria-pressed="false"
-              title="Super creative">
-        <span class="text-base transition-transform duration-200 group-hover:scale-110" data-vote-emoji>✨</span>
-        <span class="font-bold tabular-nums" data-vote-count>{{ include.submission.votes.innovative | default: 0 }}</span>
+              title="Super creative!">
+        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-sparkle" data-vote-emoji>✨</span>
+        <span class="font-extrabold tabular-nums text-brand-orange" data-vote-count>{{ include.submission.votes.innovative | default: 0 }}</span>
       </button>
 
       <!-- Inclusive -->
       <button type="button"
-              class="vote-btn-compact flex flex-col items-center gap-1
-                     rounded-lg border border-brand-sky/10 bg-brand-sky/5
-                     py-2 text-xs font-medium text-brand-navy
-                     transition-all duration-200
-                     hover:border-brand-sea/30 hover:bg-brand-sea/10
-                     aria-pressed:bg-brand-sea/20 aria-pressed:border-brand-sea/40"
+              class="vote-btn-compact group/btn flex flex-col items-center gap-1.5
+                     rounded-2xl border-2 border-brand-sea/20 bg-brand-sea/5
+                     py-3 text-xs font-bold text-brand-navy
+                     transition-all duration-300 ease-out
+                     hover:border-brand-sea/50 hover:bg-brand-sea/15 hover:scale-105
+                     active:scale-95"
               data-vote-btn
               data-vote-category="inclusive"
               aria-pressed="false"
-              title="Works for everyone">
-        <span class="text-base transition-transform duration-200 group-hover:scale-110" data-vote-emoji>🌍</span>
-        <span class="font-bold tabular-nums" data-vote-count>{{ include.submission.votes.inclusive | default: 0 }}</span>
+              title="Works for everyone!">
+        <span class="text-xl transition-transform duration-300 group-hover/btn:scale-125 group-hover/btn:animate-bounce" data-vote-emoji>🌍</span>
+        <span class="font-extrabold tabular-nums text-brand-sea" data-vote-count>{{ include.submission.votes.inclusive | default: 0 }}</span>
       </button>
     </div>
   </div>

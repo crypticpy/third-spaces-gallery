@@ -14,12 +14,13 @@
   }
 
   body {
-    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Source Sans 3', 'Inter', ui-sans-serif, system-ui, sans-serif;
-    font-weight: 600;
+    font-family: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   /* Focus styles for accessibility */
@@ -129,6 +130,51 @@
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Fun gradient backgrounds for youth appeal */
+  .fun-gradient {
+    background: linear-gradient(135deg, #009CDE 0%, #44499C 50%, #9F3CC9 100%);
+    background-size: 200% 200%;
+  }
+
+  .fun-gradient-animated {
+    background: linear-gradient(135deg, #009CDE 0%, #44499C 25%, #9F3CC9 50%, #009F4D 75%, #FFC600 100%);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  /* Playful card hover */
+  .card-playful {
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .card-playful:hover {
+    transform: translateY(-8px) rotate(1deg);
+  }
+
+  /* Bouncy button effect */
+  .btn-bouncy {
+    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .btn-bouncy:hover {
+    transform: scale(1.05);
+  }
+
+  .btn-bouncy:active {
+    transform: scale(0.95);
+  }
+
+  /* Youth-friendly shadows */
+  .shadow-playful {
+    box-shadow: 0 10px 40px -10px rgba(0, 156, 222, 0.3),
+                0 4px 6px -2px rgba(68, 73, 156, 0.1);
+  }
+
+  .shadow-playful-lg {
+    box-shadow: 0 20px 60px -15px rgba(0, 156, 222, 0.35),
+                0 8px 16px -4px rgba(68, 73, 156, 0.15);
   }
 }
 
