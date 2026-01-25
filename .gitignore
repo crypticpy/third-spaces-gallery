@@ -31,3 +31,6 @@ tmp/
 temp/
 assets/css/output.css
 coa-branding/
+
+# Supabase local config
+supabase/.temp/
