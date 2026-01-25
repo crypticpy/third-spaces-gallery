@@ -388,6 +388,18 @@ class ImmersiveGallery {
   }
 
   /**
+   * Update only the global footer dots (for horizontal scroll updates)
+   */
+  updateGlobalFooterDots(activeIndex) {
+    if (!this.footerDots) return;
+
+    const dots = this.footerDots.querySelectorAll(".screen-dot");
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === activeIndex);
+    });
+  }
+
+  /**
    * Show UI elements (peek strip)
    */
   showUI() {
@@ -1025,7 +1037,18 @@ class ImmersiveGallery {
     if (!track) return;
 
     const designIndex = parseInt(slide.dataset.designIndex, 10);
-    this.currentScreenIndexes[designIndex] = 0;
+    const designId = slide.dataset.designId;
+
+    // Get the submission ID from the filtered list
+    const submission = this.filteredSubmissions.find(
+      (s) => s.designId === designId,
+    );
+    const submissionId = submission?.id;
+
+    // Store screen index by submission ID for global footer lookup
+    if (submissionId) {
+      this.currentScreenIndexes[submissionId] = 0;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -1036,8 +1059,22 @@ class ImmersiveGallery {
               entry.target.dataset.screenIndex || "0",
               10,
             );
-            this.currentScreenIndexes[designIndex] = screenIndex;
+
+            // Store by submission ID
+            if (submissionId) {
+              this.currentScreenIndexes[submissionId] = screenIndex;
+            }
+
+            // Update per-slide dots (hidden but keeping for consistency)
             this.updateScreenDots(slide, screenIndex);
+
+            // Update global footer dots if this is the current design
+            if (
+              designIndex === this.currentDesignIndex ||
+              slide.dataset.cloneOf === String(this.currentDesignIndex)
+            ) {
+              this.updateGlobalFooterDots(screenIndex);
+            }
           }
         });
       },
