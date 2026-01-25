@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 812" fill="none">
+  <!-- Phone frame background -->
+  <rect width="375" height="812" fill="#F8FAFC"/>
+
+  <!-- Status bar -->
+  <rect width="375" height="44" fill="#22254E"/>
+  <text x="187" y="28" fill="white" font-family="system-ui" font-size="14" text-anchor="middle">9:41</text>
+
+  <!-- App header -->
+  <rect y="44" width="375" height="60" fill="#009CDE"/>
+  <text x="40" y="82" fill="white" font-family="system-ui" font-size="18">←</text>
+  <text x="187" y="82" fill="white" font-family="system-ui" font-size="18" font-weight="bold" text-anchor="middle">Pick Your Interests</text>
+
+  <!-- Content area -->
+  <rect y="104" width="375" height="708" fill="white"/>
+
+  <!-- Title -->
+  <text x="20" y="150" fill="#22254E" font-family="system-ui" font-size="24" font-weight="bold">What do you like?</text>
+  <text x="20" y="175" fill="#6B7280" font-family="system-ui" font-size="14">Pick all that sound fun!</text>
+
+  <!-- Interest cards - Row 1 -->
+  <rect x="20" y="200" width="160" height="100" rx="16" fill="#009F4D" fill-opacity="0.1" stroke="#009F4D" stroke-width="2"/>
+  <text x="100" y="245" fill="#009F4D" font-family="system-ui" font-size="32" text-anchor="middle">🏀</text>
+  <text x="100" y="280" fill="#009F4D" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Sports</text>
+  <circle cx="160" cy="220" r="12" fill="#009F4D"/>
+  <text x="160" y="225" fill="white" font-family="system-ui" font-size="14" text-anchor="middle">✓</text>
+
+  <rect x="195" y="200" width="160" height="100" rx="16" fill="#F3F4F6"/>
+  <text x="275" y="245" fill="#6B7280" font-family="system-ui" font-size="32" text-anchor="middle">🎨</text>
+  <text x="275" y="280" fill="#6B7280" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Art</text>
+
+  <!-- Interest cards - Row 2 -->
+  <rect x="20" y="315" width="160" height="100" rx="16" fill="#44499C" fill-opacity="0.1" stroke="#44499C" stroke-width="2"/>
+  <text x="100" y="360" fill="#44499C" font-family="system-ui" font-size="32" text-anchor="middle">🎮</text>
+  <text x="100" y="395" fill="#44499C" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Gaming</text>
+  <circle cx="160" cy="335" r="12" fill="#44499C"/>
+  <text x="160" y="340" fill="white" font-family="system-ui" font-size="14" text-anchor="middle">✓</text>
+
+  <rect x="195" y="315" width="160" height="100" rx="16" fill="#F3F4F6"/>
+  <text x="275" y="360" fill="#6B7280" font-family="system-ui" font-size="32" text-anchor="middle">🎵</text>
+  <text x="275" y="395" fill="#6B7280" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Music</text>
+
+  <!-- Interest cards - Row 3 -->
+  <rect x="20" y="430" width="160" height="100" rx="16" fill="#F3F4F6"/>
+  <text x="100" y="475" fill="#6B7280" font-family="system-ui" font-size="32" text-anchor="middle">📚</text>
+  <text x="100" y="510" fill="#6B7280" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Reading</text>
+
+  <rect x="195" y="430" width="160" height="100" rx="16" fill="#009CDE" fill-opacity="0.1" stroke="#009CDE" stroke-width="2"/>
+  <text x="275" y="475" fill="#009CDE" font-family="system-ui" font-size="32" text-anchor="middle">🔬</text>
+  <text x="275" y="510" fill="#009CDE" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">STEM</text>
+  <circle cx="335" cy="450" r="12" fill="#009CDE"/>
+  <text x="335" y="455" fill="white" font-family="system-ui" font-size="14" text-anchor="middle">✓</text>
+
+  <!-- Interest cards - Row 4 -->
+  <rect x="20" y="545" width="160" height="100" rx="16" fill="#F3F4F6"/>
+  <text x="100" y="590" fill="#6B7280" font-family="system-ui" font-size="32" text-anchor="middle">🎭</text>
+  <text x="100" y="625" fill="#6B7280" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Theater</text>
+
+  <rect x="195" y="545" width="160" height="100" rx="16" fill="#F3F4F6"/>
+  <text x="275" y="590" fill="#6B7280" font-family="system-ui" font-size="32" text-anchor="middle">🌿</text>
+  <text x="275" y="625" fill="#6B7280" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Nature</text>
+
+  <!-- Continue button -->
+  <rect x="20" y="680" width="335" height="56" rx="28" fill="#009CDE"/>
+  <text x="187" y="715" fill="white" font-family="system-ui" font-size="16" font-weight="bold" text-anchor="middle">Continue (3 selected)</text>
+</svg>

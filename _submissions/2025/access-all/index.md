@@ -15,8 +15,8 @@ feature_focus:
   - communication
 
 images:
-  - screen1.png
-  - screen2.png
+  - screen1.svg
+  - screen2.svg
 thumbnail: thumb.svg
 thumbnail_alt: "Access All app showing accessibility features and language options"
 
@@ -37,18 +37,21 @@ We believe every kid should be able to find and enjoy third spaces, no matter th
 ## Accessibility Features
 
 ### For Visual Impairments
+
 - Full screen reader support with detailed descriptions
 - High contrast mode with customizable colors
 - Large text options and dyslexia-friendly fonts
 - Audio descriptions of places and routes
 
 ### For Mobility Needs
+
 - Wheelchair accessibility ratings for every location
 - Accessible route planning (ramps, elevators, flat paths)
 - Real-time info on elevator outages or construction
 - Sensory-friendly environment indicators
 
 ### For Different Languages
+
 - Support for Spanish, Vietnamese, Chinese, and more
 - Easy language switching
 - Translated reviews from other users

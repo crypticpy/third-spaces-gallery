@@ -14,8 +14,8 @@ feature_focus:
   - ai
 
 images:
-  - screen1.png
-  - screen2.png
+  - screen1.svg
+  - screen2.svg
 thumbnail: thumb.svg
 thumbnail_alt: "Vibe Finder app showing mood selection bubbles"
 
@@ -36,6 +36,7 @@ Sometimes you don't know exactly what you want to do — you just know how you'r
 ## The Concept
 
 Instead of searching by activity or location, you tell the app how you're feeling:
+
 - 🎨 **Creative** → Art studios, maker spaces, music rooms
 - 📚 **Focused** → Quiet study spots, libraries, peaceful parks
 - 🎮 **Playful** → Gaming centers, arcades, sports courts
@@ -45,6 +46,7 @@ Instead of searching by activity or location, you tell the app how you're feelin
 ## AI-Powered Suggestions
 
 The app uses AI to learn your patterns:
+
 - If you always pick "creative" after school, it'll have suggestions ready
 - Weather affects suggestions (indoor spots when it's rainy)
 - Time-aware (different vibes for weekday vs weekend)

@@ -15,8 +15,8 @@ feature_focus:
   - feedback
 
 images:
-  - screen1.png
-  - screen2.png
+  - screen1.svg
+  - screen2.svg
 thumbnail: thumb.svg
 thumbnail_alt: "Community Hub app showing group chats and event planning features"
 
@@ -37,17 +37,20 @@ Finding a cool place is just the start. What makes it great is the people you me
 ## Core Features
 
 ### Interest-Based Groups
+
 - Join groups for things you're into (robotics, basketball, art, etc.)
 - See which third spaces host your group's activities
 - Plan meetups with other group members
 
 ### Event Planning
+
 - Create events at third spaces
 - Invite friends or open it to your interest groups
 - RSVP system so you know who's coming
 - Adults/staff can verify and support events
 
 ### Safe Messaging
+
 - Chat with other verified youth users
 - Moderated spaces to keep conversations safe
 - Block and report features
@@ -56,6 +59,7 @@ Finding a cool place is just the start. What makes it great is the people you me
 ## Safety First
 
 We know parents worry about online connections. That's why we built in:
+
 - Age verification during signup
 - Parental approval options for younger users
 - Staff-monitored group chats at each location

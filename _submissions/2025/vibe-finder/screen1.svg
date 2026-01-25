@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 375 812" fill="none">
+  <!-- Phone frame background -->
+  <rect width="375" height="812" fill="#22254E"/>
+
+  <!-- Status bar -->
+  <rect width="375" height="44" fill="#22254E"/>
+  <text x="187" y="28" fill="white" font-family="system-ui" font-size="14" text-anchor="middle">9:41</text>
+
+  <!-- Header -->
+  <text x="187" y="100" fill="white" font-family="system-ui" font-size="28" font-weight="bold" text-anchor="middle">How are you feeling?</text>
+  <text x="187" y="130" fill="#9CA3AF" font-family="system-ui" font-size="14" text-anchor="middle">Pick your vibe and we'll find the perfect spot</text>
+
+  <!-- Mood bubbles -->
+  <!-- Creative - large -->
+  <circle cx="120" cy="280" r="70" fill="#FFC600" fill-opacity="0.2" stroke="#FFC600" stroke-width="3"/>
+  <text x="120" y="270" fill="#FFC600" font-family="system-ui" font-size="36" text-anchor="middle">🎨</text>
+  <text x="120" y="305" fill="#FFC600" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Creative</text>
+
+  <!-- Focused -->
+  <circle cx="270" cy="240" r="55" fill="#44499C" fill-opacity="0.2" stroke="#44499C" stroke-width="3"/>
+  <text x="270" y="230" fill="#9CA3AF" font-family="system-ui" font-size="28" text-anchor="middle">📚</text>
+  <text x="270" y="260" fill="#9CA3AF" font-family="system-ui" font-size="12" font-weight="bold" text-anchor="middle">Focused</text>
+
+  <!-- Playful -->
+  <circle cx="80" cy="430" r="50" fill="#009F4D" fill-opacity="0.2" stroke="#009F4D" stroke-width="3"/>
+  <text x="80" y="420" fill="#9CA3AF" font-family="system-ui" font-size="24" text-anchor="middle">🎮</text>
+  <text x="80" y="450" fill="#9CA3AF" font-family="system-ui" font-size="11" font-weight="bold" text-anchor="middle">Playful</text>
+
+  <!-- Social - selected -->
+  <circle cx="200" cy="400" r="65" fill="#009CDE" fill-opacity="0.3" stroke="#009CDE" stroke-width="4"/>
+  <text x="200" y="388" fill="white" font-family="system-ui" font-size="32" text-anchor="middle">👥</text>
+  <text x="200" y="425" fill="white" font-family="system-ui" font-size="14" font-weight="bold" text-anchor="middle">Social</text>
+
+  <!-- Chill -->
+  <circle cx="310" cy="370" r="45" fill="#9CA3AF" fill-opacity="0.2" stroke="#9CA3AF" stroke-width="3"/>
+  <text x="310" y="362" fill="#9CA3AF" font-family="system-ui" font-size="22" text-anchor="middle">🧘</text>
+  <text x="310" y="388" fill="#9CA3AF" font-family="system-ui" font-size="10" font-weight="bold" text-anchor="middle">Chill</text>
+
+  <!-- Adventurous -->
+  <circle cx="140" cy="540" r="48" fill="#FF6B6B" fill-opacity="0.2" stroke="#FF6B6B" stroke-width="3"/>
+  <text x="140" y="530" fill="#9CA3AF" font-family="system-ui" font-size="24" text-anchor="middle">🚀</text>
+  <text x="140" y="558" fill="#9CA3AF" font-family="system-ui" font-size="10" font-weight="bold" text-anchor="middle">Adventurous</text>
+
+  <!-- Hungry -->
+  <circle cx="270" cy="510" r="42" fill="#F97316" fill-opacity="0.2" stroke="#F97316" stroke-width="3"/>
+  <text x="270" y="502" fill="#9CA3AF" font-family="system-ui" font-size="22" text-anchor="middle">🍕</text>
+  <text x="270" y="528" fill="#9CA3AF" font-family="system-ui" font-size="10" font-weight="bold" text-anchor="middle">Hungry</text>
+
+  <!-- Bottom card preview -->
+  <rect y="620" width="375" height="192" fill="white" rx="30"/>
+  <text x="187" y="660" fill="#22254E" font-family="system-ui" font-size="14" text-anchor="middle">Feeling Social? Try these spots:</text>
+
+  <!-- Suggestion chips -->
+  <rect x="30" y="680" width="150" height="50" rx="25" fill="#009CDE" fill-opacity="0.1"/>
+  <text x="105" y="710" fill="#009CDE" font-family="system-ui" font-size="12" text-anchor="middle">🏢 Teen Center</text>
+
+  <rect x="195" y="680" width="150" height="50" rx="25" fill="#009CDE" fill-opacity="0.1"/>
+  <text x="270" y="710" fill="#009CDE" font-family="system-ui" font-size="12" text-anchor="middle">☕ Youth Café</text>
+
+  <!-- Find spots button -->
+  <rect x="40" y="745" width="295" height="50" rx="25" fill="#009CDE"/>
+  <text x="187" y="777" fill="white" font-family="system-ui" font-size="16" font-weight="bold" text-anchor="middle">Find Social Spots →</text>
+</svg>

@@ -15,8 +15,8 @@ feature_focus:
   - feedback
 
 images:
-  - screen1.png
-  - screen2.png
+  - screen1.svg
+  - screen2.svg
 thumbnail: thumb.svg
 thumbnail_alt: "Third Spaces Explorer app showing a colorful map with nearby places"
 
@@ -37,6 +37,7 @@ We noticed that kids often don't know about cool places in their neighborhood. S
 ## Our Solution
 
 Our app lets you:
+
 - **Pick your interests** (gaming, sports, art, music, STEM, etc.)
 - **See places nearby** on a colorful, easy-to-read map
 - **Get directions** by walking, bus, or car (with parent mode for younger kids)
