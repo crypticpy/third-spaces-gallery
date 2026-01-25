@@ -16,7 +16,6 @@ class ImmersiveGallery {
     this.filterPanel = document.querySelector("[data-filter-panel]");
     this.swipeHint = document.querySelector("[data-swipe-hint]");
     this.peekStrip = document.querySelector("[data-peek-strip]");
-    this.swipeNav = document.querySelector("[data-swipe-nav]");
 
     this.submissions = [];
     this.filteredSubmissions = [];
@@ -610,14 +609,6 @@ class ImmersiveGallery {
           this.navigateScreen(1);
           break;
       }
-    });
-
-    // Swipe navigation buttons
-    document.querySelector("[data-nav-up]")?.addEventListener("click", () => {
-      this.navigateDesign(-1);
-    });
-    document.querySelector("[data-nav-down]")?.addEventListener("click", () => {
-      this.navigateDesign(1);
     });
 
     // Peek strip thumbnail clicks
