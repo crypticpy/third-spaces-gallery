@@ -29,7 +29,6 @@ npm-debug.log*
 # Temporary
 tmp/
 temp/
-assets/css/output.css
 coa-branding/
 
 # Supabase local config
