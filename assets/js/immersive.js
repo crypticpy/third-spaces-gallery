@@ -15,6 +15,8 @@ class ImmersiveGallery {
     this.designStack = document.querySelector("[data-design-stack]");
     this.filterPanel = document.querySelector("[data-filter-panel]");
     this.swipeHint = document.querySelector("[data-swipe-hint]");
+    this.peekStrip = document.querySelector("[data-peek-strip]");
+    this.swipeNav = document.querySelector("[data-swipe-nav]");
 
     this.submissions = [];
     this.filteredSubmissions = [];
@@ -33,9 +35,49 @@ class ImmersiveGallery {
     this.isFilterOpen = false;
     this.isInitializing = false; // Prevent clone jumps during init
 
+    // Viewed tracking (persisted in localStorage)
+    this.viewedDesigns = this.loadViewedDesigns();
+
     // For scroll position tracking
     this.designObserver = null;
     this.screenObservers = new Map();
+  }
+
+  /**
+   * Load viewed designs from localStorage
+   */
+  loadViewedDesigns() {
+    try {
+      const stored = localStorage.getItem("tsg_viewed_designs");
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch {
+      return new Set();
+    }
+  }
+
+  /**
+   * Save viewed designs to localStorage
+   */
+  saveViewedDesigns() {
+    try {
+      localStorage.setItem(
+        "tsg_viewed_designs",
+        JSON.stringify([...this.viewedDesigns]),
+      );
+    } catch {
+      // Ignore storage errors
+    }
+  }
+
+  /**
+   * Mark a design as viewed
+   */
+  markAsViewed(designId) {
+    if (!this.viewedDesigns.has(designId)) {
+      this.viewedDesigns.add(designId);
+      this.saveViewedDesigns();
+      this.updatePeekStrip();
+    }
   }
 
   /**
@@ -231,6 +273,48 @@ class ImmersiveGallery {
     }
 
     // Initial scroll position is set in activate() when gallery becomes visible
+
+    // Render peek strip thumbnails
+    this.renderPeekStrip();
+  }
+
+  /**
+   * Render the peek strip with thumbnails
+   */
+  renderPeekStrip() {
+    if (!this.peekStrip) return;
+
+    this.peekStrip.innerHTML = this.filteredSubmissions
+      .map((sub, index) => {
+        const isActive = index === this.currentDesignIndex;
+        const isViewed = this.viewedDesigns.has(sub.designId);
+        const thumb = sub.coverImage || sub.screens?.[0]?.src || "";
+
+        return `
+          <button type="button"
+                  class="peek-thumb${isActive ? " active" : ""}${isViewed ? " viewed" : ""}"
+                  data-peek-index="${index}"
+                  data-design-id="${sub.designId}"
+                  aria-label="Go to ${this.escapeHtml(sub.title)}${isViewed ? " (viewed)" : ""}">
+            <img src="${thumb}" alt="" loading="lazy" />
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  /**
+   * Update peek strip state (active & viewed)
+   */
+  updatePeekStrip() {
+    if (!this.peekStrip) return;
+
+    const thumbs = this.peekStrip.querySelectorAll(".peek-thumb");
+    thumbs.forEach((thumb, i) => {
+      const designId = thumb.dataset.designId;
+      thumb.classList.toggle("active", i === this.currentDesignIndex);
+      thumb.classList.toggle("viewed", this.viewedDesigns.has(designId));
+    });
   }
 
   /**
@@ -497,8 +581,39 @@ class ImmersiveGallery {
       }
     });
 
+    // Swipe navigation buttons
+    document.querySelector("[data-nav-up]")?.addEventListener("click", () => {
+      this.navigateDesign(-1);
+    });
+    document.querySelector("[data-nav-down]")?.addEventListener("click", () => {
+      this.navigateDesign(1);
+    });
+
+    // Peek strip thumbnail clicks
+    this.peekStrip?.addEventListener("click", (e) => {
+      const thumb = e.target.closest("[data-peek-index]");
+      if (thumb) {
+        const index = parseInt(thumb.dataset.peekIndex, 10);
+        this.goToDesign(index);
+      }
+    });
+
     // Touch event handling for overscroll loop detection
     this.setupTouchLoopDetection();
+  }
+
+  /**
+   * Go directly to a specific design index
+   */
+  goToDesign(index) {
+    if (index < 0 || index >= this.filteredSubmissions.length) return;
+
+    const slide = this.designStack?.querySelector(
+      `[data-design-index="${index}"]:not([data-clone-of])`,
+    );
+    if (slide) {
+      slide.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   /**
@@ -616,6 +731,7 @@ class ImmersiveGallery {
             const slide = entry.target;
             const index = parseInt(slide.dataset.designIndex, 10);
             const cloneOf = slide.dataset.cloneOf;
+            const designId = slide.dataset.designId;
 
             // If this is a clone slide, instantly jump to the real one
             // But not during initialization to prevent unwanted jumps
@@ -631,14 +747,18 @@ class ImmersiveGallery {
                   block: "start",
                 });
                 this.currentDesignIndex = realIndex;
-                this.updateCounter();
+                this.updatePeekStrip();
+                // Mark the real slide as viewed
+                const realDesignId = realSlide.dataset.designId;
+                if (realDesignId) this.markAsViewed(realDesignId);
               }
               return;
             }
 
-            // Regular slide - just update tracking
+            // Regular slide - update tracking and mark as viewed
             this.currentDesignIndex = index;
-            this.updateCounter();
+            this.updatePeekStrip();
+            if (designId) this.markAsViewed(designId);
           }
         });
       },
@@ -697,16 +817,6 @@ class ImmersiveGallery {
    */
   getScreenCount(slide) {
     return slide.querySelectorAll("[data-screen-slide]").length;
-  }
-
-  /**
-   * Update the design counter
-   */
-  updateCounter() {
-    const currentEl = document.querySelector("[data-current-design]");
-    if (currentEl) {
-      currentEl.textContent = this.currentDesignIndex + 1;
-    }
   }
 
   /**
@@ -907,7 +1017,7 @@ class ImmersiveGallery {
     this.setupScrollObservers();
     this.setupTouchLoopDetection(); // Re-setup touch detection for new DOM
     this.currentDesignIndex = 0;
-    this.updateCounter();
+    this.renderPeekStrip(); // Re-render peek strip for new filtered set
 
     // Scroll to top
     this.designStack?.scrollTo({ top: 0, behavior: "smooth" });
@@ -940,7 +1050,7 @@ class ImmersiveGallery {
       if (firstReal) {
         firstReal.scrollIntoView({ behavior: "instant", block: "start" });
         this.currentDesignIndex = 0;
-        this.updateCounter();
+        this.updatePeekStrip();
       }
       // Clear flag after scroll settles to enable clone jump behavior
       setTimeout(() => {

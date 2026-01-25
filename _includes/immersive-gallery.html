@@ -9,14 +9,8 @@
 {% endcomment %}
 
 <div class="immersive-gallery" data-immersive-gallery hidden>
-  <!-- Minimal header overlay -->
+  <!-- Minimal header overlay - just actions, no counter -->
   <header class="immersive-header">
-    <div class="immersive-counter">
-      <span data-current-design>1</span>
-      <span class="immersive-counter-sep">/</span>
-      <span data-total-designs>{{ site.submissions | size }}</span>
-    </div>
-
     <div class="immersive-actions">
       <button type="button"
               class="immersive-btn"
@@ -34,6 +28,27 @@
       </button>
     </div>
   </header>
+
+  <!-- TikTok-style navigation arrows (side-anchored) -->
+  <nav class="swipe-nav" data-swipe-nav aria-label="Design navigation">
+    <button type="button"
+            class="swipe-nav-btn swipe-nav-up"
+            data-nav-up
+            aria-label="Previous design">
+      <span class="swipe-nav-icon">‹</span>
+    </button>
+    <button type="button"
+            class="swipe-nav-btn swipe-nav-down"
+            data-nav-down
+            aria-label="Next design">
+      <span class="swipe-nav-icon">›</span>
+    </button>
+  </nav>
+
+  <!-- Peek strip - thumbnail previews at bottom -->
+  <div class="peek-strip" data-peek-strip>
+    <!-- Populated by JS with design thumbnails -->
+  </div>
 
   <!-- Vertical design stack (populated by JS) -->
   <div class="design-stack" data-design-stack>
