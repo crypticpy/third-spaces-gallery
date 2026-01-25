@@ -49,7 +49,7 @@
   </div>
 
   <!-- Onboarding overlay (shown on first visit) -->
-  <div class="onboarding-overlay" data-onboarding hidden>
+  <div class="onboarding-overlay" data-onboarding hidden onclick="window.immersiveGallery?.dismissOnboarding()">
     <div class="onboarding-content">
       <!-- Swipe instructions -->
       <div class="onboarding-instructions">
@@ -87,7 +87,7 @@
       </div>
 
       <!-- Single dismiss button -->
-      <button type="button" class="onboarding-dismiss" data-onboarding-dismiss>Got it!</button>
+      <button type="button" class="onboarding-dismiss" onclick="window.immersiveGallery?.dismissOnboarding()">Got it!</button>
     </div>
   </div>
 
