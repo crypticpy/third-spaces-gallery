@@ -31,6 +31,7 @@ class ImmersiveGallery {
     // UI state
     this.isActive = false;
     this.isFilterOpen = false;
+    this.isInitializing = false; // Prevent clone jumps during init
 
     // For scroll position tracking
     this.designObserver = null;
@@ -614,7 +615,8 @@ class ImmersiveGallery {
             const cloneOf = slide.dataset.cloneOf;
 
             // If this is a clone slide, instantly jump to the real one
-            if (cloneOf !== undefined) {
+            // But not during initialization to prevent unwanted jumps
+            if (cloneOf !== undefined && !this.isInitializing) {
               const realIndex = parseInt(cloneOf, 10);
               const realSlide = this.designStack.querySelector(
                 `[data-design-index="${realIndex}"]:not([data-clone-of])`,
@@ -930,6 +932,7 @@ class ImmersiveGallery {
     // Scroll to first real slide (skip clone at beginning)
     // Must happen after container is visible for scroll to work
     // Use setTimeout to ensure layout is complete
+    this.isInitializing = true;
     setTimeout(() => {
       const firstReal = this.designStack?.querySelector(
         '[data-design-index="0"]',
@@ -939,6 +942,10 @@ class ImmersiveGallery {
         this.currentDesignIndex = 0;
         this.updateCounter();
       }
+      // Clear flag after scroll settles
+      setTimeout(() => {
+        this.isInitializing = false;
+      }, 100);
     }, 50);
 
     console.log("[ImmersiveGallery] Activated");
