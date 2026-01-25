@@ -210,7 +210,7 @@ class FeedbackPromptHandler {
   init(votingSystem) {
     this.votingSystem = votingSystem;
     this.bindEvents();
-    console.log("[FeedbackSystem] Initialized");
+    console.log("[FeedbackPromptHandler] Initialized");
   }
 
   bindEvents() {
@@ -320,7 +320,7 @@ class FeedbackPromptHandler {
 
     try {
       // In production, send to Supabase or other backend
-      console.log("[FeedbackSystem] Feedback submitted:", {
+      console.log("[FeedbackPromptHandler] Feedback submitted:", {
         submission_id: submissionId,
         type: "quick_reaction",
         content: text || null,
@@ -335,7 +335,7 @@ class FeedbackPromptHandler {
         this.votingSystem.showMessage("Thanks for sharing! 🙌", "success");
       }
     } catch (e) {
-      console.error("[FeedbackSystem] Submit error:", e);
+      console.error("[FeedbackPromptHandler] Submit error:", e);
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = "Share 💬";

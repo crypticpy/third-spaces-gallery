@@ -109,8 +109,8 @@ class FeedbackSystem {
       try {
         const { error } = await this.supabase.from("feedback").insert({
           submission_id: submissionId,
-          author_name: authorName,
-          feedback_text: feedbackText || null,
+          author_name: authorName || "Anonymous",
+          feedback_text: feedbackText || "", // Empty string if no text (only tags)
           tags: selectedTags,
           approved: false, // Requires moderation
         });
