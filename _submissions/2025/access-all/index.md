@@ -15,9 +15,9 @@ feature_focus:
   - communication
 
 images:
-  - screen1.svg
-  - screen2.svg
-thumbnail: thumb.svg
+  - /assets/images/submissions/2025/access-all/screen1.svg
+  - /assets/images/submissions/2025/access-all/screen2.svg
+thumbnail: /assets/images/submissions/2025/access-all/thumb.svg
 thumbnail_alt: "Access All app showing accessibility features and language options"
 
 links:

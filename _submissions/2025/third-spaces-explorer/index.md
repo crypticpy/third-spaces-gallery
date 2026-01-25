@@ -15,9 +15,9 @@ feature_focus:
   - feedback
 
 images:
-  - screen1.svg
-  - screen2.svg
-thumbnail: thumb.svg
+  - /assets/images/submissions/2025/third-spaces-explorer/screen1.svg
+  - /assets/images/submissions/2025/third-spaces-explorer/screen2.svg
+thumbnail: /assets/images/submissions/2025/third-spaces-explorer/thumb.svg
 thumbnail_alt: "Third Spaces Explorer app showing a colorful map with nearby places"
 
 links:

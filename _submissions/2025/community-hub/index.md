@@ -15,9 +15,9 @@ feature_focus:
   - feedback
 
 images:
-  - screen1.svg
-  - screen2.svg
-thumbnail: thumb.svg
+  - /assets/images/submissions/2025/community-hub/screen1.svg
+  - /assets/images/submissions/2025/community-hub/screen2.svg
+thumbnail: /assets/images/submissions/2025/community-hub/thumb.svg
 thumbnail_alt: "Community Hub app showing group chats and event planning features"
 
 links:

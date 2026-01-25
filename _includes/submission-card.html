@@ -23,7 +23,7 @@
     {% if include.submission.thumbnail %}
     <img class="h-full w-full object-cover transition-transform duration-500
                 group-hover:scale-105"
-         src="{{ include.submission.thumbnail | prepend: include.submission.url | relative_url }}"
+         src="{{ include.submission.thumbnail | relative_url }}"
          alt="{{ include.submission.thumbnail_alt | default: include.submission.title }}"
          loading="lazy"
          decoding="async">

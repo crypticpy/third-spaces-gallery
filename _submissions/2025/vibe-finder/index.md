@@ -14,9 +14,9 @@ feature_focus:
   - ai
 
 images:
-  - screen1.svg
-  - screen2.svg
-thumbnail: thumb.svg
+  - /assets/images/submissions/2025/vibe-finder/screen1.svg
+  - /assets/images/submissions/2025/vibe-finder/screen2.svg
+thumbnail: /assets/images/submissions/2025/vibe-finder/thumb.svg
 thumbnail_alt: "Vibe Finder app showing mood selection bubbles"
 
 links:

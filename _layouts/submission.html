@@ -83,10 +83,10 @@ layout: default
             {% for image in page.images %}
             <figure class="overflow-hidden rounded-xl border border-brand-sky/10 bg-white
                           shadow-[0_4px_20px_rgba(34,37,78,0.08)]">
-              <a href="{{ image | prepend: page.url | relative_url }}"
+              <a href="{{ image | relative_url }}"
                  target="_blank"
                  class="block aspect-[4/3] overflow-hidden">
-                <img src="{{ image | prepend: page.url | relative_url }}"
+                <img src="{{ image | relative_url }}"
                      alt="Screen from {{ page.title }}"
                      class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                      loading="lazy">
@@ -112,7 +112,7 @@ layout: default
         {% if page.thumbnail %}
         <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
                     shadow-[0_8px_30px_rgba(34,37,78,0.12)]">
-          <img src="{{ page.thumbnail | prepend: page.url | relative_url }}"
+          <img src="{{ page.thumbnail | relative_url }}"
                alt="{{ page.thumbnail_alt | default: page.title }}"
                class="aspect-[16/10] w-full object-cover">
         </div>
