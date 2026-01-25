@@ -668,11 +668,9 @@ class ImmersiveGallery {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            // Get screen index from the slide's data attribute
             const screenIndex = parseInt(
-              (entry.target.dataset.screenIndex ??
-                entry.target.dataset.detailsSlide)
-                ? this.getScreenCount(slide)
-                : 0,
+              entry.target.dataset.screenIndex || "0",
               10,
             );
             this.currentScreenIndexes[designIndex] = screenIndex;
