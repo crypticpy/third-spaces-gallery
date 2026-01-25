@@ -184,33 +184,71 @@ class ImmersiveGallery {
   }
 
   /**
-   * Render all design slides
+   * Render all design slides with clones for infinite loop
+   * Clone structure: [clone-last] [real items...] [clone-first]
+   * This enables seamless TikTok-style infinite scrolling
    */
   renderDesigns() {
     if (!this.designStack) return;
 
-    this.designStack.innerHTML = this.filteredSubmissions
-      .map((sub, index) => this.renderDesignSlide(sub, index))
+    const total = this.filteredSubmissions.length;
+    if (total === 0) {
+      this.designStack.innerHTML = "";
+      return;
+    }
+
+    // Render real slides
+    const realSlides = this.filteredSubmissions
+      .map((sub, index) => this.renderDesignSlide(sub, index, false))
       .join("");
 
-    // Update total count
+    // Clone first slide at end (for looping forward)
+    const cloneFirst = this.renderDesignSlide(
+      this.filteredSubmissions[0],
+      total, // index after last real
+      true, // isClone
+      0, // cloneOf (index of original)
+    );
+
+    // Clone last slide at beginning (for looping backward)
+    const cloneLast = this.renderDesignSlide(
+      this.filteredSubmissions[total - 1],
+      -1, // special index for clone at start
+      true, // isClone
+      total - 1, // cloneOf
+    );
+
+    this.designStack.innerHTML = cloneLast + realSlides + cloneFirst;
+
+    // Update total count (only real designs)
     const totalEl = document.querySelector("[data-total-designs]");
     if (totalEl) {
-      totalEl.textContent = this.filteredSubmissions.length;
+      totalEl.textContent = total;
     }
+
+    // Start at the first real slide (skip the clone at beginning)
+    requestAnimationFrame(() => {
+      const firstReal = this.designStack.querySelector(
+        '[data-design-index="0"]',
+      );
+      if (firstReal) {
+        firstReal.scrollIntoView({ behavior: "instant", block: "start" });
+      }
+    });
   }
 
   /**
    * Render a single design slide
    */
-  renderDesignSlide(submission, index) {
+  renderDesignSlide(submission, index, isClone = false, cloneOf = null) {
     const screens = submission.screens || [];
 
     return `
-      <article class="design-slide"
+      <article class="design-slide${isClone ? " design-slide-clone" : ""}"
                data-design-slide
                data-design-index="${index}"
-               data-design-id="${submission.designId}">
+               data-design-id="${submission.designId}"
+               ${isClone ? `data-clone-of="${cloneOf}"` : ""}>
 
         <!-- Horizontal screen track -->
         <div class="screen-track" data-screen-track>
@@ -511,13 +549,14 @@ class ImmersiveGallery {
         const elapsed = Date.now() - touchStartTime;
 
         // Detect upward swipe at top (delta > 50px, quick swipe < 300ms)
+        // Scroll to the clone of the last slide (at index -1)
         if (deltaY < -50 && elapsed < 300 && this.designStack.scrollTop <= 5) {
-          const total = this.filteredSubmissions.length;
-          const lastSlide = this.designStack.querySelector(
-            `[data-design-index="${total - 1}"]`,
+          const cloneAtStart = this.designStack.querySelector(
+            '[data-design-index="-1"]',
           );
-          if (lastSlide) {
-            lastSlide.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (cloneAtStart) {
+            // Scroll to clone, observer will instantly jump to real last slide
+            cloneAtStart.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
       },
@@ -547,12 +586,13 @@ class ImmersiveGallery {
             const elapsed = Date.now() - touchStartTime;
 
             // Detect leftward swipe at left edge (loop to end)
+            // For horizontal, we use instant scroll to prevent rewind effect
             if (deltaX < -50 && elapsed < 300 && track.scrollLeft <= 5) {
               const screens = track.querySelectorAll("[data-screen-slide]");
               const lastScreen = screens[screens.length - 1];
               if (lastScreen) {
                 lastScreen.scrollIntoView({
-                  behavior: "smooth",
+                  behavior: "instant",
                   inline: "start",
                 });
               }
@@ -572,12 +612,34 @@ class ImmersiveGallery {
     // Clean up existing observers
     this.cleanupObservers();
 
-    // Observer for vertical design scrolling
+    // Observer for vertical design scrolling with clone handling
     this.designObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-            const index = parseInt(entry.target.dataset.designIndex, 10);
+            const slide = entry.target;
+            const index = parseInt(slide.dataset.designIndex, 10);
+            const cloneOf = slide.dataset.cloneOf;
+
+            // If this is a clone slide, instantly jump to the real one
+            if (cloneOf !== undefined) {
+              const realIndex = parseInt(cloneOf, 10);
+              const realSlide = this.designStack.querySelector(
+                `[data-design-index="${realIndex}"]:not([data-clone-of])`,
+              );
+              if (realSlide) {
+                // Instant jump (no animation) to create seamless loop
+                realSlide.scrollIntoView({
+                  behavior: "instant",
+                  block: "start",
+                });
+                this.currentDesignIndex = realIndex;
+                this.updateCounter();
+              }
+              return;
+            }
+
+            // Regular slide - just update tracking
             this.currentDesignIndex = index;
             this.updateCounter();
           }
@@ -594,113 +656,8 @@ class ImmersiveGallery {
         this.setupScreenObserver(slide);
       });
 
-    // Set up scroll end detection for infinite looping
-    this.setupInfiniteScrollDetection();
-  }
-
-  /**
-   * Set up scroll end detection for infinite looping on swipe
-   */
-  setupInfiniteScrollDetection() {
-    if (!this.designStack) return;
-
-    let verticalScrollTimeout = null;
-
-    // Detect vertical scroll end for design looping
-    this.designStack.addEventListener("scroll", () => {
-      clearTimeout(verticalScrollTimeout);
-      verticalScrollTimeout = setTimeout(() => {
-        this.checkVerticalBoundaryAndLoop();
-      }, 150); // Debounce scroll end
-    });
-
-    // Set up horizontal scroll detection for each screen track
-    this.designStack
-      .querySelectorAll("[data-screen-track]")
-      .forEach((track) => {
-        let horizontalScrollTimeout = null;
-        track.addEventListener("scroll", () => {
-          clearTimeout(horizontalScrollTimeout);
-          horizontalScrollTimeout = setTimeout(() => {
-            this.checkHorizontalBoundaryAndLoop(track);
-          }, 150);
-        });
-      });
-  }
-
-  /**
-   * Check if at vertical boundary and loop
-   */
-  checkVerticalBoundaryAndLoop() {
-    if (!this.designStack || !this.isActive) return;
-
-    const { scrollTop, scrollHeight, clientHeight } = this.designStack;
-    const total = this.filteredSubmissions.length;
-
-    // At bottom - loop to top
-    if (
-      scrollTop + clientHeight >= scrollHeight - 10 &&
-      this.currentDesignIndex === total - 1
-    ) {
-      // Small delay to let scroll-snap settle
-      setTimeout(() => {
-        const firstSlide = this.designStack.querySelector(
-          '[data-design-index="0"]',
-        );
-        if (firstSlide) {
-          firstSlide.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 100);
-    }
-
-    // At top with overscroll detection - loop to bottom
-    // We need touch event detection for upward overscroll since scroll position can't go negative
-    // This is handled via touch events in bindEvents()
-
-    this._lastDesignIndex = this.currentDesignIndex;
-  }
-
-  /**
-   * Check if at horizontal boundary and loop within a screen track
-   */
-  checkHorizontalBoundaryAndLoop(track) {
-    if (!track || !this.isActive) return;
-
-    const { scrollLeft, scrollWidth, clientWidth } = track;
-    const screens = track.querySelectorAll("[data-screen-slide]");
-    const total = screens.length;
-    if (total === 0) return;
-
-    const slide = track.closest("[data-design-slide]");
-    const designIndex = parseInt(slide?.dataset.designIndex, 10);
-    const currentScreen = this.currentScreenIndexes[designIndex] || 0;
-
-    // At right edge - loop to first screen
-    if (
-      scrollLeft + clientWidth >= scrollWidth - 10 &&
-      currentScreen === total - 1
-    ) {
-      setTimeout(() => {
-        screens[0]?.scrollIntoView({ behavior: "smooth", inline: "start" });
-      }, 100);
-    }
-
-    // At left edge - loop to last screen
-    if (scrollLeft <= 10 && currentScreen === 0) {
-      // Store last screen index to detect intentional leftward swipe
-      const lastScreenIndex = this._lastScreenIndexes?.[designIndex];
-      if (lastScreenIndex === 0) {
-        setTimeout(() => {
-          screens[total - 1]?.scrollIntoView({
-            behavior: "smooth",
-            inline: "start",
-          });
-        }, 100);
-      }
-    }
-
-    this._lastScreenIndexes = this._lastScreenIndexes || {};
-    this._lastScreenIndexes[designIndex] = currentScreen;
+    // Clone-based infinite scrolling is handled by the observer above
+    // No need for boundary detection - clones handle the loop seamlessly
   }
 
   /**
@@ -778,22 +735,25 @@ class ImmersiveGallery {
   }
 
   /**
-   * Navigate designs (vertical) with infinite loop
+   * Navigate designs (vertical) with infinite loop via clones
    */
   navigateDesign(direction) {
     const total = this.filteredSubmissions.length;
     if (total === 0) return;
 
-    // Wrap around for infinite looping
-    let newIndex = this.currentDesignIndex + direction;
-    if (newIndex >= total) {
-      newIndex = 0; // Loop to start
-    } else if (newIndex < 0) {
-      newIndex = total - 1; // Loop to end
+    let targetIndex = this.currentDesignIndex + direction;
+
+    // For looping, navigate to clone which will trigger instant jump
+    if (targetIndex >= total) {
+      // Going past last - scroll to clone at end (index = total)
+      targetIndex = total;
+    } else if (targetIndex < 0) {
+      // Going before first - scroll to clone at start (index = -1)
+      targetIndex = -1;
     }
 
     const slide = this.designStack.querySelector(
-      `[data-design-index="${newIndex}"]`,
+      `[data-design-index="${targetIndex}"]`,
     );
     slide?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
