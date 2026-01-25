@@ -9,8 +9,12 @@
 {% endcomment %}
 
 <div class="immersive-gallery" data-immersive-gallery hidden>
-  <!-- Minimal header overlay - just actions, no counter -->
+  <!-- Header overlay - title, designer, and actions -->
   <header class="immersive-header">
+    <div class="header-meta">
+      <h2 class="header-title" data-header-title></h2>
+      <p class="header-designer" data-header-designer></p>
+    </div>
     <div class="immersive-actions">
       <button type="button"
               class="immersive-btn"
@@ -47,12 +51,8 @@
     </div>
   </div>
 
-  <!-- Global footer - shows current design info and votes -->
+  <!-- Global footer - votes and screen navigation -->
   <footer class="immersive-footer" data-immersive-footer>
-    <div class="slide-meta">
-      <h2 class="slide-title" data-footer-title></h2>
-      <p class="slide-designer" data-footer-designer></p>
-    </div>
     <div class="quick-votes" data-footer-votes>
       <!-- Populated by JS -->
     </div>

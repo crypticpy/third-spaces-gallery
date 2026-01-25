@@ -17,10 +17,12 @@ class ImmersiveGallery {
     this.swipeHint = document.querySelector("[data-swipe-hint]");
     this.peekStrip = document.querySelector("[data-peek-strip]");
 
-    // Global footer elements
+    // Header elements (title and designer)
+    this.headerTitle = document.querySelector("[data-header-title]");
+    this.headerDesigner = document.querySelector("[data-header-designer]");
+
+    // Footer elements (votes and dots)
     this.globalFooter = document.querySelector("[data-immersive-footer]");
-    this.footerTitle = document.querySelector("[data-footer-title]");
-    this.footerDesigner = document.querySelector("[data-footer-designer]");
     this.footerVotes = document.querySelector("[data-footer-votes]");
     this.footerDots = document.querySelector("[data-footer-dots]");
 
@@ -335,21 +337,21 @@ class ImmersiveGallery {
   }
 
   /**
-   * Update the global footer with current design info
+   * Update the header and footer with current design info
    */
   updateGlobalFooter() {
     const submission = this.filteredSubmissions[this.currentDesignIndex];
-    if (!submission || !this.globalFooter) return;
+    if (!submission) return;
 
-    // Update title and designer
-    if (this.footerTitle) {
-      this.footerTitle.textContent = submission.title || "";
+    // Update header title and designer
+    if (this.headerTitle) {
+      this.headerTitle.textContent = submission.title || "";
     }
-    if (this.footerDesigner) {
+    if (this.headerDesigner) {
       const grade = submission.grade
         ? ` • ${submission.grade.split(" ")[0]}`
         : "";
-      this.footerDesigner.textContent = `by ${submission.designer || "Unknown"}${grade}`;
+      this.headerDesigner.textContent = `by ${submission.designer || "Unknown"}${grade}`;
     }
 
     // Update vote buttons
