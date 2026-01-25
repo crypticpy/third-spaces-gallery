@@ -33,9 +33,14 @@
     </div>
   </header>
 
-  <!-- Peek strip - thumbnail previews on left side -->
-  <div class="peek-strip" data-peek-strip>
-    <!-- Populated by JS with design thumbnails -->
+  <!-- Navigation arrows (TikTok-style, show on interaction) -->
+  <div class="nav-arrows" data-nav-arrows>
+    <button type="button" class="nav-arrow nav-arrow-up" data-nav-up aria-label="Previous design">
+      <span>‹</span>
+    </button>
+    <button type="button" class="nav-arrow nav-arrow-down" data-nav-down aria-label="Next design">
+      <span>›</span>
+    </button>
   </div>
 
   <!-- Vertical design stack (populated by JS) -->
@@ -43,12 +48,39 @@
     <!-- Slides injected here from submission JSON data -->
   </div>
 
-  <!-- Swipe hint (shown briefly on first load) -->
-  <div class="swipe-hint" data-swipe-hint hidden>
-    <div class="swipe-hint-content">
-      <div class="swipe-hint-icon">↕</div>
-      <span>Swipe up/down for more designs</span>
+  <!-- Onboarding overlay (shown on first visit) -->
+  <div class="onboarding-overlay" data-onboarding hidden>
+    <!-- Step 1: Vertical swipe -->
+    <div class="onboarding-step" data-onboarding-step="1">
+      <div class="onboarding-animation onboarding-vertical">
+        <div class="onboarding-hand">👆</div>
+      </div>
+      <p class="onboarding-text">Swipe <strong>up & down</strong> to see different designs</p>
+      <button type="button" class="onboarding-next" data-onboarding-next>Got it</button>
     </div>
+
+    <!-- Step 2: Horizontal swipe -->
+    <div class="onboarding-step" data-onboarding-step="2" hidden>
+      <div class="onboarding-animation onboarding-horizontal">
+        <div class="onboarding-hand">👆</div>
+      </div>
+      <p class="onboarding-text">Swipe <strong>left & right</strong> to explore each design</p>
+      <button type="button" class="onboarding-next" data-onboarding-next>Got it</button>
+    </div>
+
+    <!-- Step 3: Voting -->
+    <div class="onboarding-step" data-onboarding-step="3" hidden>
+      <div class="onboarding-votes-preview">
+        <span class="onboarding-vote">💖 I'd use this</span>
+        <span class="onboarding-vote">✨ Creative</span>
+        <span class="onboarding-vote">🌍 For everyone</span>
+      </div>
+      <p class="onboarding-text">Tap to <strong>vote</strong> for your favorites!</p>
+      <button type="button" class="onboarding-next onboarding-start" data-onboarding-next>Start exploring</button>
+    </div>
+
+    <!-- Skip button -->
+    <button type="button" class="onboarding-skip" data-onboarding-skip>Skip</button>
   </div>
 
   <!-- Global footer - votes and screen navigation -->

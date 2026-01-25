@@ -475,108 +475,214 @@ img {
   }
 }
 
-/* Peek strip - LEFT side vertical thumbnail preview */
-.peek-strip {
+/* Navigation arrows - TikTok style */
+.nav-arrows {
   position: fixed;
-  left: 0.75rem;
+  right: 1rem;
   top: 50%;
   z-index: 105;
   display: -webkit-flex;
   display: flex;
   -webkit-flex-direction: column;
   flex-direction: column;
-  -webkit-align-items: center;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.75rem;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.4);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  max-height: 60vh;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  opacity: 1;
-  -webkit-transition: opacity 0.3s ease, transform 0.3s ease;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* Auto-hide peek strip after inactivity */
-.peek-strip.auto-hidden {
   opacity: 0;
-  -webkit-transform: translateY(-50%) translateX(-100%);
-  transform: translateY(-50%) translateX(-100%);
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
   pointer-events: none;
 }
 
-.peek-strip::-webkit-scrollbar {
-  display: none;
-}
-
-.peek-thumb {
-  position: relative;
-  width: 2.5rem;
-  height: 2.5rem;
-  min-height: 2.5rem;
-  border-radius: 0.375rem;
-  overflow: hidden;
-  border: 2px solid transparent;
-  cursor: pointer;
-  -webkit-transition: border-color 0.2s, transform 0.2s, opacity 0.2s;
-  transition: border-color 0.2s, transform 0.2s, opacity 0.2s;
-  opacity: 0.7;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.peek-thumb:hover,
-.peek-thumb:active {
+.nav-arrows.visible {
   opacity: 1;
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
+  pointer-events: auto;
 }
 
-.peek-thumb.active {
-  border-color: #009CDE; /* brand-sky */
-  opacity: 1;
-  -webkit-transform: scale(1.05);
-  transform: scale(1.05);
-}
-
-.peek-thumb.viewed::after {
-  content: "✓";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 0.875rem;
-  height: 0.875rem;
-  background: rgba(0, 159, 77, 0.95); /* brand-sea */
+.nav-arrow {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
-  font-size: 0.5rem;
+  font-size: 1.5rem;
   display: -webkit-flex;
   display: flex;
   -webkit-align-items: center;
   align-items: center;
   -webkit-justify-content: center;
   justify-content: center;
-  border-radius: 0.25rem 0 0 0;
+  cursor: pointer;
+  -webkit-transition: background 0.2s, transform 0.15s;
+  transition: background 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.peek-thumb img {
-  width: 100%;
-  height: 100%;
-  -o-object-fit: cover;
-  object-fit: cover;
+.nav-arrow:active {
+  -webkit-transform: scale(0.9);
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.25);
 }
 
-/* Hide peek strip on very small screens or landscape */
-@media (max-height: 400px), (max-width: 350px) {
-  .peek-strip {
-    display: none;
-  }
+.nav-arrow-up span {
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.nav-arrow-down span {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+/* Onboarding overlay */
+.onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.onboarding-step {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  text-align: center;
+  max-width: 280px;
+}
+
+.onboarding-animation {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.onboarding-hand {
+  font-size: 2.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+/* Vertical swipe animation */
+.onboarding-vertical .onboarding-hand {
+  -webkit-animation: swipeVertical 1.5s ease-in-out infinite;
+  animation: swipeVertical 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes swipeVertical {
+  0%, 100% { -webkit-transform: translate(-50%, -30%); transform: translate(-50%, -30%); }
+  50% { -webkit-transform: translate(-50%, 30%); transform: translate(-50%, 30%); }
+}
+
+@keyframes swipeVertical {
+  0%, 100% { transform: translate(-50%, -30%); }
+  50% { transform: translate(-50%, 30%); }
+}
+
+/* Horizontal swipe animation */
+.onboarding-horizontal .onboarding-hand {
+  -webkit-animation: swipeHorizontal 1.5s ease-in-out infinite;
+  animation: swipeHorizontal 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes swipeHorizontal {
+  0%, 100% { -webkit-transform: translate(-70%, -50%); transform: translate(-70%, -50%); }
+  50% { -webkit-transform: translate(20%, -50%); transform: translate(20%, -50%); }
+}
+
+@keyframes swipeHorizontal {
+  0%, 100% { transform: translate(-70%, -50%); }
+  50% { transform: translate(20%, -50%); }
+}
+
+.onboarding-text {
+  font-size: 1.125rem;
+  color: #fff;
+  margin: 0 0 1.5rem;
+  line-height: 1.5;
+}
+
+.onboarding-text strong {
+  color: #009CDE;
+}
+
+.onboarding-votes-preview {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-vote {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.9375rem;
+  color: #fff;
+}
+
+.onboarding-next {
+  background: #009CDE;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-transition: background 0.2s, transform 0.15s;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.onboarding-next:active {
+  -webkit-transform: scale(0.95);
+  transform: scale(0.95);
+}
+
+.onboarding-start {
+  background: #009F4D;
+}
+
+.onboarding-skip {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.onboarding-skip:active {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Vertical design stack */

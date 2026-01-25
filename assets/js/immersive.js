@@ -14,8 +14,8 @@ class ImmersiveGallery {
     this.container = document.querySelector("[data-immersive-gallery]");
     this.designStack = document.querySelector("[data-design-stack]");
     this.filterPanel = document.querySelector("[data-filter-panel]");
-    this.swipeHint = document.querySelector("[data-swipe-hint]");
-    this.peekStrip = document.querySelector("[data-peek-strip]");
+    this.navArrows = document.querySelector("[data-nav-arrows]");
+    this.onboarding = document.querySelector("[data-onboarding]");
 
     // Header elements (title and designer)
     this.headerTitle = document.querySelector("[data-header-title]");
@@ -50,9 +50,10 @@ class ImmersiveGallery {
     this.designObserver = null;
     this.screenObservers = new Map();
 
-    // Auto-hide timers
-    this.peekStripTimer = null;
+    // Auto-hide timers for nav arrows
+    this.navArrowTimer = null;
     this.uiVisible = true;
+    this.onboardingStep = 1;
   }
 
   /**
@@ -88,7 +89,7 @@ class ImmersiveGallery {
     if (!this.viewedDesigns.has(designId)) {
       this.viewedDesigns.add(designId);
       this.saveViewedDesigns();
-      this.updatePeekStrip();
+      this.updateNavigation();
     }
   }
 
@@ -152,7 +153,7 @@ class ImmersiveGallery {
       const pref = localStorage.getItem("tsg_view_mode");
       if (pref !== "grid") {
         this.activate();
-        this.showSwipeHint();
+        this.checkOnboarding();
       }
     }
 
@@ -285,53 +286,78 @@ class ImmersiveGallery {
     }
 
     // Initial scroll position is set in activate() when gallery becomes visible
-
-    // Render peek strip thumbnails
-    this.renderPeekStrip();
   }
 
   /**
-   * Render the peek strip with thumbnails
+   * Check if onboarding should be shown
    */
-  renderPeekStrip() {
-    if (!this.peekStrip) return;
-
-    this.peekStrip.innerHTML = this.filteredSubmissions
-      .map((sub, index) => {
-        const isActive = index === this.currentDesignIndex;
-        const isViewed = this.viewedDesigns.has(sub.designId);
-        const thumb = sub.coverImage || sub.screens?.[0]?.src || "";
-
-        return `
-          <button type="button"
-                  class="peek-thumb${isActive ? " active" : ""}${isViewed ? " viewed" : ""}"
-                  data-peek-index="${index}"
-                  data-design-id="${sub.designId}"
-                  aria-label="Go to ${this.escapeHtml(sub.title)}${isViewed ? " (viewed)" : ""}">
-            <img src="${thumb}" alt="" loading="lazy" />
-          </button>
-        `;
-      })
-      .join("");
+  checkOnboarding() {
+    const hasSeenOnboarding = localStorage.getItem("tsg_onboarding_complete");
+    if (!hasSeenOnboarding && this.onboarding) {
+      this.showOnboarding();
+    }
   }
 
   /**
-   * Update peek strip state (active & viewed)
+   * Show onboarding overlay
    */
-  updatePeekStrip() {
-    if (!this.peekStrip) return;
+  showOnboarding() {
+    if (!this.onboarding) return;
+    this.onboarding.hidden = false;
+    this.onboardingStep = 1;
+    this.showOnboardingStep(1);
+  }
 
-    const thumbs = this.peekStrip.querySelectorAll(".peek-thumb");
-    thumbs.forEach((thumb, i) => {
-      const designId = thumb.dataset.designId;
-      thumb.classList.toggle("active", i === this.currentDesignIndex);
-      thumb.classList.toggle("viewed", this.viewedDesigns.has(designId));
+  /**
+   * Show a specific onboarding step
+   */
+  showOnboardingStep(step) {
+    if (!this.onboarding) return;
+
+    // Hide all steps
+    this.onboarding.querySelectorAll("[data-onboarding-step]").forEach((el) => {
+      el.hidden = true;
     });
 
-    // Also update global footer
+    // Show current step
+    const stepEl = this.onboarding.querySelector(
+      `[data-onboarding-step="${step}"]`,
+    );
+    if (stepEl) {
+      stepEl.hidden = false;
+    }
+  }
+
+  /**
+   * Advance to next onboarding step or complete
+   */
+  nextOnboardingStep() {
+    this.onboardingStep++;
+    if (this.onboardingStep > 3) {
+      this.completeOnboarding();
+    } else {
+      this.showOnboardingStep(this.onboardingStep);
+    }
+  }
+
+  /**
+   * Complete onboarding and hide overlay
+   */
+  completeOnboarding() {
+    if (this.onboarding) {
+      this.onboarding.hidden = true;
+    }
+    localStorage.setItem("tsg_onboarding_complete", "true");
+  }
+
+  /**
+   * Update navigation state (called when design changes)
+   */
+  updateNavigation() {
+    // Update global footer/header
     this.updateGlobalFooter();
 
-    // Auto-hide UI after interaction
+    // Show nav arrows briefly
     this.showUI();
     this.scheduleUIHide();
   }
@@ -402,21 +428,21 @@ class ImmersiveGallery {
   }
 
   /**
-   * Show UI elements (peek strip)
+   * Show UI elements (nav arrows)
    */
   showUI() {
-    if (this.peekStrip) {
-      this.peekStrip.classList.remove("auto-hidden");
+    if (this.navArrows) {
+      this.navArrows.classList.add("visible");
     }
     this.uiVisible = true;
   }
 
   /**
-   * Hide UI elements (peek strip)
+   * Hide UI elements (nav arrows)
    */
   hideUI() {
-    if (this.peekStrip) {
-      this.peekStrip.classList.add("auto-hidden");
+    if (this.navArrows) {
+      this.navArrows.classList.remove("visible");
     }
     this.uiVisible = false;
   }
@@ -425,12 +451,12 @@ class ImmersiveGallery {
    * Schedule UI to hide after delay
    */
   scheduleUIHide() {
-    if (this.peekStripTimer) {
-      clearTimeout(this.peekStripTimer);
+    if (this.navArrowTimer) {
+      clearTimeout(this.navArrowTimer);
     }
-    this.peekStripTimer = setTimeout(() => {
+    this.navArrowTimer = setTimeout(() => {
       this.hideUI();
-    }, 3000); // Hide after 3 seconds
+    }, 2000); // Hide after 2 seconds
   }
 
   /**
@@ -728,12 +754,21 @@ class ImmersiveGallery {
       }
     });
 
-    // Peek strip thumbnail clicks
-    this.peekStrip?.addEventListener("click", (e) => {
-      const thumb = e.target.closest("[data-peek-index]");
-      if (thumb) {
-        const index = parseInt(thumb.dataset.peekIndex, 10);
-        this.goToDesign(index);
+    // Nav arrow clicks
+    document.querySelector("[data-nav-up]")?.addEventListener("click", () => {
+      this.navigateDesign(-1);
+    });
+    document.querySelector("[data-nav-down]")?.addEventListener("click", () => {
+      this.navigateDesign(1);
+    });
+
+    // Onboarding buttons
+    this.onboarding?.addEventListener("click", (e) => {
+      if (e.target.closest("[data-onboarding-next]")) {
+        this.nextOnboardingStep();
+      }
+      if (e.target.closest("[data-onboarding-skip]")) {
+        this.completeOnboarding();
       }
     });
 
@@ -1001,7 +1036,7 @@ class ImmersiveGallery {
                   block: "start",
                 });
                 this.currentDesignIndex = realIndex;
-                this.updatePeekStrip();
+                this.updateNavigation();
                 // Mark the real slide as viewed
                 const realDesignId = realSlide.dataset.designId;
                 if (realDesignId) this.markAsViewed(realDesignId);
@@ -1011,7 +1046,7 @@ class ImmersiveGallery {
 
             // Regular slide - update tracking and mark as viewed
             this.currentDesignIndex = index;
-            this.updatePeekStrip();
+            this.updateNavigation();
             if (designId) this.markAsViewed(designId);
           }
         });
@@ -1296,7 +1331,7 @@ class ImmersiveGallery {
     this.setupScrollObservers();
     this.setupTouchLoopDetection(); // Re-setup touch detection for new DOM
     this.currentDesignIndex = 0;
-    this.renderPeekStrip(); // Re-render peek strip for new filtered set
+    this.updateNavigation(); // Update UI for new filtered set
 
     // Scroll to top
     this.designStack?.scrollTo({ top: 0, behavior: "smooth" });
@@ -1329,7 +1364,7 @@ class ImmersiveGallery {
       if (firstReal) {
         firstReal.scrollIntoView({ behavior: "instant", block: "start" });
         this.currentDesignIndex = 0;
-        this.updatePeekStrip();
+        this.updateNavigation();
       }
       // Clear flag after scroll settles to enable clone jump behavior
       setTimeout(() => {
@@ -1358,23 +1393,6 @@ class ImmersiveGallery {
     localStorage.setItem("tsg_view_mode", "grid");
 
     console.log("[ImmersiveGallery] Deactivated");
-  }
-
-  /**
-   * Show swipe hint briefly
-   */
-  showSwipeHint() {
-    if (!this.swipeHint) return;
-
-    // Only show once per session
-    if (sessionStorage.getItem("tsg_swipe_hint_shown")) return;
-
-    this.swipeHint.hidden = false;
-    sessionStorage.setItem("tsg_swipe_hint_shown", "true");
-
-    setTimeout(() => {
-      this.swipeHint.hidden = true;
-    }, 3000);
   }
 
   /**
