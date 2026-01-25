@@ -17,6 +17,13 @@ class ImmersiveGallery {
     this.swipeHint = document.querySelector("[data-swipe-hint]");
     this.peekStrip = document.querySelector("[data-peek-strip]");
 
+    // Global footer elements
+    this.globalFooter = document.querySelector("[data-immersive-footer]");
+    this.footerTitle = document.querySelector("[data-footer-title]");
+    this.footerDesigner = document.querySelector("[data-footer-designer]");
+    this.footerVotes = document.querySelector("[data-footer-votes]");
+    this.footerDots = document.querySelector("[data-footer-dots]");
+
     this.submissions = [];
     this.filteredSubmissions = [];
     this.currentDesignIndex = 0;
@@ -40,6 +47,10 @@ class ImmersiveGallery {
     // For scroll position tracking
     this.designObserver = null;
     this.screenObservers = new Map();
+
+    // Auto-hide timers
+    this.peekStripTimer = null;
+    this.uiVisible = true;
   }
 
   /**
@@ -314,6 +325,98 @@ class ImmersiveGallery {
       thumb.classList.toggle("active", i === this.currentDesignIndex);
       thumb.classList.toggle("viewed", this.viewedDesigns.has(designId));
     });
+
+    // Also update global footer
+    this.updateGlobalFooter();
+
+    // Auto-hide UI after interaction
+    this.showUI();
+    this.scheduleUIHide();
+  }
+
+  /**
+   * Update the global footer with current design info
+   */
+  updateGlobalFooter() {
+    const submission = this.filteredSubmissions[this.currentDesignIndex];
+    if (!submission || !this.globalFooter) return;
+
+    // Update title and designer
+    if (this.footerTitle) {
+      this.footerTitle.textContent = submission.title || "";
+    }
+    if (this.footerDesigner) {
+      const grade = submission.grade
+        ? ` • ${submission.grade.split(" ")[0]}`
+        : "";
+      this.footerDesigner.textContent = `by ${submission.designer || "Unknown"}${grade}`;
+    }
+
+    // Update vote buttons
+    if (this.footerVotes) {
+      this.footerVotes.innerHTML = `
+        <button type="button" class="quick-vote-btn" data-vote="favorite" data-submission-id="${submission.id}" aria-label="Vote I'd use this">
+          <span class="vote-emoji">💖</span>
+          <span class="vote-label">I'd use this</span>
+          <span class="vote-count" data-vote-count="favorite">${submission.votes?.favorite || 0}</span>
+        </button>
+        <button type="button" class="quick-vote-btn" data-vote="innovative" data-submission-id="${submission.id}" aria-label="Vote Creative">
+          <span class="vote-emoji">✨</span>
+          <span class="vote-label">Creative</span>
+          <span class="vote-count" data-vote-count="innovative">${submission.votes?.innovative || 0}</span>
+        </button>
+        <button type="button" class="quick-vote-btn" data-vote="inclusive" data-submission-id="${submission.id}" aria-label="Vote For everyone">
+          <span class="vote-emoji">🌍</span>
+          <span class="vote-label">For everyone</span>
+          <span class="vote-count" data-vote-count="inclusive">${submission.votes?.inclusive || 0}</span>
+        </button>
+      `;
+    }
+
+    // Update screen dots
+    if (this.footerDots) {
+      const screens = submission.screens || [];
+      const screenCount = screens.length + 1; // +1 for details slide
+      const currentScreen = this.currentScreenIndexes[submission.id] || 0;
+      this.footerDots.innerHTML = this.renderScreenDots(screenCount);
+      // Update active dot
+      const dots = this.footerDots.querySelectorAll(".screen-dot");
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === currentScreen);
+      });
+    }
+  }
+
+  /**
+   * Show UI elements (peek strip)
+   */
+  showUI() {
+    if (this.peekStrip) {
+      this.peekStrip.classList.remove("auto-hidden");
+    }
+    this.uiVisible = true;
+  }
+
+  /**
+   * Hide UI elements (peek strip)
+   */
+  hideUI() {
+    if (this.peekStrip) {
+      this.peekStrip.classList.add("auto-hidden");
+    }
+    this.uiVisible = false;
+  }
+
+  /**
+   * Schedule UI to hide after delay
+   */
+  scheduleUIHide() {
+    if (this.peekStripTimer) {
+      clearTimeout(this.peekStripTimer);
+    }
+    this.peekStripTimer = setTimeout(() => {
+      this.hideUI();
+    }, 3000); // Hide after 3 seconds
   }
 
   /**
@@ -632,6 +735,25 @@ class ImmersiveGallery {
         this.handleAddToRemix(remixBtn);
       }
     });
+
+    // Show UI on any touch/scroll interaction
+    this.designStack?.addEventListener(
+      "touchstart",
+      () => {
+        this.showUI();
+        this.scheduleUIHide();
+      },
+      { passive: true },
+    );
+
+    this.designStack?.addEventListener(
+      "scroll",
+      () => {
+        this.showUI();
+        this.scheduleUIHide();
+      },
+      { passive: true },
+    );
 
     // Touch event handling for overscroll loop detection
     this.setupTouchLoopDetection();
