@@ -3,10 +3,10 @@
  *
  * - Shuffles phone order on each page load (Fisher-Yates)
  * - Auto-cycles every 4 s so every design gets front billing
- * - Horizontal swipe on the deck manually cycles
- * - On mobile (<768 px), tapping a phone navigates to the submission
- *   page instead of opening the Quick Look modal
- * - Respects prefers-reduced-motion (no auto-cycle, no transitions)
+ * - Horizontal swipe on the deck cycles (prevents page scroll)
+ * - On mobile, tapping a phone navigates to /designs/ which
+ *   auto-activates the immersive gallery
+ * - Respects prefers-reduced-motion
  */
 (() => {
   const deck = document.querySelector("[data-hero-deck]");
@@ -20,10 +20,14 @@
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const mobileQuery = window.matchMedia("(max-width: 767px)");
 
+  // Resolve /designs/ URL from baseurl meta tag
+  const baseMeta = document.querySelector('meta[name="baseurl"]');
+  const designsUrl = (baseMeta ? baseMeta.content : "") + "/designs/";
+
   // ---------------------------------------------------------------
   // 1. Shuffle positions on load (Fisher-Yates)
   // ---------------------------------------------------------------
-  const positions = phones.map((_, i) => i); // [0, 1, 2]
+  const positions = phones.map((_, i) => i);
   for (let i = positions.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [positions[i], positions[j]] = [positions[j], positions[i]];
@@ -69,66 +73,78 @@
   deck.addEventListener("mouseleave", startAuto);
 
   // ---------------------------------------------------------------
-  // 4. Swipe detection on the deck (horizontal → cycle)
+  // 4. Touch handling — swipe cycles, tap navigates on mobile
+  //    Uses touchmove with passive:false so we can preventDefault
+  //    on horizontal gestures to stop the page from scrolling.
   // ---------------------------------------------------------------
   let startX = 0;
   let startY = 0;
+  let gestureDir = null; // null = undecided, "h" = horizontal, "v" = vertical
 
   deck.addEventListener(
     "touchstart",
     (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
+      gestureDir = null;
       stopAuto();
     },
     { passive: true },
   );
 
   deck.addEventListener(
+    "touchmove",
+    (e) => {
+      // Determine gesture direction on first significant movement
+      if (gestureDir === null) {
+        const dx = Math.abs(e.touches[0].clientX - startX);
+        const dy = Math.abs(e.touches[0].clientY - startY);
+        if (dx > 8 || dy > 8) {
+          gestureDir = dx > dy ? "h" : "v";
+        }
+      }
+      // Block page scroll for horizontal swipes on the deck
+      if (gestureDir === "h") {
+        e.preventDefault();
+      }
+    },
+    { passive: false },
+  );
+
+  deck.addEventListener(
     "touchend",
     (e) => {
       const dx = e.changedTouches[0].clientX - startX;
-      const dy = e.changedTouches[0].clientY - startY;
+      const absDx = Math.abs(dx);
 
-      if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
+      if (gestureDir === "h" && absDx > 20) {
         // Horizontal swipe — cycle the deck
         cycle();
       }
-      // Taps fall through to the click handler below
+      // Taps (no significant movement) fall through to click handler
 
+      gestureDir = null;
       startAuto();
     },
     { passive: true },
   );
 
   // ---------------------------------------------------------------
-  // 5. Mobile: navigate to submission page instead of Quick Look
-  //    Uses capture phase so it fires before modal.js delegation
+  // 5. Mobile tap → navigate to immersive gallery at /designs/
+  //    Desktop tap → let Quick Look modal handle it (no intercept)
+  //    Capture phase fires before modal.js event delegation.
   // ---------------------------------------------------------------
   deck.addEventListener(
     "click",
     (e) => {
-      if (!mobileQuery.matches) return; // desktop → let Quick Look handle it
+      if (!mobileQuery.matches) return;
 
       const btn = e.target.closest("[data-quicklook]");
       if (!btn) return;
 
-      const phone = btn.closest("[data-hero-phone]");
-      if (!phone) return;
-
-      const jsonEl = phone.querySelector("[data-design-json]");
-      if (!jsonEl) return;
-
-      try {
-        const data = JSON.parse(jsonEl.textContent);
-        if (data.url) {
-          e.stopPropagation();
-          e.preventDefault();
-          window.location.href = data.url;
-        }
-      } catch (err) {
-        console.warn("[HeroDeck] Could not parse design JSON", err);
-      }
+      e.stopPropagation();
+      e.preventDefault();
+      window.location.href = designsUrl;
     },
     true, // capture phase
   );

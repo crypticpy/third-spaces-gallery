@@ -233,6 +233,7 @@
 .hero-phone-deck {
   position: relative;
   height: 380px;
+  touch-action: pan-y; /* JS handles horizontal swipes */
 }
 
 @media (min-width: 640px) {
