@@ -80,6 +80,54 @@ layout: default
       </div>
     </div>
 
+    <!-- Remix CTA Banner (dismissible) -->
+    <div id="remix-cta-banner"
+         class="mb-6 hidden rounded-2xl border border-brand-purple/20 bg-gradient-to-r
+                from-brand-indigo/5 via-brand-purple/5 to-brand-sky/5 px-4 py-3
+                shadow-sm transition-all sm:px-6 sm:py-4
+                dark:border-brand-purple/30 dark:from-brand-indigo/10
+                dark:via-brand-purple/10 dark:to-brand-sky/10">
+      <div class="flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="text-2xl flex-shrink-0" aria-hidden="true">🎨</span>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold text-brand-navy dark:text-gray-100 sm:text-base">
+              Mix &amp; match features from different designs to build your dream app
+            </p>
+            <p class="mt-0.5 text-xs text-brand-stone dark:text-gray-400">
+              Tap any design to explore its features
+            </p>
+          </div>
+        </div>
+        <button type="button"
+                id="remix-cta-dismiss"
+                class="flex-shrink-0 rounded-lg p-1 text-brand-stone/60
+                       transition-colors hover:bg-brand-navy/5 hover:text-brand-navy
+                       dark:text-gray-500 dark:hover:bg-white/10 dark:hover:text-gray-300"
+                aria-label="Dismiss remix banner">
+          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <script>
+    (function() {
+      var banner = document.getElementById('remix-cta-banner');
+      var dismissBtn = document.getElementById('remix-cta-dismiss');
+      if (!banner) return;
+      try {
+        if (localStorage.getItem('tsg_remix_cta_dismissed') === 'true') return;
+      } catch(e) {}
+      banner.classList.remove('hidden');
+      function dismiss() {
+        banner.classList.add('hidden');
+        try { localStorage.setItem('tsg_remix_cta_dismissed', 'true'); } catch(e) {}
+      }
+      if (dismissBtn) dismissBtn.addEventListener('click', dismiss);
+    })();
+    </script>
+
     <!-- Results count -->
     <p class="mb-6 text-sm text-brand-stone dark:text-gray-400" data-results-count>
       Showing <span class="font-semibold text-brand-navy dark:text-gray-100">{{ site.submissions | size }}</span> designs

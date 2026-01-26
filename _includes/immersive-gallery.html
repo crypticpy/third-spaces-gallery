@@ -230,6 +230,7 @@
       "creatorNote": {{ submission.creator_note | jsonify }},
       "url": {{ submission.url | relative_url | jsonify }},
       "featureFocus": {{ submission.feature_focus | jsonify }},
+      "features": {{ submission.features | jsonify }},
       "screens": {% if submission.screens %}[{% for screen in submission.screens %}{"src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: submission.title | append: " screen" | jsonify }}, "caption": {{ screen.caption | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% elsif submission.images %}[{% for img in submission.images %}{"src": {{ img | relative_url | jsonify }}, "alt": {{ submission.title | append: " screen" | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% else %}[]{% endif %},
       "coverImage": {{ submission.cover_image | default: submission.thumbnail | relative_url | jsonify }},
       "votes": {

@@ -19,6 +19,9 @@
 
   <!-- Theme color for mobile browsers -->
   <meta name="theme-color" content="#f8faf2">
+
+  <!-- Base URL for JavaScript -->
+  <meta name="baseurl" content="{{ site.baseurl }}">
 </head>
 <body class="min-h-screen bg-surface-base text-brand-navy antialiased transition-colors duration-300
              dark:bg-gray-950 dark:text-gray-100">
@@ -72,6 +75,13 @@
            class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
                   {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
           About
+        </a>
+        <a href="{{ '/remix/' | relative_url }}"
+           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 inline-flex items-center gap-1.5
+                  {% if page.url contains '/remix' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+          <span aria-hidden="true">🎨</span>
+          <span>Remix</span>
+          <span class="remix-nav-badge hidden" data-remix-nav-count aria-live="polite">0</span>
         </a>
         <!-- Theme Toggle -->
         <button type="button"
@@ -173,24 +183,51 @@
   <script src="{{ '/assets/js/remix.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/immersive.js' | relative_url }}" defer></script>
 
+  {% unless page.url contains '/remix' %}
   <!-- Remix FAB (Floating Action Button) -->
   <a href="{{ '/remix/' | relative_url }}"
-     class="fixed bottom-6 right-6 z-40 hidden items-center gap-2
+     class="fixed bottom-6 right-6 z-40 flex items-center gap-2
             rounded-full bg-gradient-to-r from-brand-purple via-brand-indigo to-brand-sky
             px-5 py-3 text-sm font-bold text-white
             shadow-xl shadow-brand-indigo/30
             transition-all duration-300
             hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-purple/40
             focus:outline-none focus:ring-4 focus:ring-brand-sky/50
-            dark:from-brand-sky dark:via-brand-indigo dark:to-brand-purple"
+            dark:from-brand-sky dark:via-brand-indigo dark:to-brand-purple
+            remix-fab-empty"
      data-remix-fab
      aria-label="View your remix">
     <span aria-hidden="true">🎨</span>
-    <span>Remix:</span>
+    <span>My Remix</span>
     <span class="inline-flex h-6 min-w-6 items-center justify-center rounded-full
                  bg-white/20 px-2 text-xs font-bold tabular-nums"
-          data-remix-count>0</span>
+          data-remix-count
+          aria-live="polite">0</span>
   </a>
+
+  <!-- Remix onboarding tooltip (first visit only) -->
+  <div class="fixed bottom-[5.5rem] right-6 z-40 max-w-[260px] rounded-xl
+              bg-white p-4 shadow-xl opacity-0 translate-y-2 transition-all duration-300
+              pointer-events-none dark:bg-gray-800 dark:shadow-gray-900/50"
+       data-remix-tooltip
+       role="tooltip"
+       hidden>
+    <p class="text-sm font-medium text-brand-navy dark:text-gray-100">
+      🎨 Collect features you love from any design and build your dream app!
+    </p>
+    <button type="button"
+            class="mt-2 text-xs font-semibold text-brand-indigo hover:text-brand-navy
+                   dark:text-brand-sky dark:hover:text-white"
+            data-remix-tooltip-dismiss>
+      Got it
+    </button>
+    <!-- Caret pointing down -->
+    <div class="absolute -bottom-2 right-8 h-0 w-0
+                border-l-[8px] border-r-[8px] border-t-[8px]
+                border-l-transparent border-r-transparent border-t-white
+                dark:border-t-gray-800"></div>
+  </div>
+  {% endunless %}
 
   <!-- Quick Look Modal -->
   {% include quick-look-modal.html %}

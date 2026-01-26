@@ -19,42 +19,80 @@ description: Build your dream app by collecting features from youth designs
       <p class="mt-2 text-lg text-brand-stone dark:text-gray-400">
         Features you've collected from youth designs
       </p>
-      <p class="mt-1 text-sm text-brand-stone dark:text-gray-500">
-        <span data-remix-total>0</span> feature(s) in your collection
+      <!-- Stats Line -->
+      <p class="mt-2 hidden text-sm font-medium text-brand-indigo dark:text-brand-sky"
+         data-remix-stats>
+        <span data-remix-total>0</span> feature(s) from
+        <span data-remix-source-count>0</span> design(s)
       </p>
     </header>
 
     <!-- Empty State -->
-    <div class="text-center py-12 hidden" data-remix-empty>
-      <div class="mb-4 text-6xl">🔍</div>
-      <h2 class="text-xl font-semibold text-brand-navy dark:text-gray-100">
-        No features yet
-      </h2>
-      <p class="mt-2 text-brand-stone dark:text-gray-400 max-w-md mx-auto">
-        Browse the gallery and tap "Add to Remix" on features you like.
-        Build your dream app from the best ideas!
-      </p>
-      <a href="{{ '/designs/' | relative_url }}"
-         class="mt-6 inline-flex items-center gap-2 rounded-full
-                bg-brand-indigo px-6 py-3 text-sm font-semibold text-white
-                shadow-lg shadow-brand-indigo/25 transition-all
-                hover:-translate-y-0.5 hover:bg-brand-navy hover:shadow-xl
-                dark:bg-brand-sky dark:shadow-brand-sky/25">
-        <span aria-hidden="true">👀</span>
-        Browse Designs
-      </a>
+    <div class="hidden" data-remix-empty>
+      <div class="mx-auto max-w-sm rounded-3xl border-2 border-dashed border-brand-sky/30
+                  bg-gradient-to-b from-brand-light-blue/30 to-white
+                  px-6 py-12 text-center
+                  dark:border-brand-sky/20 dark:from-brand-indigo/10 dark:to-gray-900">
+        <!-- Illustration cluster -->
+        <div class="relative mx-auto mb-6 h-24 w-40">
+          <span class="absolute left-2 top-0 text-5xl animate-float opacity-80">🧩</span>
+          <span class="absolute right-2 top-2 text-4xl animate-float-delayed opacity-70">✨</span>
+          <span class="absolute bottom-0 left-1/2 -translate-x-1/2 text-3xl animate-bounce-slow opacity-60">🎯</span>
+        </div>
+
+        <h2 class="text-xl font-bold text-brand-navy dark:text-gray-100">
+          Build your dream app
+        </h2>
+        <p class="mt-3 text-sm leading-relaxed text-brand-stone dark:text-gray-400">
+          Browse youth-designed features for the Third Spaces app and collect the
+          ones you love. Mix and match ideas from different designers to create
+          your perfect remix!
+        </p>
+
+        <div class="mt-4 rounded-xl bg-white/60 p-3 dark:bg-gray-800/60">
+          <p class="text-xs font-medium text-brand-indigo dark:text-brand-sky">How it works</p>
+          <ol class="mt-2 space-y-1 text-left text-xs text-brand-stone dark:text-gray-400">
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
+                           bg-brand-sky/20 text-[10px] font-bold text-brand-sky">1</span>
+              Browse designs in the gallery
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
+                           bg-brand-indigo/20 text-[10px] font-bold text-brand-indigo dark:bg-brand-indigo/30">2</span>
+              Tap "Add to Remix" on features you like
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
+                           bg-brand-sea/20 text-[10px] font-bold text-brand-sea">3</span>
+              Come back here to visualize and share your remix
+            </li>
+          </ol>
+        </div>
+
+        <a href="{{ '/designs/' | relative_url }}"
+           class="mt-6 inline-flex items-center gap-2 rounded-full
+                  bg-gradient-to-r from-brand-indigo to-brand-sky
+                  px-7 py-3.5 text-sm font-bold text-white
+                  shadow-lg shadow-brand-indigo/25 transition-all
+                  hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-sky/30
+                  dark:shadow-brand-sky/20">
+          <span aria-hidden="true">👀</span>
+          Browse Designs
+        </a>
+      </div>
     </div>
 
-    <!-- Feature List -->
-    <div class="space-y-3" data-remix-list>
-      <!-- Items populated by remix.js -->
+    <!-- Grouped Feature List -->
+    <div class="space-y-6" data-remix-list>
+      <!-- Groups populated by JS -->
     </div>
 
     <!-- Actions -->
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-3 hidden" data-remix-submit>
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3 hidden" data-remix-actions>
       <!-- Visualize Button -->
       <button type="button"
-              class="tsg-chip hover:bg-brand-purple/10"
+              class="tsg-chip hover:bg-brand-purple/10 dark:hover:bg-brand-purple/20"
               data-remix-visualize>
         <span aria-hidden="true">🖼️</span>
         <span>Visualize</span>
@@ -120,41 +158,205 @@ description: Build your dream app by collecting features from youth designs
       </div>
     </div>
 
-    <!-- Visualization Modal -->
+    <!-- Confirmation Modal (shown after submit) -->
     <div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
-         data-remix-viz-modal>
-      <div class="mx-4 w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl
+         data-remix-confirm-modal>
+      <div class="mx-4 w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl
                   dark:bg-gray-800">
-        <h3 class="text-lg font-semibold text-brand-navy dark:text-gray-100 text-center">
-          Your Remix Visualization
-        </h3>
-
-        <!-- Icon Collage -->
-        <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-4xl"
-             data-remix-viz-icons>
-          <!-- Icons inserted by JS -->
+        <!-- Gradient header -->
+        <div class="bg-gradient-to-r from-brand-sea via-brand-indigo to-brand-sky px-6 py-6 text-center text-white">
+          <div class="mb-2 text-4xl">🎉</div>
+          <h3 class="text-xl font-bold">Your Remix is ready to share!</h3>
         </div>
 
-        <p class="mt-6 text-center text-sm text-brand-stone dark:text-gray-400">
-          A snapshot of the features in your remix
-        </p>
+        <div class="px-6 py-5">
+          <p class="text-sm text-brand-stone dark:text-gray-400" data-remix-confirm-summary>
+            <!-- Summary populated by JS -->
+          </p>
 
-        <div class="mt-4 flex justify-center">
+          <!-- Share URL -->
+          <div class="mt-4 flex items-center gap-2 rounded-xl border border-brand-sky/20 bg-brand-light-blue/30
+                      p-3 dark:border-gray-600 dark:bg-gray-700">
+            <span class="flex-1 truncate text-xs text-brand-navy dark:text-gray-300" data-remix-share-url>
+              <!-- URL populated by JS -->
+            </span>
+            <button type="button"
+                    class="shrink-0 rounded-lg bg-brand-indigo px-3 py-1.5 text-xs font-semibold text-white
+                           transition-all hover:bg-brand-navy"
+                    data-remix-copy-share>
+              Copy Link
+            </button>
+          </div>
+          <p class="mt-1 text-[11px] text-brand-stone/70 dark:text-gray-500">
+            Share this link so others can see your remix
+          </p>
+
+          <!-- Social sharing buttons -->
+          <div class="mt-4 flex items-center justify-center gap-3">
+            <button type="button"
+                    class="inline-flex items-center gap-1.5 rounded-full border border-gray-300
+                           bg-gray-900 px-4 py-2 text-xs font-semibold text-white
+                           transition-all hover:bg-black hover:shadow-md
+                           dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    data-remix-share-x>
+              <span class="text-sm font-bold" aria-hidden="true">&#x1D54F;</span>
+              Share
+            </button>
+            <button type="button"
+                    class="inline-flex items-center gap-1.5 rounded-full border border-green-300
+                           bg-green-600 px-4 py-2 text-xs font-semibold text-white
+                           transition-all hover:bg-green-700 hover:shadow-md
+                           dark:border-green-700 dark:bg-green-700 dark:hover:bg-green-600"
+                    data-remix-share-whatsapp>
+              <span class="text-sm" aria-hidden="true">💬</span>
+              WhatsApp
+            </button>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+            <a href="{{ '/designs/' | relative_url }}"
+               class="flex-1 rounded-full border-2 border-brand-sky/20 px-4 py-2.5 text-center
+                      text-sm font-semibold text-brand-indigo transition-all
+                      hover:border-brand-sky hover:bg-brand-light-blue/30
+                      dark:border-gray-600 dark:text-brand-sky dark:hover:border-brand-sky/50">
+              Keep Browsing
+            </a>
+            <button type="button"
+                    class="flex-1 rounded-full border-2 border-red-200 px-4 py-2.5
+                           text-sm font-semibold text-red-600 transition-all
+                           hover:border-red-300 hover:bg-red-50
+                           dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20"
+                    data-remix-start-fresh>
+              Start Fresh
+            </button>
+            <button type="button"
+                    class="flex-1 rounded-full bg-brand-indigo px-4 py-2.5
+                           text-sm font-semibold text-white transition-all
+                           hover:bg-brand-navy
+                           dark:bg-brand-sky dark:hover:bg-brand-indigo"
+                    data-remix-confirm-close>
+              Done
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clear Confirmation Modal -->
+    <div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
+         data-remix-clear-modal>
+      <div class="mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800">
+        <h3 class="text-lg font-semibold text-brand-navy dark:text-gray-100">
+          Clear your remix?
+        </h3>
+        <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
+          This will remove all features from your collection. This can't be undone.
+        </p>
+        <div class="mt-5 flex justify-end gap-2">
+          <button type="button" class="tsg-chip" data-clear-cancel>Cancel</button>
           <button type="button"
-                  class="tsg-chip"
+                  class="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white
+                         transition-all hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600"
+                  data-clear-confirm>
+            Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visualization Modal (Remix Card) -->
+    <div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
+         data-remix-viz-modal>
+      <div class="mx-4 w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl
+                  dark:bg-gray-800">
+        <!-- Shareable Remix Card -->
+        <div data-remix-card>
+          <!-- Gradient header -->
+          <div class="bg-gradient-to-r from-brand-purple via-brand-indigo to-brand-sky
+                      px-6 py-5 text-center text-white">
+            <p class="text-xs font-semibold uppercase tracking-widest opacity-80">Third Spaces Gallery</p>
+            <h3 class="mt-1 text-xl font-bold">My Third Spaces Remix</h3>
+          </div>
+
+          <!-- Card body -->
+          <div class="px-6 py-5">
+            <!-- Constellation layout -->
+            <style>
+              @keyframes constellation-float {
+                0%, 100% { transform: translate(var(--tx), var(--ty)) scale(1); }
+                50% { transform: translate(var(--tx), calc(var(--ty) - 6px)) scale(1.04); }
+              }
+              @keyframes constellation-pulse {
+                0%, 100% { opacity: 0.25; }
+                50% { opacity: 0.45; }
+              }
+              .constellation-bubble {
+                animation: constellation-float 3s ease-in-out infinite;
+                animation-delay: var(--delay, 0s);
+              }
+              .constellation-bubble:hover {
+                z-index: 20 !important;
+                animation-play-state: paused;
+              }
+              .constellation-bubble:hover .constellation-bubble-inner {
+                transform: scale(1.2);
+                box-shadow: 0 0 20px var(--bubble-color, rgba(68,73,156,0.4));
+              }
+              .constellation-bubble:hover .constellation-tooltip {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+                pointer-events: auto;
+              }
+              .constellation-bubble-inner {
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+              }
+              .constellation-tooltip {
+                opacity: 0;
+                transform: translateX(-50%) translateY(4px);
+                transition: opacity 0.15s ease, transform 0.15s ease;
+                pointer-events: none;
+              }
+              .constellation-line {
+                animation: constellation-pulse 3s ease-in-out infinite;
+                animation-delay: var(--delay, 0s);
+              }
+            </style>
+
+            <div class="aspect-square w-full max-w-[320px] mx-auto relative" data-remix-viz-constellation>
+              <!-- Constellation built by JS -->
+            </div>
+
+            <!-- Count line -->
+            <div class="mt-5 flex items-center justify-center gap-2 rounded-full
+                        bg-gradient-to-r from-brand-light-blue/50 to-brand-light-green/50
+                        px-4 py-2 dark:from-brand-indigo/20 dark:to-brand-sea/20">
+              <span class="text-sm font-bold text-brand-indigo dark:text-brand-sky"
+                    data-remix-viz-count>
+                <!-- Count populated by JS -->
+              </span>
+            </div>
+          </div>
+
+          <!-- Card footer -->
+          <div class="border-t border-brand-sky/10 bg-brand-cream/50 px-6 py-3 text-center
+                      dark:border-gray-700 dark:bg-gray-900/50">
+            <p class="text-[11px] font-medium text-brand-stone dark:text-gray-500">
+              Built with Third Spaces Youth Design Gallery
+            </p>
+          </div>
+        </div>
+
+        <!-- Modal controls (outside the card) -->
+        <div class="flex items-center justify-center gap-3 bg-white px-6 py-4 dark:bg-gray-800">
+          <button type="button"
+                  class="tsg-chip hover:bg-brand-sky/10"
                   data-remix-viz-close>
             <span aria-hidden="true">✕</span>
             Close
           </button>
         </div>
       </div>
-    </div>
-
-    <!-- Success Toast -->
-    <div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 hidden
-                rounded-full bg-brand-sea px-6 py-3 text-sm font-semibold text-white shadow-xl"
-         data-remix-toast>
-      Remix submitted! Thanks for sharing your ideas.
     </div>
   </div>
 </div>
@@ -163,117 +365,475 @@ description: Build your dream app by collecting features from youth designs
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.querySelector('[data-remix-modal]');
   const vizModal = document.querySelector('[data-remix-viz-modal]');
-  const toast = document.querySelector('[data-remix-toast]');
+  const confirmModal = document.querySelector('[data-remix-confirm-modal]');
+  const clearModal = document.querySelector('[data-remix-clear-modal]');
   const noteInput = document.querySelector('[data-remix-note]');
-  const vizIcons = document.querySelector('[data-remix-viz-icons]');
+  const vizConstellation = document.querySelector('[data-remix-viz-constellation]');
+  const vizCount = document.querySelector('[data-remix-viz-count]');
 
-  // Open submit modal
-  document.querySelector('[data-remix-submit-btn]')?.addEventListener('click', () => {
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+  var previousFocus = null;
+
+  // --- Helper: open/close modals ---
+  function openModal(el) {
+    if (!el) return;
+    previousFocus = document.activeElement;
+    el.classList.remove('hidden');
+    el.classList.add('flex');
+    // Focus first focusable element inside the modal
+    var focusable = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) focusable.focus();
+  }
+  function closeModal(el) {
+    if (!el) return;
+    el.classList.add('hidden');
+    el.classList.remove('flex');
+    if (previousFocus) {
+      previousFocus.focus();
+      previousFocus = null;
+    }
+  }
+
+  // --- Helper: group items by sourceTitle ---
+  function groupBySource(items) {
+    const groups = {};
+    const order = [];
+    items.forEach(function(item) {
+      var key = item.sourceTitle || 'Other Features';
+      if (!groups[key]) {
+        groups[key] = { sourceTitle: key, sourceSubmission: item.sourceSubmission, items: [] };
+        order.push(key);
+      }
+      groups[key].items.push(item);
+    });
+    return order.map(function(k) { return groups[k]; });
+  }
+
+  // --- Helper: count unique sources ---
+  function countUniqueSources(items) {
+    var seen = {};
+    items.forEach(function(item) {
+      var key = item.sourceSubmission || item.sourceTitle || item.id;
+      seen[key] = true;
+    });
+    return Object.keys(seen).length;
+  }
+
+  // --- Helper: generate share URL ---
+  function getShareURL() {
+    if (window.TSGRemix && typeof window.TSGRemix.getShareURL === 'function') {
+      return window.TSGRemix.getShareURL();
+    }
+    // Fallback: encode feature IDs as query params
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var ids = items.map(function(i) { return i.id; }).join(',');
+    return window.location.origin + window.location.pathname + '?features=' + encodeURIComponent(ids);
+  }
+
+  // --- Render grouped feature list ---
+  function renderGroupedList() {
+    var container = document.querySelector('[data-remix-list]');
+    if (!container || !window.TSGRemix) return;
+
+    var items = window.TSGRemix.getAll();
+    container.innerHTML = '';
+
+    if (items.length === 0) return;
+
+    var groups = groupBySource(items);
+
+    groups.forEach(function(group) {
+      var section = document.createElement('div');
+      section.className = 'rounded-2xl border border-brand-sky/10 bg-white shadow-sm overflow-hidden dark:border-gray-700 dark:bg-gray-800';
+
+      // Group header
+      var header = document.createElement('div');
+      header.className = 'flex items-center gap-2 border-b border-brand-sky/10 bg-brand-light-blue/20 px-4 py-2.5 dark:border-gray-700 dark:bg-gray-700/50';
+      header.innerHTML =
+        '<span class="text-sm" aria-hidden="true">📐</span>' +
+        '<h3 class="text-sm font-semibold text-brand-navy dark:text-gray-200 truncate">' + escapeHtml(group.sourceTitle) + '</h3>' +
+        '<span class="ml-auto shrink-0 rounded-full bg-brand-sky/10 px-2 py-0.5 text-[11px] font-semibold text-brand-indigo dark:bg-brand-sky/20 dark:text-brand-sky">' + group.items.length + '</span>';
+
+      section.appendChild(header);
+
+      // Feature chips container
+      var chipsWrap = document.createElement('div');
+      chipsWrap.className = 'flex flex-wrap gap-2 p-4';
+
+      group.items.forEach(function(item) {
+        var chip = document.createElement('div');
+        chip.className = 'inline-flex items-center gap-1.5 rounded-full border border-brand-sky/15 bg-brand-light-blue/30 pl-2.5 pr-1.5 py-1.5 text-sm transition-all hover:border-brand-sky/30 hover:shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500';
+        chip.dataset.remixItem = item.id;
+
+        chip.innerHTML =
+          '<span class="text-base shrink-0" aria-hidden="true">' + escapeHtml(item.icon) + '</span>' +
+          '<span class="font-medium text-brand-navy dark:text-gray-200 truncate max-w-[150px] sm:max-w-[200px]">' + escapeHtml(item.name) + '</span>' +
+          '<button type="button" ' +
+            'class="ml-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-brand-stone/60 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400" ' +
+            'data-remix-remove="' + escapeHtml(item.id) + '" ' +
+            'aria-label="Remove ' + escapeHtml(item.name) + ' from remix">' +
+            '<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
+          '</button>';
+
+        chipsWrap.appendChild(chip);
+      });
+
+      section.appendChild(chipsWrap);
+      container.appendChild(section);
+    });
+  }
+
+  // --- Update stats line ---
+  function updateStats() {
+    var statsEl = document.querySelector('[data-remix-stats]');
+    var totalEl = document.querySelector('[data-remix-total]');
+    var sourceCountEl = document.querySelector('[data-remix-source-count]');
+    var emptyEl = document.querySelector('[data-remix-empty]');
+    var actionsEl = document.querySelector('[data-remix-actions]');
+
+    var count = window.TSGRemix ? window.TSGRemix.count() : 0;
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var sourceCount = countUniqueSources(items);
+
+    if (totalEl) totalEl.textContent = count;
+    if (sourceCountEl) sourceCountEl.textContent = sourceCount;
+
+    if (statsEl) statsEl.classList.toggle('hidden', count === 0);
+    if (emptyEl) emptyEl.classList.toggle('hidden', count > 0);
+    if (actionsEl) actionsEl.classList.toggle('hidden', count === 0);
+  }
+
+  // --- Open submit modal ---
+  document.querySelector('[data-remix-submit-btn]')?.addEventListener('click', function() {
+    openModal(modal);
     noteInput?.focus();
   });
 
-  // Close submit modal
-  document.querySelector('[data-remix-modal-close]')?.addEventListener('click', () => {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
+  // --- Close submit modal ---
+  document.querySelector('[data-remix-modal-close]')?.addEventListener('click', function() {
+    closeModal(modal);
   });
 
-  // Submit remix
-  document.querySelector('[data-remix-modal-submit]')?.addEventListener('click', async () => {
-    const note = noteInput?.value?.trim() || '';
+  // --- Submit remix ---
+  document.querySelector('[data-remix-modal-submit]')?.addEventListener('click', async function() {
+    var note = noteInput?.value?.trim() || '';
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var featureCount = items.length;
+    var sourceCount = countUniqueSources(items);
 
     if (window.TSGRemix) {
-      const payload = await window.TSGRemix.submit(note);
-      console.log('[Remix Dashboard] Submitted:', payload);
+      await window.TSGRemix.submit(note);
     }
 
-    // Close modal and show toast
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
+    // Close submit modal
+    closeModal(modal);
 
-    toast.classList.remove('hidden');
-    setTimeout(() => {
-      toast.classList.add('hidden');
-    }, 3000);
+    // Populate confirmation modal
+    var summaryEl = document.querySelector('[data-remix-confirm-summary]');
+    if (summaryEl) {
+      summaryEl.textContent = 'You submitted ' + featureCount + ' feature' + (featureCount !== 1 ? 's' : '') +
+        ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '') +
+        (note ? '. Your note: "' + note + '"' : '') + '.';
+    }
+
+    var shareUrlEl = document.querySelector('[data-remix-share-url]');
+    if (shareUrlEl) {
+      shareUrlEl.textContent = getShareURL();
+    }
+
+    // Show confirmation modal
+    openModal(confirmModal);
 
     // Clear form
     if (noteInput) noteInput.value = '';
   });
 
-  // Close modal on backdrop click
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
+  // --- Copy share URL ---
+  document.querySelector('[data-remix-copy-share]')?.addEventListener('click', function() {
+    var url = document.querySelector('[data-remix-share-url]')?.textContent || '';
+    if (!url) return;
+
+    var btn = this;
+    navigator.clipboard.writeText(url).then(function() {
+      var originalText = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('bg-brand-sea');
+      btn.classList.remove('bg-brand-indigo');
+      setTimeout(function() {
+        btn.textContent = originalText;
+        btn.classList.remove('bg-brand-sea');
+        btn.classList.add('bg-brand-indigo');
+      }, 2000);
+    }).catch(function() {
+      // Fallback: select text
+      var range = document.createRange();
+      var shareEl = document.querySelector('[data-remix-share-url]');
+      if (shareEl) {
+        range.selectNodeContents(shareEl);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
   });
 
-  // Visualize
-  document.querySelector('[data-remix-visualize]')?.addEventListener('click', () => {
+  // --- Share on X/Twitter ---
+  document.querySelector('[data-remix-share-x]')?.addEventListener('click', function() {
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var featureCount = items.length;
+    var url = getShareURL();
+    var text = 'I built my dream Third Spaces app by remixing ' + featureCount + ' features from youth designs! \uD83C\uDFA8';
+    var shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
+    window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=400');
+  });
+
+  // --- Share on WhatsApp ---
+  document.querySelector('[data-remix-share-whatsapp]')?.addEventListener('click', function() {
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var featureCount = items.length;
+    var url = getShareURL();
+    var text = 'Check out my Third Spaces Remix! I collected ' + featureCount + ' features from youth designs: ' + url;
+    var shareUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+  });
+
+  // --- Start Fresh from confirmation modal ---
+  document.querySelector('[data-remix-start-fresh]')?.addEventListener('click', function() {
+    if (window.TSGRemix) {
+      window.TSGRemix.clear();
+    }
+    closeModal(confirmModal);
+    renderGroupedList();
+    updateStats();
+  });
+
+  // --- Close confirmation modal ---
+  document.querySelector('[data-remix-confirm-close]')?.addEventListener('click', function() {
+    closeModal(confirmModal);
+  });
+
+  // --- Close submit modal on backdrop click ---
+  modal?.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal(modal);
+  });
+
+  // --- Close confirmation modal on backdrop click ---
+  confirmModal?.addEventListener('click', function(e) {
+    if (e.target === confirmModal) closeModal(confirmModal);
+  });
+
+  // --- Visualize: Radial Constellation ---
+  var constellationColors = ['#9F3CC9', '#44499C', '#009CDE', '#009F4D', '#FFC600', '#E87722'];
+
+  document.querySelector('[data-remix-visualize]')?.addEventListener('click', function() {
     if (!window.TSGRemix) return;
 
-    const items = window.TSGRemix.getAll();
+    var items = window.TSGRemix.getAll();
     if (!items.length) return;
 
-    // Build icon collage
-    vizIcons.innerHTML = items.map(item =>
-      `<span class="p-3 rounded-xl bg-brand-light-blue/50 dark:bg-gray-700" title="${escapeHtml(item.name)}">${escapeHtml(item.icon)}</span>`
-    ).join('');
+    var groups = groupBySource(items);
+    var sourceCount = countUniqueSources(items);
 
-    vizModal.classList.remove('hidden');
-    vizModal.classList.add('flex');
-  });
+    // Build constellation
+    if (vizConstellation) {
+      vizConstellation.innerHTML = '';
 
-  // Close viz modal
-  document.querySelector('[data-remix-viz-close]')?.addEventListener('click', () => {
-    vizModal.classList.add('hidden');
-    vizModal.classList.remove('flex');
-  });
+      // Assign colors to sources
+      var sourceColorMap = {};
+      var colorIdx = 0;
+      groups.forEach(function(group) {
+        var key = group.sourceSubmission || group.sourceTitle;
+        if (!sourceColorMap[key]) {
+          sourceColorMap[key] = constellationColors[colorIdx % constellationColors.length];
+          colorIdx++;
+        }
+      });
 
-  vizModal?.addEventListener('click', (e) => {
-    if (e.target === vizModal) {
-      vizModal.classList.add('hidden');
-      vizModal.classList.remove('flex');
+      // Flatten items with their assigned color
+      var allBubbles = [];
+      items.forEach(function(item) {
+        var key = item.sourceSubmission || item.sourceTitle || 'Other';
+        allBubbles.push({
+          item: item,
+          color: sourceColorMap[key] || constellationColors[0]
+        });
+      });
+
+      var total = allBubbles.length;
+      var containerSize = 320; // matches max-w-[320px]
+      var center = containerSize / 2;
+
+      // Determine ring layout
+      var rings = [];
+      if (total <= 6) {
+        rings = [{ start: 0, count: total, radius: 100 }];
+      } else if (total <= 12) {
+        rings = [{ start: 0, count: total, radius: 115 }];
+      } else {
+        // Multi-ring: inner ring gets up to 8, outer ring gets the rest
+        var innerCount = Math.min(8, Math.ceil(total / 2));
+        var outerCount = total - innerCount;
+        rings = [
+          { start: 0, count: innerCount, radius: 80 },
+          { start: innerCount, count: outerCount, radius: 125 }
+        ];
+      }
+
+      // Draw connecting lines and bubbles
+      var bubbleIndex = 0;
+      rings.forEach(function(ring) {
+        for (var i = 0; i < ring.count; i++) {
+          var bubble = allBubbles[ring.start + i];
+          var angle = (2 * Math.PI * i / ring.count) - Math.PI / 2; // start from top
+          var bx = center + ring.radius * Math.cos(angle);
+          var by = center + ring.radius * Math.sin(angle);
+
+          // Connecting line (a thin gradient div rotated toward center)
+          var line = document.createElement('div');
+          var lineLen = ring.radius - 32; // stop short of center hub
+          var lineDeg = (angle * 180 / Math.PI) + 180; // point toward center
+          line.className = 'constellation-line absolute rounded-full';
+          line.style.cssText =
+            'width: ' + lineLen + 'px; height: 2px;' +
+            'left: ' + bx + 'px; top: ' + by + 'px;' +
+            'transform-origin: 0% 50%;' +
+            'transform: rotate(' + lineDeg + 'deg);' +
+            'background: linear-gradient(90deg, ' + bubble.color + '44, transparent);' +
+            '--delay: ' + (bubbleIndex * 0.2) + 's;';
+          vizConstellation.appendChild(line);
+
+          // Bubble
+          var bEl = document.createElement('div');
+          bEl.className = 'constellation-bubble absolute';
+          var floatTx = (Math.random() * 4 - 2).toFixed(1) + 'px';
+          var floatTy = '0px';
+          bEl.style.cssText =
+            'left: ' + (bx - 24) + 'px; top: ' + (by - 24) + 'px;' +
+            'z-index: 10;' +
+            '--tx: ' + floatTx + '; --ty: ' + floatTy + ';' +
+            '--delay: ' + (bubbleIndex * 0.25) + 's;' +
+            '--bubble-color: ' + bubble.color + '66;';
+
+          var inner = document.createElement('div');
+          inner.className = 'constellation-bubble-inner flex items-center justify-center w-12 h-12 rounded-full text-xl cursor-default shadow-lg';
+          inner.style.cssText =
+            'background: radial-gradient(circle at 30% 30%, ' + bubble.color + 'cc, ' + bubble.color + '88);' +
+            'border: 2px solid ' + bubble.color + '44;';
+          inner.textContent = bubble.item.icon || '✦';
+          inner.setAttribute('aria-label', bubble.item.name);
+          bEl.appendChild(inner);
+
+          // Tooltip
+          var tooltip = document.createElement('div');
+          tooltip.className = 'constellation-tooltip absolute left-1/2 top-full mt-1 whitespace-nowrap rounded-lg px-2.5 py-1 text-[11px] font-semibold shadow-lg';
+          tooltip.style.cssText =
+            'background: ' + bubble.color + '; color: #fff;';
+          tooltip.textContent = bubble.item.name;
+          bEl.appendChild(tooltip);
+
+          vizConstellation.appendChild(bEl);
+          bubbleIndex++;
+        }
+      });
+
+      // Center hub
+      var hub = document.createElement('div');
+      hub.className = 'absolute flex flex-col items-center justify-center w-16 h-16 rounded-full shadow-xl z-20';
+      hub.style.cssText =
+        'left: ' + (center - 32) + 'px; top: ' + (center - 32) + 'px;' +
+        'background: linear-gradient(135deg, #9F3CC9, #44499C, #009CDE);';
+      hub.innerHTML =
+        '<span class="text-lg font-bold text-white leading-none">' + total + '</span>' +
+        '<span class="text-[9px] font-semibold text-white/80 uppercase tracking-wide">features</span>';
+      vizConstellation.appendChild(hub);
     }
+
+    // Count line
+    if (vizCount) {
+      vizCount.textContent = items.length + ' feature' + (items.length !== 1 ? 's' : '') +
+        ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '');
+    }
+
+    openModal(vizModal);
   });
 
-  // Escape key closes modals
-  document.addEventListener('keydown', (e) => {
+  // --- Close viz modal ---
+  document.querySelector('[data-remix-viz-close]')?.addEventListener('click', function() {
+    closeModal(vizModal);
+  });
+
+  vizModal?.addEventListener('click', function(e) {
+    if (e.target === vizModal) closeModal(vizModal);
+  });
+
+  // --- Clear confirmation modal ---
+  document.addEventListener('remix:clear-request', function(e) {
+    e.preventDefault();
+    openModal(clearModal);
+  });
+
+  document.querySelector('[data-clear-confirm]')?.addEventListener('click', function() {
+    if (window.TSGRemix) window.TSGRemix.clear();
+    closeModal(clearModal);
+    renderGroupedList();
+    updateStats();
+  });
+
+  document.querySelector('[data-clear-cancel]')?.addEventListener('click', function() {
+    closeModal(clearModal);
+  });
+
+  clearModal?.addEventListener('click', function(e) {
+    if (e.target === clearModal) closeModal(clearModal);
+  });
+
+  // --- Escape key closes all modals ---
+  document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      modal?.classList.add('hidden');
-      modal?.classList.remove('flex');
-      vizModal?.classList.add('hidden');
-      vizModal?.classList.remove('flex');
+      closeModal(modal);
+      closeModal(vizModal);
+      closeModal(confirmModal);
+      closeModal(clearModal);
     }
   });
 
   function escapeHtml(str) {
     if (!str) return '';
-    const div = document.createElement('div');
+    var div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
   }
 
-  // Update empty state visibility
-  const updateEmptyState = () => {
-    const empty = document.querySelector('[data-remix-empty]');
-    const submit = document.querySelector('[data-remix-submit]');
-    const count = window.TSGRemix?.count() || 0;
+  // --- Initial render ---
+  function initialRender() {
+    renderGroupedList();
+    updateStats();
+  }
 
-    if (empty) empty.classList.toggle('hidden', count > 0);
-    if (submit) submit.classList.toggle('hidden', count === 0);
-  };
+  setTimeout(initialRender, 100);
 
-  // Initial update
-  setTimeout(updateEmptyState, 100);
-
-  // Listen for cart changes (observe the list container)
-  const listContainer = document.querySelector('[data-remix-list]');
+  // --- Observe cart changes to re-render ---
+  var listContainer = document.querySelector('[data-remix-list]');
   if (listContainer) {
-    const observer = new MutationObserver(updateEmptyState);
+    var observer = new MutationObserver(function() {
+      updateStats();
+    });
     observer.observe(listContainer, { childList: true });
+  }
+
+  // Patch TSGRemix.updateUI so cart changes trigger our grouped renderer.
+  // The original updateUI handles FAB, nav badge, and button states.
+  // Its internal updateDashboard rebuilds a flat list which we immediately
+  // overwrite with our grouped layout — a minor redundancy but harmless.
+  if (window.TSGRemix) {
+    setTimeout(function() {
+      if (!window.TSGRemix) return;
+      var origUpdateUI = window.TSGRemix.updateUI;
+      window.TSGRemix.updateUI = function() {
+        if (origUpdateUI) origUpdateUI();
+        renderGroupedList();
+        updateStats();
+      };
+    }, 200);
   }
 });
 </script>

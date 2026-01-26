@@ -139,20 +139,27 @@
    * Update all UI elements
    */
   const updateUI = () => {
-    // Update FAB
+    // Update FAB - always visible, muted when empty
     const fab = document.querySelector("[data-remix-fab]");
     if (fab) {
       const countEl = fab.querySelector("[data-remix-count]");
       if (countEl) {
         countEl.textContent = cart.length;
       }
-      fab.classList.toggle("hidden", cart.length === 0);
+      fab.classList.toggle("remix-fab-empty", cart.length === 0);
 
       // Add pulse animation when items change
       if (cart.length > 0) {
         fab.classList.add("animate-pulse-once");
         setTimeout(() => fab.classList.remove("animate-pulse-once"), 600);
       }
+    }
+
+    // Update nav count badge
+    const navBadge = document.querySelector("[data-remix-nav-count]");
+    if (navBadge) {
+      navBadge.textContent = cart.length;
+      navBadge.classList.toggle("hidden", cart.length === 0);
     }
 
     // Update Add to Remix buttons (toggle state)
@@ -166,7 +173,7 @@
       // Update button text if has label element
       const labelEl = btn.querySelector("[data-remix-label]");
       if (labelEl) {
-        labelEl.textContent = inCart ? "Added" : "Add to Remix";
+        labelEl.textContent = inCart ? "\u2713 Added" : "+ Add";
       }
     });
 
@@ -182,7 +189,7 @@
     if (!container) return;
 
     const emptyState = document.querySelector("[data-remix-empty]");
-    const submitBtn = document.querySelector("[data-remix-submit]");
+    const submitBtn = document.querySelector("[data-remix-actions]");
 
     // Show/hide empty state
     if (emptyState) {
@@ -282,6 +289,82 @@
   };
 
   /**
+   * Add a feature by ID only (graceful degradation with generic metadata)
+   * Used when importing from shared URLs where full metadata isn't available.
+   * @param {string} featureId - Unique feature identifier
+   */
+  const addById = (featureId) => {
+    if (!featureId || has(featureId)) return false;
+    return add(featureId, { name: featureId, icon: "🎯" });
+  };
+
+  /**
+   * Generate a shareable URL encoding the current cart's feature IDs
+   * @returns {string} Full URL with ?features= query param
+   */
+  const getShareURL = () => {
+    const baseurl =
+      document.querySelector('meta[name="baseurl"]')?.content || "";
+    const base = window.location.origin + baseurl + "/remix/";
+    if (cart.length === 0) return base;
+
+    const url = new URL(base);
+    url.searchParams.set("features", cart.map((item) => item.id).join(","));
+    return url.toString();
+  };
+
+  /**
+   * Load features from a shared URL's ?features= query param
+   * Parses comma-separated feature IDs and adds any missing ones to cart.
+   * Cleans the URL afterwards via history.replaceState.
+   */
+  const loadFromShareURL = () => {
+    try {
+      const url = new URL(window.location.href);
+      const featuresParam = url.searchParams.get("features");
+      if (!featuresParam) return;
+
+      const ids = featuresParam
+        .split(",")
+        .map((id) => id.trim())
+        .filter(Boolean);
+      if (ids.length === 0) return;
+
+      let imported = 0;
+      ids.forEach((id) => {
+        if (addById(id)) {
+          imported++;
+        }
+      });
+
+      // Clean the URL (remove query params)
+      url.searchParams.delete("features");
+      const cleanURL =
+        url.pathname +
+        (url.searchParams.toString() ? "?" + url.searchParams.toString() : "") +
+        url.hash;
+      history.replaceState(null, "", cleanURL);
+
+      if (imported > 0) {
+        console.log(`[Remix] Imported ${imported} features from shared URL`);
+      }
+    } catch (e) {
+      console.warn("[Remix] Failed to load from share URL:", e);
+    }
+  };
+
+  /**
+   * Get the count of unique source submissions in the cart
+   * @returns {number} Number of unique sourceSubmission values
+   */
+  const uniqueSources = () => {
+    const sources = new Set(
+      cart.map((item) => item.sourceSubmission).filter(Boolean),
+    );
+    return sources.size;
+  };
+
+  /**
    * Generate remix payload for submission
    */
   const generatePayload = () => {
@@ -293,7 +376,6 @@
         sourceSubmission: item.sourceSubmission,
       })),
       createdAt: new Date().toISOString(),
-      deviceId: localStorage.getItem("tsg_device_id") || null,
     };
   };
 
@@ -319,6 +401,7 @@
 
   // Initialize
   loadCart();
+  loadFromShareURL();
 
   // Event delegation for click handlers
   document.addEventListener("click", (e) => {
@@ -355,8 +438,16 @@
     const clearBtn = e.target.closest("[data-remix-clear]");
     if (clearBtn) {
       e.preventDefault();
-      if (confirm("Remove all features from your remix?")) {
-        clear();
+      // Dispatch event so dashboard can show a styled modal instead
+      const event = new CustomEvent("remix:clear-request", {
+        cancelable: true,
+      });
+      const handled = !document.dispatchEvent(event);
+      if (!handled) {
+        // Fallback for pages without a custom handler
+        if (confirm("Remove all features from your remix?")) {
+          clear();
+        }
       }
     }
   });
@@ -371,6 +462,7 @@
   // Expose API
   window.TSGRemix = {
     add,
+    addById,
     remove,
     has,
     getAll,
@@ -378,8 +470,107 @@
     clear,
     submit,
     generatePayload,
+    getShareURL,
+    uniqueSources,
     updateUI,
   };
 
   console.log("[Remix] Engine initialized, cart has", cart.length, "items");
+
+  // --- Remix Onboarding Tooltip ---
+  const initOnboardingTooltip = () => {
+    try {
+      // Skip if we're already on the remix page
+      if (window.location.pathname.replace(/\/$/, "").endsWith("/remix"))
+        return;
+
+      // Skip if user has already seen the tooltip
+      if (localStorage.getItem("tsg_remix_onboarding_seen")) return;
+    } catch (e) {
+      // Private browsing or localStorage unavailable — skip silently
+      return;
+    }
+
+    const tooltip = document.querySelector("[data-remix-tooltip]");
+    if (!tooltip) return;
+
+    let dismissed = false;
+    let autoTimer = null;
+
+    const dismiss = () => {
+      if (dismissed) return;
+      dismissed = true;
+
+      if (autoTimer) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+
+      // Fade out
+      tooltip.classList.remove(
+        "opacity-100",
+        "translate-y-0",
+        "pointer-events-auto",
+      );
+      tooltip.classList.add(
+        "opacity-0",
+        "translate-y-2",
+        "pointer-events-none",
+      );
+
+      // Hide after transition completes
+      setTimeout(() => {
+        tooltip.setAttribute("hidden", "");
+      }, 350);
+
+      // Record dismissal
+      try {
+        localStorage.setItem("tsg_remix_onboarding_seen", "1");
+      } catch (_) {
+        // Ignore storage errors
+      }
+    };
+
+    // Show after a 1.5-second delay to let the page settle
+    setTimeout(() => {
+      if (dismissed) return;
+
+      tooltip.removeAttribute("hidden");
+
+      // Trigger reflow then animate in
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          tooltip.classList.remove(
+            "opacity-0",
+            "translate-y-2",
+            "pointer-events-none",
+          );
+          tooltip.classList.add(
+            "opacity-100",
+            "translate-y-0",
+            "pointer-events-auto",
+          );
+        });
+      });
+
+      // Auto-dismiss after 8 seconds
+      autoTimer = setTimeout(dismiss, 8000);
+    }, 1500);
+
+    // Dismiss on button click
+    const dismissBtn = tooltip.querySelector("[data-remix-tooltip-dismiss]");
+    if (dismissBtn) {
+      dismissBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        dismiss();
+      });
+    }
+  };
+
+  // Run onboarding after DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initOnboardingTooltip);
+  } else {
+    initOnboardingTooltip();
+  }
 })();

@@ -137,6 +137,10 @@ class ImmersiveGallery {
     // Render the design stack
     this.renderDesigns();
 
+    // Sync remix button states with cart
+    window.TSGRemix?.updateUI();
+    this.syncRemixChips();
+
     // Bind events
     this.bindEvents();
 
@@ -496,7 +500,7 @@ class ImmersiveGallery {
       <div class="screen-slide" data-screen-slide data-screen-index="${index}">
         <div class="screen-image-container">
           <img class="screen-image"
-               src="${screen.src}"
+               src="${this.escapeHtml(screen.src)}"
                alt="${this.escapeHtml(screen.alt || "Design screen")}"
                loading="lazy"
                decoding="async">
@@ -560,30 +564,58 @@ class ImmersiveGallery {
             <p class="feedback-thanks" data-feedback-thanks hidden>Thanks for your feedback! 🎉</p>
           </div>
 
+          ${
+            submission.features && submission.features.length > 0
+              ? `
+            <div class="immersive-remix-section">
+              <p class="immersive-remix-label">
+                🎨 Remix Features
+              </p>
+              <div class="immersive-remix-chips">
+                ${submission.features
+                  .map(
+                    (f) => `
+                  <button type="button"
+                          class="immersive-remix-chip"
+                          data-remix-add="${this.escapeHtml(f.id)}"
+                          data-remix-name="${this.escapeHtml(f.name)}"
+                          data-remix-icon="${this.escapeHtml(f.icon)}"
+                          data-remix-source="${this.escapeHtml(submission.id)}"
+                          data-remix-source-title="${this.escapeHtml(submission.title)}"
+                          aria-pressed="false">
+                    <span class="immersive-remix-chip-icon" aria-hidden="true">${this.escapeHtml(f.icon)}</span>
+                    <span>${this.escapeHtml(f.name)}</span>
+                    <span class="immersive-remix-chip-indicator">+</span>
+                  </button>`,
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `
+              : ""
+          }
+
           <div class="details-actions">
-            <button type="button"
-                    class="details-btn details-btn-remix"
-                    data-add-remix
-                    data-submission-id="${submission.id}"
-                    data-submission-title="${this.escapeHtml(submission.title)}">
-              <span aria-hidden="true">🎨</span>
-              Add to Remix
-            </button>
             <a href="${submission.url}" class="details-btn details-btn-primary">
               View Full Page
               <span aria-hidden="true">→</span>
             </a>
             ${
               submission.demoUrl
-                ? `
-              <a href="${submission.demoUrl}"
+                ? (() => {
+                    const safeDemoUrl = /^https?:\/\//i.test(submission.demoUrl)
+                      ? submission.demoUrl
+                      : "#";
+                    return `
+              <a href="${safeDemoUrl}"
                  target="_blank"
                  rel="noopener noreferrer"
                  class="details-btn details-btn-secondary">
                 Try Demo
                 <span aria-hidden="true">↗</span>
               </a>
-            `
+            `;
+                  })()
                 : ""
             }
           </div>
@@ -739,9 +771,11 @@ class ImmersiveGallery {
         this.handleFeedbackTag(tag);
       }
 
-      const remixBtn = e.target.closest("[data-add-remix]");
+      // Sync remix chip visuals after remix.js processes the click
+      const remixBtn = e.target.closest("[data-remix-add]");
       if (remixBtn) {
-        this.handleAddToRemix(remixBtn);
+        // Allow remix.js event delegation to process first, then sync visuals
+        requestAnimationFrame(() => this.syncRemixChips());
       }
     });
 
@@ -809,46 +843,19 @@ class ImmersiveGallery {
   }
 
   /**
-   * Handle Add to Remix button click
+   * Sync remix chip visuals with cart state.
+   * remix.js toggles .is-added and aria-pressed on [data-remix-add] buttons,
+   * but our compact chips need additional indicator/style updates.
    */
-  handleAddToRemix(btn) {
-    const submissionId = btn.dataset.submissionId;
-    const submissionTitle = btn.dataset.submissionTitle;
-
-    if (!submissionId) return;
-
-    // Get current remix from localStorage
-    const remixKey = "tsg_remix";
-    const remix = JSON.parse(localStorage.getItem(remixKey) || "[]");
-
-    // Check if already in remix
-    const existingIdx = remix.findIndex((r) => r.id === submissionId);
-
-    if (existingIdx > -1) {
-      // Remove from remix
-      remix.splice(existingIdx, 1);
-      btn.classList.remove("in-remix");
-      btn.innerHTML = '<span aria-hidden="true">🎨</span> Add to Remix';
-    } else {
-      // Add to remix
-      remix.push({
-        id: submissionId,
-        title: submissionTitle,
-        addedAt: Date.now(),
-      });
-      btn.classList.add("in-remix");
-      btn.innerHTML = '<span aria-hidden="true">✓</span> In Your Remix';
-    }
-
-    localStorage.setItem(remixKey, JSON.stringify(remix));
-
-    // Update remix count in header if visible
-    const remixTotal = document.querySelector("[data-remix-total]");
-    if (remixTotal) {
-      remixTotal.textContent = remix.length;
-    }
-
-    console.log("[ImmersiveGallery] Remix:", remix.length, "items");
+  syncRemixChips() {
+    if (!this.designStack) return;
+    this.designStack.querySelectorAll("[data-remix-add]").forEach((btn) => {
+      const inCart = btn.classList.contains("is-added");
+      const indicator = btn.querySelector(".immersive-remix-chip-indicator");
+      if (indicator) {
+        indicator.textContent = inCart ? "\u2713" : "+";
+      }
+    });
   }
 
   /**
@@ -1150,8 +1157,8 @@ class ImmersiveGallery {
     const screens = track?.querySelectorAll("[data-screen-slide]");
     if (!screens || screens.length === 0) return;
 
-    const currentScreen =
-      this.currentScreenIndexes[this.currentDesignIndex] || 0;
+    const submission = this.filteredSubmissions[this.currentDesignIndex];
+    const currentScreen = this.currentScreenIndexes[submission?.id] || 0;
     const total = screens.length;
 
     // Wrap around for infinite looping
@@ -1293,6 +1300,10 @@ class ImmersiveGallery {
     this.currentDesignIndex = 0;
     this.updateNavigation(); // Update UI for new filtered set
 
+    // Sync remix button states with cart after re-render
+    window.TSGRemix?.updateUI();
+    this.syncRemixChips();
+
     // Scroll to top
     this.designStack?.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1326,6 +1337,9 @@ class ImmersiveGallery {
         this.currentDesignIndex = 0;
         this.updateNavigation();
       }
+      // Sync remix button states with cart
+      window.TSGRemix?.updateUI();
+      this.syncRemixChips();
       // Clear flag after scroll settles to enable clone jump behavior
       setTimeout(() => {
         this.isInitializing = false;

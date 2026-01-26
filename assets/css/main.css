@@ -313,6 +313,28 @@
   @apply bg-red-900/30 border-red-700 text-red-400;
 }
 
+/* Remix FAB empty state */
+.remix-fab-empty {
+  opacity: 0.5;
+  transform: scale(0.85);
+}
+
+/* Remix nav count badge */
+.remix-nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #9F3CC9, #44499C);
+  color: #fff;
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 /* Vote button specific animations */
 .vote-btn:not(.is-voted):active {
   transform: scale(0.98);
@@ -935,6 +957,76 @@ img {
 
 .details-btn-remix.in-remix {
   background: linear-gradient(135deg, #009F4D 0%, #008743 100%); /* brand-sea gradient */
+}
+
+/* Immersive remix features section */
+.immersive-remix-section {
+  margin-bottom: 1rem;
+}
+
+.immersive-remix-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.immersive-remix-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.immersive-remix-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.immersive-remix-chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.immersive-remix-chip:active {
+  transform: scale(0.95);
+}
+
+.immersive-remix-chip.is-added {
+  border-color: rgba(0, 159, 77, 0.6);
+  background: rgba(0, 159, 77, 0.15);
+}
+
+.immersive-remix-chip.is-added:hover {
+  background: rgba(0, 159, 77, 0.25);
+}
+
+.immersive-remix-chip-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.immersive-remix-chip-indicator {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-left: 0.125rem;
+}
+
+.immersive-remix-chip.is-added .immersive-remix-chip-indicator {
+  color: #4ade80;
+  opacity: 1;
 }
 
 /* Feedback section in details slide */

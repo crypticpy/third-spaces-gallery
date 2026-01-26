@@ -176,13 +176,27 @@ layout: default
         {% if page.features and page.features.size > 0 %}
         <section class="mt-8 rounded-2xl border-2 border-dashed border-brand-purple/30 bg-brand-purple/5 p-6
                         dark:border-brand-purple/50 dark:bg-brand-purple/10" aria-label="Features to remix">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="text-2xl" aria-hidden="true">🎨</span>
-            <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl" aria-hidden="true">🎨</span>
+              <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
+            </div>
+            <a href="{{ '/remix/' | relative_url }}"
+               class="text-xs font-medium text-brand-purple hover:text-brand-indigo transition dark:text-brand-purple/80 dark:hover:text-brand-purple">
+              View your Remix →
+            </a>
           </div>
-          <p class="text-sm text-brand-stone dark:text-gray-400 mb-4">
-            Love a feature? Add it to your remix and build your dream app!
+          <p class="text-sm text-brand-stone dark:text-gray-400 mb-3">
+            Pick features you love from any design. They'll be saved to your Remix collection — your personal wishlist for the perfect app.
           </p>
+          <details class="mb-4 text-xs text-brand-stone/70 dark:text-gray-500">
+            <summary class="cursor-pointer hover:text-brand-stone dark:hover:text-gray-400 transition inline-flex items-center gap-1">
+              What is Remix?
+            </summary>
+            <p class="mt-1 pl-0.5">
+              Your Remix is like a wishlist — collect features from any design, then share your ideal combo.
+            </p>
+          </details>
           <div class="flex flex-wrap gap-2">
             {% for feature in page.features %}
             <button type="button"
@@ -194,8 +208,8 @@ layout: default
                     data-remix-source-title="{{ page.title }}"
                     aria-pressed="false">
               <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
-              <span data-remix-label>Add to Remix</span>
               <span class="font-medium">{{ feature.name }}</span>
+              <span data-remix-label class="text-xs opacity-70">+ Add</span>
             </button>
             {% endfor %}
           </div>
