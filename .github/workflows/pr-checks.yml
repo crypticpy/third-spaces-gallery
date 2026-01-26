@@ -67,7 +67,8 @@ jobs:
               --include='*.yml' --include='*.yaml' --include='*.json' \
               -E "$pattern" . \
               --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
-              --exclude-dir=.bundle --exclude-dir=.github --exclude='package-lock.json' \
+              --exclude-dir=.bundle --exclude='package-lock.json' \
+              --exclude='.github/workflows/pr-checks.yml' \
               2>/dev/null || true)
             if [ -n "$MATCHES" ]; then
               echo "::error::Potential secret pattern found: $pattern"
