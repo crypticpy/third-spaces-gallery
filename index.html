@@ -6,17 +6,17 @@ title: Home
 {% include home-hero.html %}
 
 <!-- Featured Designs -->
-<section class="py-16 lg:py-24" style="background: rgb(var(--bg));">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<section class="relative py-16 lg:py-24 overflow-hidden sparkle-field" style="background: #22254E;">
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
       <div>
         <p class="inline-flex items-center gap-2 font-bold text-sm mb-3" style="color: #009CDE;">
-          <span class="text-lg">&#x1F31F;</span> Fresh from Austin Youth
+          <span class="text-lg">&#x1F31F;</span> Fresh from Austin
         </p>
         <h2 class="text-3xl lg:text-4xl font-extrabold" style="color: rgb(var(--fg));">
           Featured <span class="text-gradient">Designs</span>
         </h2>
-        <p class="mt-2 text-lg" style="color: rgb(var(--fg) / 0.65);">See what your neighbors dreamed up!</p>
+        <p class="mt-2 text-lg" style="color: rgb(var(--fg) / 0.65);">See what Austin students designed</p>
       </div>
       <a href="{{ '/designs/' | relative_url }}"
          class="btn-glow hidden sm:inline-flex text-sm">
@@ -46,22 +46,22 @@ title: Home
 </section>
 
 <!-- How it Works -->
-<section class="relative py-20 lg:py-28 overflow-hidden">
+<section class="relative py-20 lg:py-28 overflow-hidden sparkle-field">
   <!-- Gradient mesh background for this section -->
   <div class="absolute inset-0" aria-hidden="true"
        style="background:
-         radial-gradient(ellipse 70% 50% at 30% 0%, rgba(220, 242, 253, 0.7) 0%, transparent 60%),
-         radial-gradient(ellipse 50% 60% at 80% 100%, rgba(223, 240, 227, 0.5) 0%, transparent 50%),
-         rgb(var(--bg));"></div>
+         radial-gradient(ellipse 70% 50% at 30% 0%, rgba(0, 156, 222, 0.15) 0%, transparent 60%),
+         radial-gradient(ellipse 50% 60% at 80% 100%, rgba(159, 60, 201, 0.1) 0%, transparent 50%),
+         #22254E;"></div>
 
   <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="text-center">
       <span class="text-4xl">&#x1F3AF;</span>
       <h2 class="mt-4 text-3xl lg:text-4xl font-extrabold" style="color: rgb(var(--fg));">
-        Super Easy to <span class="text-gradient">Join In</span>!
+        Here's How It <span class="text-gradient">Works</span>
       </h2>
       <p class="mx-auto mt-4 max-w-xl text-lg" style="color: rgb(var(--fg) / 0.65);">
-        Help decide what goes into the Third Spaces app
+        You decide what gets built
       </p>
     </div>
 
@@ -73,7 +73,7 @@ title: Home
         <div class="text-5xl mb-4 group-hover:animate-wiggle">&#x1F440;</div>
         <h3 class="text-xl font-bold" style="color: rgb(var(--fg));">Explore</h3>
         <p class="mt-3 leading-relaxed" style="color: rgb(var(--fg) / 0.65);">
-          Check out the cool designs Austin kids created for finding fun places to hang out
+          Browse designs from Austin students &mdash; they imagined new ways to find your next favorite spot
         </p>
       </div>
 
@@ -95,7 +95,7 @@ title: Home
         <div class="text-5xl mb-4 group-hover:animate-wiggle">&#x1F389;</div>
         <h3 class="text-xl font-bold" style="color: rgb(var(--fg));">Make an Impact</h3>
         <p class="mt-3 leading-relaxed" style="color: rgb(var(--fg) / 0.65);">
-          Your votes help decide which ideas might become real features in the app!
+          Your votes shape which ideas become real features in the app
         </p>
       </div>
     </div>

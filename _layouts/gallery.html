@@ -8,9 +8,19 @@ layout: default
 <!-- Grid View (shown on desktop by default) -->
 <div class="py-8 lg:py-12" data-grid-view>
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Breadcrumb (desktop) -->
+    <nav class="mb-6 hidden lg:block" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm">
+        <li>
+          <a href="{{ '/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition dark:text-gray-400 dark:hover:text-white">Home</a>
+        </li>
+        <li class="text-brand-cloud dark:text-gray-600">/</li>
+        <li class="text-brand-navy font-medium dark:text-gray-100" aria-current="page">All Designs</li>
+      </ol>
+    </nav>
     <!-- Header -->
     <header class="mb-8 text-center lg:mb-12">
-      <h1 class="text-3xl font-bold text-brand-navy dark:text-gray-100 sm:text-4xl lg:text-5xl">
+      <h1 class="text-3xl font-extrabold text-brand-navy dark:text-gray-100 sm:text-4xl lg:text-5xl">
         {{ page.title | default: "Youth Design Gallery" }}
       </h1>
       <p class="mx-auto mt-4 max-w-2xl text-lg text-brand-stone dark:text-gray-400">

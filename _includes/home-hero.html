@@ -1,5 +1,6 @@
 <!-- _includes/home-hero.html — "Studio Wall" hero -->
-<section class="hero-mesh wave-divider">
+<section class="hero-mesh">
+  <div class="wave-divider-edge" aria-hidden="true"></div>
   <div class="relative z-10 mx-auto max-w-6xl px-4 py-14 sm:py-20 lg:py-24">
     <div class="grid items-center gap-10 lg:grid-cols-2">
 
@@ -21,7 +22,7 @@
 
         <p class="mt-5 text-lg leading-relaxed max-w-lg" style="color: rgb(var(--fg) / 0.8);">
           Third Spaces are the places between home and school &mdash; parks, libraries, rec centers.
-          Austin youth designed these prototypes to help you find them.
+          Austin students designed these to help you find them.
           <strong style="color: rgb(var(--fg));">Vote to shape what gets built.</strong>
         </p>
 
@@ -149,3 +150,5 @@
 
 <!-- Hero deck behavior: shuffle, cycle, mobile navigation -->
 <script src="{{ '/assets/js/hero-deck.js' | relative_url }}" defer></script>
+<!-- Floating emoji particles -->
+<script src="{{ '/assets/js/hero-particles.js' | relative_url }}" defer></script>

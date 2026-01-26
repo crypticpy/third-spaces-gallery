@@ -336,8 +336,7 @@
   position: relative;
   background: #fff;
   border-radius: 1.5rem;
-  padding: 2.5rem 2rem;
-  overflow: hidden;
+  padding: 2.5rem 2rem 2rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -369,23 +368,22 @@
   background: #2c2f58;
 }
 
-/* Step badge — bigger, gradient-filled */
+/* Step badge — tab-style in top-left corner */
 .step-badge {
   position: absolute;
-  top: -1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  font-size: 1rem;
+  min-width: 2.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0 0 0.75rem 0;
+  font-size: 0.85rem;
   font-weight: 800;
   color: #fff;
   background: linear-gradient(135deg, var(--card-accent, #009CDE), var(--card-accent2, #44499C));
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Section wave divider */
@@ -393,16 +391,113 @@
   position: relative;
 }
 
-.wave-divider::after {
-  content: '';
+.wave-divider-edge {
   position: absolute;
   bottom: -1px;
   left: 0;
   right: 0;
   height: 60px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C360 0 720 60 1080 30 C1260 15 1380 40 1440 30 V60 H0Z' fill='%23f7f6f5'/%3E%3C/svg%3E") no-repeat center bottom;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0 30 C360 0 720 60 1080 30 C1260 15 1380 40 1440 30 V60 H0Z' fill='%2322254E'/%3E%3C/svg%3E") no-repeat center bottom;
   background-size: 100% 60px;
-  z-index: 1;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Sparkle star-field overlay (Discord-style)
+   Uses ::before for standalone sections, ::after for sections
+   that already use ::before (like hero-mesh). */
+
+.sparkle-field::before,
+.hero-mesh::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    /* Large stars */
+    radial-gradient(2px 2px at 12% 15%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(2px 2px at 78% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 45% 42%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 90% 55%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(2px 2px at 25% 72%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(2.5px 2.5px at 65% 85%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 8% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    /* Medium stars */
+    radial-gradient(1.5px 1.5px at 35% 5%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 22%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 82% 35%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 18% 48%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 72% 62%, rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 78%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 95% 82%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    /* Small stars */
+    radial-gradient(1px 1px at 5% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 12%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 18%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 55%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 48%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 65%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 75%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 48% 92%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 95%, rgba(255,255,255,0.2) 0%, transparent 100%);
+  animation: sparkle-twinkle 6s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle-twinkle {
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkle-field::before,
+  .hero-mesh::after { animation: none; opacity: 0.8; }
+}
+
+/* Hero floating emoji particles */
+.hero-particles-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;          /* above mesh bg, below content (z-10) */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-particle {
+  position: absolute;
+  bottom: var(--start-y, -30px);
+  will-change: transform, opacity;
+  animation: particle-float var(--dur, 16s) ease-in-out forwards;
+  line-height: 1;
+  user-select: none;
+  filter: blur(0.3px);
+  opacity: 0;
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.65;
+    transform: translateY(calc(var(--travel, -80vh) * 0.08)) translateX(calc(var(--drift, 0px) * 0.15)) scale(0.8) rotate(10deg);
+  }
+  40% {
+    opacity: 0.45;
+  }
+  70% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(var(--travel, -80vh)) translateX(var(--drift, 0px)) scale(1) rotate(-8deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-particles-container { display: none; }
 }
 
 /* Phone glow effect */
@@ -643,9 +738,19 @@
     background-clip: text;
   }
 
+  /* High-contrast gradient for dark backgrounds */
+  [data-theme="hype"] .text-gradient,
+  .dark .text-gradient,
+  .sparkle-field .text-gradient {
+    background: linear-gradient(135deg, #5BC4F0 0%, #A8ABE0 45%, #CDA0E5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   /* Animated gradient text for hero headings */
   .text-gradient-animated {
-    background: linear-gradient(135deg, #009CDE, #44499C, #9F3CC9, #009CDE);
+    background: linear-gradient(135deg, #5BC4F0, #A8ABE0, #CDA0E5, #5BC4F0);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

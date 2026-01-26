@@ -32,7 +32,7 @@ cover_image: /assets/images/submissions/2025/access-all/thumb.svg
 thumbnail: /assets/images/submissions/2025/access-all/thumb.svg
 thumbnail_alt: "Access All app showing accessibility features and language options"
 
-creator_note: "1 in 4 people have some kind of disability, and lots of Austin families speak languages other than English. We wanted to make sure Third Spaces works for ALL Austin youth."
+creator_note: "1 in 4 people have some kind of disability, and lots of Austin families speak languages other than English. We wanted to make sure Third Spaces works for ALL of Austin."
 
 # Remixable features for the Remix Engine
 features:
@@ -64,7 +64,7 @@ created_at: 2025-01-20
 github_issue: 3
 ---
 
-We believe every kid should be able to find and enjoy third spaces, no matter their abilities or background. Access All is designed from the ground up to be inclusive.
+We believe everyone should be able to find and enjoy third spaces, no matter their abilities or background. That's why we designed Access All to be inclusive from the start.
 
 ## Accessibility Features
 
@@ -91,7 +91,7 @@ We believe every kid should be able to find and enjoy third spaces, no matter th
 
 ## Why Accessibility Matters
 
-About 1 in 4 people have some kind of disability. And lots of Austin families speak languages other than English at home. If Third Spaces is going to help ALL Austin youth, it needs to work for everyone.
+About 1 in 4 people have some kind of disability. And lots of Austin families speak languages other than English at home. If Third Spaces is going to work for ALL of Austin, it needs to be accessible to everyone.
 
 ## Special Features
 

@@ -8,7 +8,7 @@ designer: "Aiden P., Maya L., & Chris W."
 school: "Kealing Middle School"
 grade: "Middle School (6-8)"
 
-summary: "Turn Third Spaces into actual communities with group chats, event planning, and ways to meet other youth who share your interests."
+summary: "Turn Third Spaces into actual communities with group chats, event planning, and ways to meet other people who share your interests."
 feature_focus:
   - communication
   - discovery
@@ -32,7 +32,7 @@ cover_image: /assets/images/submissions/2025/community-hub/thumb.svg
 thumbnail: /assets/images/submissions/2025/community-hub/thumb.svg
 thumbnail_alt: "Community Hub app showing group chats and event planning features"
 
-creator_note: "We noticed kids often go to the same places but never meet each other. We wanted to change that by making it easy to find others who share your interests before you even show up."
+creator_note: "We noticed people often go to the same places but never meet each other. We wanted to change that by making it easy to find others who share your interests before you even show up."
 
 # Remixable features for the Remix Engine
 features:
@@ -61,7 +61,7 @@ created_at: 2025-01-22
 github_issue: 4
 ---
 
-Finding a cool place is just the start. What makes it great is the people you meet there. Community Hub adds social features to help youth connect.
+Finding a cool place is just the start. What makes it great is the people you meet there. Community Hub adds social features to help people connect.
 
 ## Core Features
 
@@ -80,7 +80,7 @@ Finding a cool place is just the start. What makes it great is the people you me
 
 ### Safe Messaging
 
-- Chat with other verified youth users
+- Chat with other verified users
 - Moderated spaces to keep conversations safe
 - Block and report features
 - No direct messaging from strangers
@@ -96,4 +96,4 @@ We know parents worry about online connections. That's why we built in:
 
 ## The Vision
 
-We want Third Spaces to feel like YOUR space. When you walk into the library or rec center, you should already know some people there. Community Hub makes that happen by connecting youth before they even show up.
+We want Third Spaces to feel like YOUR space. When you walk into the library or rec center, you should already know some people there. Community Hub makes that happen by connecting people before they even show up.

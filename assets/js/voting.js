@@ -29,7 +29,7 @@ const VOTE_CONFIG = {
       id: "innovative",
       label: "Super creative",
       emoji: "✨",
-      votedLabel: "You dig it!",
+      votedLabel: "Love that!",
       votedEmoji: "✓",
     },
     {
