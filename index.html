@@ -5,29 +5,29 @@ title: Home
 
 {% include home-hero.html %}
 
-<!-- Featured Designs - Playful Grid -->
-<section class="py-16 lg:py-24 bg-surface-base">
+<!-- Featured Designs -->
+<section class="py-16 lg:py-24" style="background: rgb(var(--bg));">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 text-brand-sky font-semibold text-sm mb-3">
-          <span class="text-lg">🌟</span> Fresh from Austin Youth
-        </div>
-        <h2 class="text-3xl lg:text-4xl font-extrabold text-brand-navy">Featured Designs</h2>
-        <p class="mt-2 text-brand-stone text-lg">See what your neighbors dreamed up!</p>
+        <p class="inline-flex items-center gap-2 font-bold text-sm mb-3" style="color: #009CDE;">
+          <span class="text-lg">&#x1F31F;</span> Fresh from Austin Youth
+        </p>
+        <h2 class="text-3xl lg:text-4xl font-extrabold" style="color: rgb(var(--fg));">
+          Featured <span class="text-gradient">Designs</span>
+        </h2>
+        <p class="mt-2 text-lg" style="color: rgb(var(--fg) / 0.65);">See what your neighbors dreamed up!</p>
       </div>
       <a href="{{ '/designs/' | relative_url }}"
-         class="hidden sm:inline-flex items-center gap-2 rounded-full bg-brand-indigo/10 px-5 py-2.5
-                text-sm font-bold text-brand-indigo transition-all duration-300
-                hover:bg-brand-indigo hover:text-white btn-bouncy">
+         class="btn-glow hidden sm:inline-flex text-sm">
         See all designs
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
         </svg>
       </a>
     </div>
 
-    <!-- Grid with playful styling -->
+    <!-- Grid -->
     <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
       {% assign featured = site.submissions | sort: "created_at" | reverse | limit: 6 %}
       {% for submission in featured %}
@@ -35,88 +35,77 @@ title: Home
       {% endfor %}
     </div>
 
-    <!-- Mobile see all link -->
+    <!-- Mobile see all -->
     <div class="mt-10 text-center sm:hidden">
-      <a href="{{ '/designs/' | relative_url }}"
-         class="inline-flex items-center gap-2 rounded-full bg-brand-indigo px-8 py-4
-                text-base font-bold text-white shadow-lg shadow-brand-indigo/25
-                transition-all duration-300 hover:shadow-xl btn-bouncy">
+      <a href="{{ '/designs/' | relative_url }}" class="btn-glow text-base">
         See all designs
-        <span class="text-xl">🎨</span>
+        <span class="text-xl" aria-hidden="true">&#x1F3A8;</span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- How it Works - Fun & Simple -->
+<!-- How it Works -->
 <section class="relative py-20 lg:py-28 overflow-hidden">
-  <!-- Subtle background decoration -->
-  <div class="absolute inset-0 bg-gradient-to-br from-brand-light-blue/50 via-white to-brand-light-green/30"></div>
+  <!-- Gradient mesh background for this section -->
+  <div class="absolute inset-0" aria-hidden="true"
+       style="background:
+         radial-gradient(ellipse 70% 50% at 30% 0%, rgba(220, 242, 253, 0.7) 0%, transparent 60%),
+         radial-gradient(ellipse 50% 60% at 80% 100%, rgba(223, 240, 227, 0.5) 0%, transparent 50%),
+         rgb(var(--bg));"></div>
 
-  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+  <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="text-center">
-      <span class="text-4xl">🎯</span>
-      <h2 class="mt-4 text-3xl lg:text-4xl font-extrabold text-brand-navy">
-        Super Easy to Join In!
+      <span class="text-4xl">&#x1F3AF;</span>
+      <h2 class="mt-4 text-3xl lg:text-4xl font-extrabold" style="color: rgb(var(--fg));">
+        Super Easy to <span class="text-gradient">Join In</span>!
       </h2>
-      <p class="mx-auto mt-4 max-w-xl text-lg text-brand-stone">
+      <p class="mx-auto mt-4 max-w-xl text-lg" style="color: rgb(var(--fg) / 0.65);">
         Help decide what goes into the Third Spaces app
       </p>
     </div>
 
-    <div class="mt-16 grid gap-8 sm:grid-cols-3">
-      <!-- Step 1 -->
-      <div class="group relative text-center p-8 rounded-3xl bg-white
-                  shadow-lg shadow-brand-sky/10 border border-brand-sky/10
-                  transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center
-                    rounded-full bg-brand-sky text-white text-sm font-bold shadow-lg">
-          1
-        </div>
-        <div class="text-5xl mb-4 group-hover:animate-wiggle">👀</div>
-        <h3 class="text-xl font-bold text-brand-navy">Explore</h3>
-        <p class="mt-3 text-brand-stone leading-relaxed">
+    <div class="mt-16 grid gap-10 sm:grid-cols-3">
+      <!-- Step 1: Explore -->
+      <div class="gradient-border-card group text-center"
+           style="--card-accent: #009CDE; --card-accent2: #44499C;">
+        <div class="step-badge" style="--card-accent: #009CDE; --card-accent2: #44499C;">1</div>
+        <div class="text-5xl mb-4 group-hover:animate-wiggle">&#x1F440;</div>
+        <h3 class="text-xl font-bold" style="color: rgb(var(--fg));">Explore</h3>
+        <p class="mt-3 leading-relaxed" style="color: rgb(var(--fg) / 0.65);">
           Check out the cool designs Austin kids created for finding fun places to hang out
         </p>
       </div>
 
-      <!-- Step 2 -->
-      <div class="group relative text-center p-8 rounded-3xl bg-white
-                  shadow-lg shadow-vote-favorite/10 border border-vote-favorite/10
-                  transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center
-                    rounded-full bg-vote-favorite text-white text-sm font-bold shadow-lg">
-          2
-        </div>
-        <div class="text-5xl mb-4 group-hover:animate-wiggle">💖</div>
-        <h3 class="text-xl font-bold text-brand-navy">Vote</h3>
-        <p class="mt-3 text-brand-stone leading-relaxed">
+      <!-- Step 2: Vote -->
+      <div class="gradient-border-card group text-center"
+           style="--card-accent: #9F3CC9; --card-accent2: #44499C;">
+        <div class="step-badge" style="--card-accent: #9F3CC9; --card-accent2: #44499C;">2</div>
+        <div class="text-5xl mb-4 group-hover:animate-wiggle">&#x1F496;</div>
+        <h3 class="text-xl font-bold" style="color: rgb(var(--fg));">Vote</h3>
+        <p class="mt-3 leading-relaxed" style="color: rgb(var(--fg) / 0.65);">
           Tap the heart if you love it, the star if it's creative, or the globe if it's for everyone!
         </p>
       </div>
 
-      <!-- Step 3 -->
-      <div class="group relative text-center p-8 rounded-3xl bg-white
-                  shadow-lg shadow-brand-sea/10 border border-brand-sea/10
-                  transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 flex h-8 w-8 items-center justify-center
-                    rounded-full bg-brand-sea text-white text-sm font-bold shadow-lg">
-          3
-        </div>
-        <div class="text-5xl mb-4 group-hover:animate-wiggle">🎉</div>
-        <h3 class="text-xl font-bold text-brand-navy">Make an Impact</h3>
-        <p class="mt-3 text-brand-stone leading-relaxed">
+      <!-- Step 3: Impact -->
+      <div class="gradient-border-card group text-center"
+           style="--card-accent: #009F4D; --card-accent2: #008743;">
+        <div class="step-badge" style="--card-accent: #009F4D; --card-accent2: #008743;">3</div>
+        <div class="text-5xl mb-4 group-hover:animate-wiggle">&#x1F389;</div>
+        <h3 class="text-xl font-bold" style="color: rgb(var(--fg));">Make an Impact</h3>
+        <p class="mt-3 leading-relaxed" style="color: rgb(var(--fg) / 0.65);">
           Your votes help decide which ideas might become real features in the app!
         </p>
       </div>
     </div>
 
-    <!-- Parent/guardian note — below fold, collapsible -->
-    <details class="tsg-card mt-16 mx-auto max-w-2xl p-4">
+    <!-- Parent/guardian note -->
+    <details class="glass-card mt-16 mx-auto max-w-2xl p-5">
       <summary class="cursor-pointer text-sm font-semibold" style="color: rgb(var(--fg));">
         For parents &amp; guardians
       </summary>
-      <p class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.75);">
+      <p class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.7);">
         This is a safe, moderated space. No login required to browse or vote.
         Positive-only reactions. Youth can clear their data anytime via the footer.
       </p>

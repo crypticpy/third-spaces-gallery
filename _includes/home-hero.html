@@ -1,72 +1,53 @@
 <!-- _includes/home-hero.html — "Studio Wall" hero -->
-<section class="relative overflow-hidden" style="background: rgb(var(--bg));">
-  <!-- Decorative background: gradient blobs + wavy lines (no floating emoji) -->
-  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
-    <div class="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full blur-3xl"
-         style="background: rgb(var(--accent) / 0.15);"></div>
-    <div class="absolute -bottom-24 right-0 h-72 w-72 rounded-full blur-3xl"
-         style="background: rgb(var(--accent2) / 0.12);"></div>
-
-    <!-- Faint wavy pattern -->
-    <svg class="absolute inset-0 h-full w-full opacity-[0.08]"
-         viewBox="0 0 1200 600" preserveAspectRatio="none"
-         style="color: rgb(var(--border));">
-      <defs>
-        <pattern id="hero-wavy" width="220" height="220" patternUnits="userSpaceOnUse">
-          <path d="M0 40 C60 10, 160 70, 220 40" fill="none" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M0 90 C70 60, 150 120, 220 90" fill="none" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M0 140 C55 110, 165 170, 220 140" fill="none" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M0 190 C65 160, 155 220, 220 190" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        </pattern>
-      </defs>
-      <rect width="1200" height="600" fill="url(#hero-wavy)"></rect>
-    </svg>
-  </div>
-
-  <div class="relative mx-auto max-w-6xl px-4 py-12 sm:py-16 lg:py-20">
+<section class="hero-mesh wave-divider">
+  <div class="relative z-10 mx-auto max-w-6xl px-4 py-14 sm:py-20 lg:py-24">
     <div class="grid items-center gap-10 lg:grid-cols-2">
 
       <!-- LEFT: message + actions -->
       <div class="relative z-10">
-        <p class="tsg-chip inline-flex items-center gap-2">
-          <span aria-hidden="true">Austin</span>
-          <span class="opacity-50">&bull;</span>
-          <span>Youth design studio</span>
+        <p class="btn-glass inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider"
+           style="cursor: default; pointer-events: none;">
+          <span aria-hidden="true" style="color: #009CDE;">&#9679;</span>
+          <span>Austin</span>
+          <span style="opacity: 0.4;">&bull;</span>
+          <span>Youth Design Studio</span>
         </p>
 
-        <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
-            style="color: rgb(var(--fg));">
+        <h1 class="mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"
+            style="color: rgb(var(--fg)); line-height: 1.08;">
           Your ideas.<br>
-          <span class="text-gradient">Real Third Spaces features.</span>
+          <span class="text-gradient-animated">Real Third Spaces features.</span>
         </h1>
 
-        <p class="mt-4 text-lg leading-relaxed" style="color: rgb(var(--fg) / 0.8);">
+        <p class="mt-5 text-lg leading-relaxed max-w-lg" style="color: rgb(var(--fg) / 0.8);">
           Third Spaces are the places between home and school &mdash; parks, libraries, rec centers.
           Austin youth designed these prototypes to help you find them.
-          Vote to shape what gets built.
+          <strong style="color: rgb(var(--fg));">Vote to shape what gets built.</strong>
         </p>
 
-        <!-- CTAs -->
-        <div class="mt-6 flex flex-wrap gap-2">
-          <a class="tsg-chip font-semibold text-white"
-             style="background: rgb(var(--accent)); border-color: transparent;"
+        <!-- CTAs — gradient glow primary, glass secondary -->
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a class="btn-glow"
              href="{{ '/designs/' | relative_url }}">
-            Explore designs
+            Explore Designs
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
           </a>
-          <a class="tsg-chip font-semibold"
+          <a class="btn-glass"
              href="{{ '/designs/' | relative_url }}#immersive">
-            Immersive swipe view
+            Swipe View
           </a>
-          <a class="tsg-chip font-semibold"
+          <a class="btn-glass"
              href="{{ '/remix/' | relative_url }}">
-            Build a remix
+            Build a Remix
           </a>
         </div>
 
         <!-- Quick-entry collection chips -->
-        <div class="mt-6">
-          <p class="text-xs font-semibold uppercase tracking-wider"
-             style="color: rgb(var(--fg) / 0.55);">Jump in</p>
+        <div class="mt-8">
+          <p class="text-xs font-bold uppercase tracking-wider"
+             style="color: rgb(var(--fg) / 0.45);">Jump in</p>
           <div class="mt-2 flex flex-wrap gap-2">
             <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=fresh">&#x1F195; Fresh drops</a>
             <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=youth">&#x2B50; Youth picks</a>
@@ -75,17 +56,17 @@
           </div>
         </div>
 
-        <!-- Authentic youth voice -->
-        <figure class="tsg-card mt-6 p-4">
+        <!-- Authentic youth voice — glass card -->
+        <figure class="glass-card mt-8 p-5">
           <blockquote class="text-base leading-relaxed" style="color: rgb(var(--fg) / 0.9);">
             &ldquo;Sometimes I just want to go somewhere that matches my energy.&rdquo;
           </blockquote>
-          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.6);">
-            &mdash; from <a href="{{ '/designs/2025/vibe-finder/' | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid">Vibe Finder</a>
+          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.55);">
+            &mdash; from <a href="{{ '/designs/2025/vibe-finder/' | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">Vibe Finder</a>
           </figcaption>
         </figure>
 
-        <p class="mt-3 text-xs" style="color: rgb(var(--fg) / 0.5);">
+        <p class="mt-4 text-xs" style="color: rgb(var(--fg) / 0.4);">
           No login. Positive-only reactions. Clear your data anytime.
         </p>
       </div>
