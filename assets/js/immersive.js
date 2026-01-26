@@ -398,34 +398,39 @@ class ImmersiveGallery {
 
   /**
    * Show UI elements (nav arrows)
+   * DISABLED: Nav arrows commented out in HTML — first tap was intercepted
+   * by arrow overlay before reaching feedback/remix buttons. Restore when
+   * arrows are uncommented. Methods kept as no-ops to avoid breaking callers.
    */
   showUI() {
-    if (this.navArrows) {
-      this.navArrows.classList.add("visible");
-    }
-    this.uiVisible = true;
+    // if (this.navArrows) {
+    //   this.navArrows.classList.add("visible");
+    // }
+    // this.uiVisible = true;
   }
 
   /**
    * Hide UI elements (nav arrows)
+   * DISABLED: See showUI() comment.
    */
   hideUI() {
-    if (this.navArrows) {
-      this.navArrows.classList.remove("visible");
-    }
-    this.uiVisible = false;
+    // if (this.navArrows) {
+    //   this.navArrows.classList.remove("visible");
+    // }
+    // this.uiVisible = false;
   }
 
   /**
    * Schedule UI to hide after delay
+   * DISABLED: See showUI() comment.
    */
   scheduleUIHide() {
-    if (this.navArrowTimer) {
-      clearTimeout(this.navArrowTimer);
-    }
-    this.navArrowTimer = setTimeout(() => {
-      this.hideUI();
-    }, 2000); // Hide after 2 seconds
+    // if (this.navArrowTimer) {
+    //   clearTimeout(this.navArrowTimer);
+    // }
+    // this.navArrowTimer = setTimeout(() => {
+    //   this.hideUI();
+    // }, 2000);
   }
 
   /**
