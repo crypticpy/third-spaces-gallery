@@ -104,27 +104,20 @@ class FeedbackSystem {
       return;
     }
 
-    // Submit to Supabase
-    if (this.supabase) {
-      try {
-        const { error } = await this.supabase.from("feedback").insert({
-          submission_id: submissionId,
-          author_name: authorName || "Anonymous",
-          feedback_text: feedbackText || "", // Empty string if no text (only tags)
-          tags: selectedTags,
-          approved: false, // Requires moderation
-        });
+    // Submit via Edge Function
+    const result = await this.submitToServer({
+      submission_id: submissionId,
+      author_name: authorName || "Anonymous",
+      feedback_text: feedbackText || "",
+      tags: selectedTags,
+    });
 
-        if (error) {
-          console.error("[FeedbackSystem] Submit failed:", error);
-          this.showMessage("Something went wrong. Please try again.", "error");
-          return;
-        }
-      } catch (e) {
-        console.error("[FeedbackSystem] Submit error:", e);
-        this.showMessage("Something went wrong. Please try again.", "error");
-        return;
-      }
+    if (!result.success) {
+      this.showMessage(
+        result.error || "Something went wrong. Please try again.",
+        "error",
+      );
+      return;
     }
 
     // Record submission locally
@@ -136,6 +129,55 @@ class FeedbackSystem {
 
     // Show success
     this.showSuccess(form, submissionId);
+  }
+
+  /**
+   * Submit feedback to the Edge Function for moderation.
+   * Can be called by FeedbackPromptHandler or handleSubmit.
+   * @param {object} payload - { submission_id, author_name, feedback_text, tags }
+   * @returns {{ success: boolean, error?: string, reference?: string }}
+   */
+  async submitToServer(payload) {
+    const supabaseUrl = window.ThirdSpacesSupabase?.url;
+    if (!supabaseUrl) {
+      console.warn(
+        "[FeedbackSystem] Supabase not configured, skipping server submit",
+      );
+      return { success: true };
+    }
+
+    // Attach device_id for rate limiting
+    let deviceId = null;
+    try {
+      deviceId = localStorage.getItem("tsg_device_id");
+    } catch (e) {}
+
+    try {
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/submit-feedback`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...payload,
+            device_id: deviceId,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("[FeedbackSystem] Server error:", data);
+        return { success: false, error: data.error || "Server error" };
+      }
+
+      console.log("[FeedbackSystem] Submitted, reference:", data.reference);
+      return { success: true, reference: data.reference };
+    } catch (e) {
+      console.error("[FeedbackSystem] Network error:", e);
+      return { success: false, error: "Network error. Please try again." };
+    }
   }
 
   showSuccess(form, submissionId) {

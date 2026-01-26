@@ -4,107 +4,28 @@ title: Privacy Policy
 ---
 
 <div class="py-12 lg:py-20">
-  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-    <header class="mb-12">
-      <h1 class="text-4xl font-bold text-brand-navy">Privacy Policy</h1>
-      <p class="mt-4 text-brand-stone">Last updated: January 2025</p>
-    </header>
-
-    <div class="prose prose-brand max-w-none">
-      <h2>Overview</h2>
-      <p>
-        The Third Spaces Youth Design Gallery is operated by the City of Austin's Resident Data Impact Project (RIDP). We are committed to protecting the privacy of all visitors, especially youth users.
-      </p>
-
-      <h2>Information We Collect</h2>
-
-      <h3>Voting Data</h3>
-      <p>When you vote on designs, we collect:</p>
-      <ul>
-        <li><strong>Vote selections</strong> - Which designs you voted for and in which categories</li>
-        <li><strong>Random Device ID</strong> - A randomly generated identifier stored in your browser. This is <em>not</em> linked to your name, email, or any personal information. It is used only to prevent duplicate votes and can be cleared at any time.</li>
-        <li><strong>Timestamp</strong> - When you voted</li>
-      </ul>
-      <p>
-        This data is stored locally in your browser and optionally synced to our servers for vote aggregation. We do not collect your name, email, or any personal contact information through voting.
-      </p>
-      <p>
-        <strong>Clear your data anytime:</strong> Use the "Clear My Data" button in the footer to remove all your votes, device ID, and local data. This gives you full control over your information.
-      </p>
-
-      <h3>Feedback & Comments</h3>
-      <p>
-        If you leave feedback or comments, we collect the content you submit. Comments are powered by GitHub Discussions and require a GitHub account. GitHub's privacy policy applies to comment data.
-      </p>
-
-      <h3>Design Submissions</h3>
-      <p>
-        If you submit a design, we collect the information you provide in the submission form, including your first name, school, and grade level. This information will be displayed publicly alongside your design.
-      </p>
-
-      <h2>How We Use Information</h2>
-      <p>We use collected information to:</p>
-      <ul>
-        <li>Display aggregate vote counts on designs</li>
-        <li>Prevent voting manipulation and spam</li>
-        <li>Improve the Third Spaces app based on community feedback</li>
-        <li>Showcase youth designs and give credit to designers</li>
-      </ul>
-
-      <h2>Data Storage & Security</h2>
-      <p>
-        Vote data is stored locally in your browser using localStorage and cookies. If server-side aggregation is enabled, vote data is stored securely using industry-standard encryption.
-      </p>
-      <p>
-        We do not sell, trade, or transfer your information to third parties, except as required by law.
-      </p>
-
-      <h2>Children's Privacy</h2>
-      <p>
-        This site is designed for use by Austin youth. We do not knowingly collect personal information from children under 13 without parental consent. The voting system is designed to work without any personal information.
-      </p>
-      <p>
-        If you are a parent or guardian and believe your child has provided personal information to us, please contact us so we can delete it.
-      </p>
-
-      <h2>Cookies</h2>
-      <p>We use cookies for:</p>
-      <ul>
-        <li><strong>Vote persistence</strong> - Remembering your votes if localStorage is cleared</li>
-        <li><strong>Spam prevention</strong> - Preventing duplicate voting</li>
-      </ul>
-      <p>We do not use advertising or tracking cookies.</p>
-
-      <h2>Your Rights</h2>
-      <p>You have the right to:</p>
-      <ul>
-        <li><strong>Clear your data instantly</strong> - Use the "Clear My Data" button in the footer to immediately remove all your votes and identifiers from your browser</li>
-        <li>Clear your vote data by clearing your browser's cookies and localStorage</li>
-        <li>Request removal of your design submission</li>
-        <li>Request information about what data we have collected</li>
-      </ul>
-
-      <h2>Third-Party Services</h2>
-      <p>This site uses the following third-party services:</p>
-      <ul>
-        <li><strong>GitHub Pages</strong> - For hosting (GitHub Privacy Policy applies)</li>
-        <li><strong>Giscus/GitHub Discussions</strong> - For comments (GitHub Privacy Policy applies)</li>
-        <li><strong>Google Fonts</strong> - For typography (Google Privacy Policy applies)</li>
-      </ul>
-
-      <h2>Changes to This Policy</h2>
-      <p>
-        We may update this privacy policy from time to time. We will notify users of any material changes by posting the new policy on this page.
-      </p>
-
-      <h2>Contact Us</h2>
-      <p>
-        If you have questions about this privacy policy or our data practices, please contact:
-      </p>
-      <p>
-        <strong>City of Austin - Resident Data Impact Project</strong><br>
-        Email: <a href="mailto:ridp@austintexas.gov">ridp@austintexas.gov</a>
-      </p>
-    </div>
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
+    <h1 class="text-3xl font-extrabold text-brand-navy dark:text-gray-100">
+      This page has moved
+    </h1>
+    <p class="mt-4 text-brand-stone dark:text-gray-400">
+      Our privacy and data information is now on the
+      <a href="{{ '/transparency/' | relative_url }}"
+         class="text-brand-sky hover:text-brand-indigo font-semibold transition-colors">
+        Transparency page</a>.
+    </p>
+    <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
+      Redirecting you now...
+    </p>
   </div>
 </div>
+
+<script>
+(function() {
+  var base = document.querySelector('meta[name="baseurl"]');
+  var baseurl = base ? base.content : '';
+  // Strip trailing slash to avoid double-slash in redirect
+  baseurl = baseurl.replace(/\/+$/, '');
+  window.location.replace(baseurl + '/transparency/');
+})();
+</script>

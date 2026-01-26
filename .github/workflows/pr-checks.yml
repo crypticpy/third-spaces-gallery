@@ -1,0 +1,232 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build Tailwind CSS
+        run: npm run build:css
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
+
+      - name: Verify build output exists
+        run: |
+          test -d _site || (echo "Build output _site/ not found" && exit 1)
+          echo "Build output contains $(find _site -type f | wc -l) files"
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for hardcoded secrets
+        run: |
+          echo "Scanning for potential secrets in source files..."
+          FOUND=0
+
+          # Check for common secret patterns (excluding known safe files)
+          for pattern in \
+            'password\s*[:=]\s*["\x27][^"\x27]{8,}' \
+            'secret\s*[:=]\s*["\x27][^"\x27]{8,}' \
+            'api_key\s*[:=]\s*["\x27][^"\x27]{8,}' \
+            'private_key' \
+            'BEGIN RSA PRIVATE KEY' \
+            'BEGIN OPENSSH PRIVATE KEY'; do
+            MATCHES=$(grep -rnI --include='*.js' --include='*.ts' --include='*.html' \
+              --include='*.yml' --include='*.yaml' --include='*.json' \
+              -E "$pattern" . \
+              --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
+              --exclude-dir=.bundle --exclude='package-lock.json' \
+              --exclude='pr-checks.yml' \
+              2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+              echo "::error::Potential secret pattern found: $pattern"
+              echo "$MATCHES"
+              FOUND=1
+            fi
+          done
+
+          # Check for .env files that shouldn't be committed
+          if find . -name '.env' -o -name '.env.local' -o -name '.env.production' | grep -q .; then
+            echo "::error::.env file found in repository"
+            FOUND=1
+          fi
+
+          if [ "$FOUND" -eq 1 ]; then
+            echo "::error::Potential secrets or .env files detected — review and remove before merging"
+            exit 1
+          else
+            echo "No secret patterns found"
+          fi
+
+      - name: Check for known vulnerable patterns
+        run: |
+          echo "Checking for common vulnerability patterns..."
+          ISSUES=0
+
+          # innerHTML with user input (potential XSS)
+          INNERHTML=$(grep -rnI --include='*.js' --include='*.ts' \
+            'innerHTML\s*=' . \
+            --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
+            2>/dev/null | grep -v 'escapeHtml' | grep -v '\.innerHTML = ""' \
+            | grep -v '\.innerHTML = '"'"''"'"'' || true)
+
+          if [ -n "$INNERHTML" ]; then
+            echo "::warning::innerHTML assignments found — verify XSS protection:"
+            echo "$INNERHTML"
+          fi
+
+          # eval() usage
+          EVAL=$(grep -rnI --include='*.js' --include='*.ts' \
+            '\beval\s*(' . \
+            --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
+            2>/dev/null || true)
+
+          if [ -n "$EVAL" ]; then
+            echo "::error::eval() usage found — this is a security risk"
+            echo "$EVAL"
+            ISSUES=1
+          fi
+
+          # document.write
+          DOCWRITE=$(grep -rnI --include='*.js' --include='*.ts' \
+            'document\.write\s*(' . \
+            --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
+            2>/dev/null || true)
+
+          if [ -n "$DOCWRITE" ]; then
+            echo "::warning::document.write() found — review for XSS risk:"
+            echo "$DOCWRITE"
+          fi
+
+          if [ "$ISSUES" -gt 0 ]; then
+            exit 1
+          fi
+
+          echo "No critical vulnerability patterns found"
+
+  file-checks:
+    name: File & Content Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for large files
+        run: |
+          echo "Checking for files larger than 1MB..."
+          LARGE=$(find . -type f -size +1M \
+            -not -path './node_modules/*' \
+            -not -path './.git/*' \
+            -not -path './_site/*' \
+            -not -path './vendor/*' \
+            -not -path './.bundle/*' \
+            2>/dev/null || true)
+          if [ -n "$LARGE" ]; then
+            echo "::warning::Large files found (>1MB):"
+            echo "$LARGE" | while read f; do
+              SIZE=$(du -sh "$f" | cut -f1)
+              echo "  $SIZE  $f"
+            done
+          else
+            echo "No oversized files found"
+          fi
+
+      - name: Check for merge conflict markers
+        run: |
+          CONFLICTS=$(grep -rnI '^<<<<<<< \|^=======$\|^>>>>>>> ' \
+            --include='*.js' --include='*.ts' --include='*.html' \
+            --include='*.css' --include='*.yml' --include='*.md' \
+            --include='*.sql' \
+            . --exclude-dir=node_modules --exclude-dir=_site \
+            2>/dev/null || true)
+          if [ -n "$CONFLICTS" ]; then
+            echo "::error::Merge conflict markers found:"
+            echo "$CONFLICTS"
+            exit 1
+          fi
+          echo "No merge conflict markers found"
+
+      - name: Check for debug artifacts
+        run: |
+          echo "Checking for debug statements..."
+          DEBUG=$(grep -rnI --include='*.js' --include='*.ts' \
+            '\bconsole\.log\b' . \
+            --exclude-dir=node_modules --exclude-dir=_site --exclude-dir=vendor \
+            2>/dev/null || true)
+          COUNT=$(echo "$DEBUG" | grep -c '.' 2>/dev/null || echo 0)
+          if [ "$COUNT" -gt 0 ]; then
+            echo "::notice::Found $COUNT console.log statements (review if intentional):"
+            echo "$DEBUG" | head -20
+            if [ "$COUNT" -gt 20 ]; then
+              echo "  ... and $((COUNT - 20)) more"
+            fi
+          else
+            echo "No console.log statements found"
+          fi
+
+  migration-check:
+    name: Migration Safety
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check migration files
+        run: |
+          echo "Checking Supabase migration files..."
+
+          # Verify no DROP TABLE without IF EXISTS
+          DROPS=$(grep -rnI 'DROP TABLE\b' supabase/migrations/ \
+            2>/dev/null | grep -v 'IF EXISTS' || true)
+          if [ -n "$DROPS" ]; then
+            echo "::error::DROP TABLE without IF EXISTS found:"
+            echo "$DROPS"
+            exit 1
+          fi
+
+          # Verify no TRUNCATE statements
+          TRUNCATES=$(grep -rnI '\bTRUNCATE\b' supabase/migrations/ \
+            2>/dev/null || true)
+          if [ -n "$TRUNCATES" ]; then
+            echo "::warning::TRUNCATE found in migrations — review carefully:"
+            echo "$TRUNCATES"
+          fi
+
+          # List all migrations in order
+          echo ""
+          echo "Migration files:"
+          ls -1 supabase/migrations/*.sql 2>/dev/null | sort || echo "No migrations found"
+          echo ""
+          echo "All migration checks passed"

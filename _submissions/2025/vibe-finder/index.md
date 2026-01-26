@@ -82,4 +82,4 @@ The app uses AI to learn your patterns:
 
 ## Why This Matters
 
-Teens don't always want to plan ahead. Sometimes you just want to go somewhere that matches your energy right now. Vibe Finder makes that easy.
+We don't always want to plan ahead. Sometimes you just want to go somewhere that matches your energy right now. Vibe Finder makes that easy.

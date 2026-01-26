@@ -374,29 +374,79 @@
         name: item.name,
         icon: item.icon,
         sourceSubmission: item.sourceSubmission,
+        sourceTitle: item.sourceTitle,
       })),
       createdAt: new Date().toISOString(),
     };
   };
 
   /**
-   * Submit remix (placeholder - can be connected to backend)
+   * Submit remix to the Edge Function for moderation.
+   * @param {string} [userNote] - Optional note from the author
+   * @param {string} [authorName] - Optional author name
+   * @returns {{ success: boolean, error?: string, reference?: string }}
    */
-  const submit = async (userNote) => {
+  const submit = async (userNote, authorName) => {
     const payload = generatePayload();
-    payload.userNote = userNote || "";
 
-    console.log("[Remix] Submitting remix:", payload);
+    // Get device_id for rate limiting
+    let deviceId = null;
+    try {
+      deviceId = localStorage.getItem("tsg_device_id");
+    } catch (e) {}
 
-    // For now, just log it. Could POST to Supabase or Google Form
-    // Example:
-    // const response = await fetch('/api/remix', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(payload)
-    // });
+    if (!deviceId) {
+      return {
+        success: false,
+        error: "Device ID not found. Please refresh and try again.",
+      };
+    }
 
-    return payload;
+    const supabaseUrl = window.ThirdSpacesSupabase?.url;
+    if (!supabaseUrl) {
+      console.warn("[Remix] Supabase not configured");
+      return { success: false, error: "Server not configured." };
+    }
+
+    try {
+      const response = await fetch(`${supabaseUrl}/functions/v1/submit-remix`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          device_id: deviceId,
+          author_name: authorName || "Anonymous",
+          user_note: userNote || "",
+          features: payload.features,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("[Remix] Server error:", data);
+        return { success: false, error: data.error || "Server error" };
+      }
+
+      console.log("[Remix] Published, reference:", data.reference);
+
+      // Track locally for transparency page
+      try {
+        const stored = JSON.parse(
+          localStorage.getItem("ts:published_remixes:v1") || "{}",
+        );
+        stored[data.reference] = { timestamp: new Date().toISOString() };
+        localStorage.setItem("ts:published_remixes:v1", JSON.stringify(stored));
+      } catch (e) {}
+
+      return {
+        success: true,
+        reference: data.reference,
+        message: data.message,
+      };
+    } catch (e) {
+      console.error("[Remix] Network error:", e);
+      return { success: false, error: "Network error. Please try again." };
+    }
   };
 
   // Initialize

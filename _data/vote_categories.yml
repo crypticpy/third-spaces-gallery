@@ -9,7 +9,7 @@
 
 - id: innovative
   label: "Super creative"
-  voted_label: "You dig it!"
+  voted_label: "Love that!"
   emoji: "✨"
   voted_emoji: "✓"
   color: "brand-gold"

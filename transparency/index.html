@@ -1,0 +1,1017 @@
+---
+layout: default
+title: Your Data
+---
+
+<div class="py-12 lg:py-20">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <!-- Breadcrumb (desktop) -->
+    <nav class="mb-6 hidden lg:block" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm">
+        <li>
+          <a href="{{ '/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition dark:text-gray-400 dark:hover:text-white">Home</a>
+        </li>
+        <li class="text-brand-cloud dark:text-gray-600">/</li>
+        <li class="text-brand-navy font-medium dark:text-gray-100" aria-current="page">Your Data</li>
+      </ol>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center">
+      <h1 class="text-4xl font-extrabold text-brand-navy dark:text-gray-100 lg:text-5xl">
+        How We Handle Your Data
+      </h1>
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-brand-stone dark:text-gray-400">
+        We built this site with your privacy in mind. Here's exactly what we store,
+        why we store it, and how to delete it whenever you want.
+      </p>
+    </header>
+
+    <!-- Content -->
+    <div class="mt-12 space-y-12">
+
+      <!-- What We Store -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">What We Store</h2>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          We keep things simple. Everything listed below is either stored in your browser
+          (so only you can see it) or on our server as an anonymous record with no name or
+          email attached. We never sell or share your data with anyone.
+        </p>
+
+        <div class="mt-6 space-y-4">
+          <!-- Votes -->
+          <div class="rounded-xl border border-pink-200 bg-pink-50/50 p-4
+                      dark:border-pink-800/50 dark:bg-pink-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F496;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Your Votes</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  When you vote on a design, we save which designs you liked and
+                  in which categories. This is stored in your browser and, if we have
+                  a server connection, also saved anonymously on our server so votes
+                  count toward the totals.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Device ID -->
+          <div class="rounded-xl border border-sky-200 bg-sky-50/50 p-4
+                      dark:border-sky-800/50 dark:bg-sky-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F511;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Device ID</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  A random code (like a lottery ticket number) that helps us make sure
+                  one person isn't voting a thousand times. It's <strong>not</strong> a
+                  fingerprint and it's not connected to your name, email, or anything
+                  personal. You can delete it anytime and a new one will be created
+                  next time you vote.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback -->
+          <div class="rounded-xl border border-amber-200 bg-amber-50/50 p-4
+                      dark:border-amber-800/50 dark:bg-amber-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F4AC;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Feedback & Tags</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  If you leave quick feedback tags on a design (like "easy to use" or
+                  "looks great"), those tags are saved in your browser so you can see
+                  what you already said.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remix Cart -->
+          <div class="rounded-xl border border-purple-200 bg-purple-50/50 p-4
+                      dark:border-purple-800/50 dark:bg-purple-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F3A8;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Remix Cart</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Features you collect for your remix are saved in your browser so
+                  they're still there when you come back. This never leaves your device.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser only</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferences -->
+          <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4
+                      dark:border-emerald-800/50 dark:bg-emerald-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x2699;&#xFE0F;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Preferences</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Your theme choice (Chill or Hype mode) and whether you prefer the
+                  grid or immersive gallery view. Stored in your browser only.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser only</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="rounded-xl border border-gray-200 bg-gray-50/50 p-4
+                      dark:border-gray-700 dark:bg-gray-800/50">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F441;&#xFE0F;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Viewing History</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Which designs you've viewed in immersive mode, so we can show you
+                  which ones you haven't seen yet. Stays in your browser only.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser only</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feedback Upvotes -->
+          <div class="rounded-xl border border-sky-200 bg-sky-50/50 p-4
+                      dark:border-sky-800/50 dark:bg-sky-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F44D;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Feedback Upvotes</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Which community feedback comments you upvoted. Tracked in your browser
+                  and stored anonymously on the server so the count is accurate.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Published Remixes -->
+          <div class="rounded-xl border border-purple-200 bg-purple-50/50 p-4
+                      dark:border-purple-800/50 dark:bg-purple-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x1F4E4;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Published Remixes</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Remixes you submitted for community display. These go through moderation
+                  before appearing on the site. Stored on the server with your author name
+                  (or "Anonymous" if you didn't provide one).
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no (device ID only)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remix Upvotes -->
+          <div class="rounded-xl border border-amber-200 bg-amber-50/50 p-4
+                      dark:border-amber-800/50 dark:bg-amber-950/20">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x2B50;</span>
+              <div>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Remix Upvotes</h3>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Which community remixes you upvoted. Tracked in your browser and stored
+                  anonymously on the server so the count is accurate.
+                </p>
+                <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
+                  <span>Stored in: your browser + server</span>
+                  <span>Linked to you: no</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cookie Disclosure -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">Cookies</h2>
+        <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50/30 p-5
+                    dark:border-amber-800/50 dark:bg-amber-950/20">
+          <p class="text-brand-stone dark:text-gray-400 leading-relaxed">
+            We use exactly <strong class="text-brand-navy dark:text-gray-100">one cookie</strong>
+            called <code class="rounded bg-gray-100 px-1.5 py-0.5 text-sm font-mono
+            dark:bg-gray-700">ts_v2</code>. It's a backup copy of your votes in case your
+            browser clears its memory. It lasts 180 days and is <strong>not</strong> a tracking
+            cookie. We do not use advertising, analytics, or any other cookies.
+          </p>
+        </div>
+      </section>
+
+      <!-- Live Data Snapshot -->
+      <section id="data-snapshot">
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">
+          What We Know About You Right Now
+        </h2>
+        <p class="mt-2 text-brand-stone dark:text-gray-400">
+          This is a live look at everything stored on your device and our server.
+          Nothing else, nothing hidden.
+        </p>
+        <div id="data-inventory" class="mt-6 space-y-3" aria-live="polite">
+          <p class="text-brand-stone dark:text-gray-400 italic text-sm">Loading your data snapshot...</p>
+        </div>
+      </section>
+
+      <!-- Delete My Data -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">Delete My Data</h2>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          You're in control. Delete everything at once, or pick and choose what to remove.
+          Local data is deleted instantly. If we have a server connection, your votes are
+          removed from our database too.
+        </p>
+
+        <!-- Delete Everything -->
+        <div class="mt-6 rounded-2xl border-2 border-red-200 bg-red-50/50 p-6
+                    dark:border-red-800/50 dark:bg-red-950/20">
+          <h3 class="text-xl font-bold text-brand-navy dark:text-gray-100">Delete All My Data</h3>
+          <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
+            This removes everything &mdash; your votes, feedback, upvotes, published remixes,
+            remix cart, theme choice, viewing history, and device ID. If connected, it also
+            removes your data from our server. This cannot be undone.
+          </p>
+          <button type="button"
+                  class="mt-4 rounded-full bg-red-600 px-6 py-3 text-sm font-semibold text-white
+                         transition-all hover:bg-red-700 hover:-translate-y-0.5
+                         focus:outline-none focus:ring-4 focus:ring-red-300
+                         dark:bg-red-700 dark:hover:bg-red-600
+                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                  id="delete-all-btn">
+            Delete All My Data
+          </button>
+        </div>
+
+        <!-- Granular Delete -->
+        <details class="mt-6 rounded-2xl border border-brand-sky/10 bg-white p-6
+                        dark:border-gray-700 dark:bg-gray-800">
+          <summary class="text-lg font-semibold text-brand-navy dark:text-gray-100 cursor-pointer
+                          select-none">
+            Or choose what to delete...
+          </summary>
+          <div class="mt-4 space-y-3" id="granular-delete">
+            <!-- Populated by JS -->
+          </div>
+          <button type="button"
+                  class="mt-4 rounded-full bg-brand-navy px-6 py-3 text-sm font-semibold text-white
+                         transition-all hover:bg-brand-indigo
+                         focus:outline-none focus:ring-4 focus:ring-brand-navy/30
+                         disabled:opacity-50 disabled:cursor-not-allowed
+                         dark:bg-gray-600 dark:hover:bg-gray-500"
+                  id="delete-selected-btn"
+                  disabled>
+            Delete Selected
+          </button>
+        </details>
+      </section>
+
+      <!-- Success Banner (hidden by default) -->
+      <div class="hidden rounded-xl border border-emerald-300 bg-emerald-50 p-5 text-center
+                  dark:border-emerald-700 dark:bg-emerald-950/30"
+           id="delete-success"
+           aria-live="assertive">
+        <p class="font-semibold text-emerald-700 dark:text-emerald-400">
+          All done! Your data has been removed.
+        </p>
+        <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+          This page will remember nothing about you after you leave.
+        </p>
+      </div>
+
+      <!-- Data Retention -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">How Long We Keep Data</h2>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          Data in your browser stays until you delete it (or clear your browser data).
+          The vote backup cookie expires after 180 days. Server-side vote records are
+          kept for the duration of the Gallery exhibition. When the exhibition ends,
+          all server-side data is deleted.
+        </p>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          You can delete your data at any time using the buttons above &mdash;
+          there is no waiting period. Deletion happens instantly.
+        </p>
+      </section>
+
+      <!-- Third-Party Services -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">Third-Party Services</h2>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          This site uses a few external services to work:
+        </p>
+        <ul class="mt-3 space-y-2 text-sm text-brand-stone dark:text-gray-400">
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5 font-semibold text-brand-navy dark:text-gray-200">GitHub Pages</span>
+            &mdash; hosts this website (GitHub's privacy policy applies)
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5 font-semibold text-brand-navy dark:text-gray-200">Google Fonts</span>
+            &mdash; provides the fonts you see (Google's privacy policy applies)
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="mt-0.5 font-semibold text-brand-navy dark:text-gray-200">Supabase</span>
+            &mdash; stores anonymous vote counts (when connected)
+          </li>
+        </ul>
+        <p class="mt-3 text-sm text-brand-stone dark:text-gray-400">
+          We do not use advertising networks, analytics trackers, or social media pixels.
+        </p>
+      </section>
+
+      <!-- Children's Privacy -->
+      <section>
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">For Users Under 13</h2>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          This site is designed for Austin students of all ages. We don't collect personal
+          information like your name or email through voting. The voting system works
+          without any personal info at all.
+        </p>
+        <p class="mt-4 text-brand-stone dark:text-gray-400 leading-relaxed">
+          If you're a parent or guardian and think your child shared personal information
+          with us, please reach out so we can remove it.
+        </p>
+      </section>
+
+      <!-- Data Concern Form -->
+      <section class="rounded-2xl bg-surface-lightBlue dark:bg-gray-800 p-8" id="concern-form-section">
+        <h2 class="text-2xl font-bold text-brand-navy dark:text-gray-100">Have a Data Concern?</h2>
+        <p class="mt-2 text-brand-stone dark:text-gray-400">
+          Want us to delete your server data, have a question about what we store,
+          or notice something that doesn't look right? Let us know and our team will follow up.
+        </p>
+
+        <!-- Form -->
+        <form id="concern-form" class="mt-6 space-y-4" novalidate>
+          <!-- Concern type -->
+          <div>
+            <label for="concern-type"
+                   class="block text-sm font-semibold text-brand-navy dark:text-gray-200">
+              What's this about?
+            </label>
+            <select id="concern-type"
+                    name="concern_type"
+                    required
+                    class="mt-1.5 w-full rounded-xl border border-brand-sky/20 bg-white px-4 py-2.5
+                           text-sm text-brand-navy
+                           focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
+                           dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
+              <option value="" disabled selected>Choose one...</option>
+              <option value="delete_data">Delete my server data</option>
+              <option value="data_inquiry">What data do you have about me?</option>
+              <option value="privacy_concern">Report a privacy concern</option>
+              <option value="other">Something else</option>
+            </select>
+          </div>
+
+          <!-- Details -->
+          <div>
+            <label for="concern-details"
+                   class="block text-sm font-semibold text-brand-navy dark:text-gray-200">
+              Tell us more
+            </label>
+            <textarea id="concern-details"
+                      name="details"
+                      required
+                      minlength="10"
+                      maxlength="2000"
+                      rows="4"
+                      placeholder="Describe your concern..."
+                      class="mt-1.5 w-full rounded-xl border border-brand-sky/20 bg-white px-4 py-3
+                             text-sm text-brand-navy placeholder-brand-stone/50
+                             focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
+                             dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                             dark:placeholder-gray-500"></textarea>
+            <p class="mt-1 text-xs text-brand-stone/70 dark:text-gray-500">
+              Minimum 10 characters. <span id="concern-char-count"></span>
+            </p>
+          </div>
+
+          <!-- Email (optional) -->
+          <div>
+            <label for="concern-email"
+                   class="block text-sm font-semibold text-brand-navy dark:text-gray-200">
+              Email <span class="font-normal text-brand-stone dark:text-gray-400">(optional — only if you want a response)</span>
+            </label>
+            <input id="concern-email"
+                   name="email"
+                   type="email"
+                   placeholder="you@example.com"
+                   class="mt-1.5 w-full rounded-xl border border-brand-sky/20 bg-white px-4 py-2.5
+                          text-sm text-brand-navy placeholder-brand-stone/50
+                          focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
+                          dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                          dark:placeholder-gray-500">
+          </div>
+
+          <!-- Error message -->
+          <div id="concern-error" class="hidden rounded-lg bg-red-50 border border-red-200
+                                         px-4 py-3 text-sm text-red-700
+                                         dark:bg-red-900/20 dark:border-red-800 dark:text-red-400"
+               role="alert">
+          </div>
+
+          <!-- Submit -->
+          <button type="submit"
+                  id="concern-submit-btn"
+                  class="inline-flex items-center gap-2 rounded-full bg-brand-sky px-6 py-3
+                         text-sm font-semibold text-white shadow-lg shadow-brand-sky/25
+                         transition-all hover:-translate-y-0.5 hover:bg-brand-indigo
+                         focus:outline-none focus:ring-4 focus:ring-brand-sky/30
+                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            Submit Concern
+          </button>
+        </form>
+
+        <!-- Success state (hidden by default) -->
+        <div id="concern-success" class="hidden mt-6">
+          <div class="rounded-xl border border-emerald-300 bg-emerald-50 p-5
+                      dark:border-emerald-700 dark:bg-emerald-950/30">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl flex-shrink-0">&#x2705;</span>
+              <div>
+                <p class="font-semibold text-emerald-700 dark:text-emerald-400">
+                  Concern received!
+                </p>
+                <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
+                  Your reference number is
+                  <code id="concern-reference"
+                        class="rounded bg-emerald-100 px-1.5 py-0.5 font-mono font-bold text-emerald-800
+                               dark:bg-emerald-900/50 dark:text-emerald-300">---</code>.
+                  Our team will review this and take action.
+                </p>
+                <p class="mt-2 text-xs text-brand-stone/70 dark:text-gray-500">
+                  Save this reference number if you need to follow up.
+                </p>
+              </div>
+            </div>
+          </div>
+          <button type="button"
+                  id="concern-another-btn"
+                  class="mt-4 text-sm font-medium text-brand-sky hover:text-brand-indigo
+                         transition-colors dark:text-brand-sky dark:hover:text-white">
+            Submit another concern
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
+     id="delete-confirm-modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="delete-modal-title">
+  <div class="mx-4 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800">
+    <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full
+                bg-red-100 dark:bg-red-900/30">
+      <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"
+           stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+      </svg>
+    </div>
+    <h3 class="mt-4 text-center text-xl font-bold text-brand-navy dark:text-gray-100"
+        id="delete-modal-title">
+      Are you sure?
+    </h3>
+    <p class="mt-2 text-center text-sm text-brand-stone dark:text-gray-400"
+       id="delete-confirm-message">
+      This will permanently remove all your data. This cannot be undone.
+    </p>
+    <div class="mt-6 flex justify-center gap-3">
+      <button type="button"
+              class="rounded-full bg-gray-100 px-5 py-2.5 text-sm font-semibold text-brand-navy
+                     transition-all hover:bg-gray-200
+                     dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+              id="delete-cancel-btn">
+        Never mind
+      </button>
+      <button type="button"
+              class="rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white
+                     transition-all hover:bg-red-700
+                     dark:bg-red-700 dark:hover:bg-red-600"
+              id="delete-confirm-btn">
+        Yes, delete it
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Transparency JS (loaded after page content) -->
+<script src="{{ '/assets/js/transparency.js' | relative_url }}"></script>
+<script>
+(function() {
+  'use strict';
+
+  var modal = document.getElementById('delete-confirm-modal');
+  var deleteAllBtn = document.getElementById('delete-all-btn');
+  var deleteSelectedBtn = document.getElementById('delete-selected-btn');
+  var cancelBtn = document.getElementById('delete-cancel-btn');
+  var confirmBtn = document.getElementById('delete-confirm-btn');
+  var messageEl = document.getElementById('delete-confirm-message');
+  var inventoryContainer = document.getElementById('data-inventory');
+  var granularContainer = document.getElementById('granular-delete');
+  var successBanner = document.getElementById('delete-success');
+  var previousFocus = null;
+  var pendingAction = null; // 'all' or ['votes', 'feedback', ...]
+
+  // --- Modal helpers ---
+  function openModal() {
+    if (!modal) return;
+    previousFocus = document.activeElement;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    cancelBtn?.focus();
+  }
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    pendingAction = null;
+    if (previousFocus) {
+      previousFocus.focus();
+      previousFocus = null;
+    }
+  }
+
+  // Backdrop click
+  modal?.addEventListener('click', function(e) {
+    if (e.target === modal) closeModal();
+  });
+
+  // Keyboard: Escape to close + focus trap
+  document.addEventListener('keydown', function(e) {
+    if (!modal || modal.classList.contains('hidden')) return;
+
+    if (e.key === 'Escape') {
+      closeModal();
+      return;
+    }
+
+    // Focus trap: keep Tab within the modal
+    if (e.key === 'Tab') {
+      var focusable = modal.querySelectorAll('button:not([disabled])');
+      if (focusable.length === 0) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  });
+
+  cancelBtn?.addEventListener('click', closeModal);
+
+  // --- Render data snapshot ---
+  function renderInventory() {
+    if (!inventoryContainer || !window.TSGDataManager) return;
+
+    var inv = window.TSGDataManager.inventory();
+    var summaries = window.TSGDataManager.summarize();
+    var catIds = window.TSGDataManager.getCategoryIds();
+    var anyData = window.TSGDataManager.hasAnyData();
+
+    inventoryContainer.innerHTML = '';
+
+    if (!anyData) {
+      inventoryContainer.innerHTML =
+        '<div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 text-center dark:border-emerald-800 dark:bg-emerald-950/20">' +
+          '<p class="text-sm font-semibold text-emerald-700 dark:text-emerald-400">Clean slate! We have no data about you.</p>' +
+        '</div>';
+
+      // Disable delete buttons
+      if (deleteAllBtn) {
+        deleteAllBtn.disabled = true;
+        deleteAllBtn.textContent = 'Nothing to delete';
+      }
+      return;
+    }
+
+    // Enable delete all button
+    if (deleteAllBtn) {
+      deleteAllBtn.disabled = false;
+      deleteAllBtn.textContent = 'Delete All My Data';
+    }
+
+    catIds.forEach(function(catId) {
+      var cat = inv[catId];
+      var summary = summaries[catId] || 'No data';
+      var hasData = cat.hasData;
+
+      var row = document.createElement('div');
+      row.className = 'flex items-start gap-3 rounded-xl border p-3 transition-colors ' +
+        (hasData
+          ? 'border-brand-sky/20 bg-brand-sky/5 dark:border-gray-600 dark:bg-gray-700/30'
+          : 'border-gray-200 bg-gray-50 opacity-50 dark:border-gray-700 dark:bg-gray-800/30');
+
+      row.innerHTML =
+        '<span class="text-xl flex-shrink-0">' + cat.icon + '</span>' +
+        '<div class="min-w-0">' +
+          '<p class="font-semibold text-brand-navy dark:text-gray-100 text-sm">' + cat.label + '</p>' +
+          '<p class="text-xs text-brand-stone dark:text-gray-400 mt-0.5">' + escapeHtml(summary) + '</p>' +
+        '</div>';
+
+      inventoryContainer.appendChild(row);
+    });
+  }
+
+  // --- Render granular delete checkboxes ---
+  function renderGranularDelete() {
+    if (!granularContainer || !window.TSGDataManager) return;
+
+    var inv = window.TSGDataManager.inventory();
+    var catIds = window.TSGDataManager.getCategoryIds();
+
+    granularContainer.innerHTML = '';
+
+    catIds.forEach(function(catId) {
+      var cat = inv[catId];
+
+      var label = document.createElement('label');
+      label.className = 'flex items-center gap-3 rounded-lg p-2 cursor-pointer transition-colors ' +
+        'hover:bg-gray-50 dark:hover:bg-gray-700/50 ' +
+        (cat.hasData ? '' : 'opacity-40 cursor-not-allowed');
+
+      var checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'delete-cat';
+      checkbox.value = catId;
+      checkbox.disabled = !cat.hasData;
+      checkbox.className = 'h-4 w-4 rounded border-gray-300 text-brand-sky ' +
+        'focus:ring-brand-sky/50 dark:border-gray-600 dark:bg-gray-700';
+
+      checkbox.addEventListener('change', updateDeleteSelectedState);
+
+      var textSpan = document.createElement('span');
+      textSpan.className = 'text-sm text-brand-navy dark:text-gray-200';
+      textSpan.textContent = cat.icon + '  ' + cat.label;
+
+      label.appendChild(checkbox);
+      label.appendChild(textSpan);
+      granularContainer.appendChild(label);
+    });
+  }
+
+  function updateDeleteSelectedState() {
+    var checked = granularContainer?.querySelectorAll('input[name="delete-cat"]:checked') || [];
+    if (deleteSelectedBtn) {
+      deleteSelectedBtn.disabled = checked.length === 0;
+    }
+  }
+
+  function getSelectedCategories() {
+    var checked = granularContainer?.querySelectorAll('input[name="delete-cat"]:checked') || [];
+    var cats = [];
+    checked.forEach(function(cb) { cats.push(cb.value); });
+    return cats;
+  }
+
+  // --- Delete All ---
+  deleteAllBtn?.addEventListener('click', function() {
+    pendingAction = 'all';
+    if (messageEl) {
+      messageEl.textContent = 'This will permanently remove all your data — votes, feedback, remix cart, preferences, and viewing history. This cannot be undone.';
+    }
+    openModal();
+  });
+
+  // --- Delete Selected ---
+  deleteSelectedBtn?.addEventListener('click', function() {
+    var selected = getSelectedCategories();
+    if (selected.length === 0) return;
+
+    pendingAction = selected;
+
+    var labels = selected.map(function(catId) {
+      var meta = window.TSGDataManager.getCategoryMeta(catId);
+      return meta ? meta.label : catId;
+    });
+
+    if (messageEl) {
+      messageEl.textContent = 'This will delete: ' + labels.join(', ') + '. This cannot be undone.';
+    }
+    openModal();
+  });
+
+  // --- Confirm deletion ---
+  confirmBtn?.addEventListener('click', function() {
+    if (!pendingAction || !window.TSGDataManager) {
+      closeModal();
+      return;
+    }
+
+    // Disable button to prevent double-click
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Deleting...';
+
+    var promise;
+
+    if (pendingAction === 'all') {
+      promise = window.TSGDataManager.clearAll();
+    } else {
+      // Granular: read device ID BEFORE clearing categories (needed for server deletion)
+      var deviceId = null;
+      try { deviceId = localStorage.getItem('tsg_device_id'); } catch(e) {}
+
+      // Clear selected categories
+      var totalRemoved = 0;
+      pendingAction.forEach(function(catId) {
+        totalRemoved += window.TSGDataManager.clearCategory(catId);
+      });
+      // Server deletion if any server-backed category selected
+      var serverCategories = ['votes', 'identity', 'feedback', 'feedback_upvotes', 'published_remixes', 'remix_upvotes'];
+      var needsServer = serverCategories.some(function(cat) {
+        return pendingAction.indexOf(cat) !== -1;
+      });
+      if (needsServer) {
+        promise = window.TSGDataManager.clearServerData(deviceId).then(function(server) {
+          return { local: totalRemoved, server: server };
+        });
+      } else {
+        promise = Promise.resolve({ local: totalRemoved, server: { success: true, message: 'No server data affected' } });
+      }
+    }
+
+    promise.then(function(result) {
+      closeModal();
+
+      // Re-enable button
+      if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, delete it';
+      }
+
+      // Show success
+      if (successBanner) {
+        successBanner.classList.remove('hidden');
+        // Include server message if relevant
+        if (result.server && result.server.message && result.server.deletedRows > 0) {
+          var serverNote = successBanner.querySelector('p:last-child');
+          if (serverNote) {
+            serverNote.textContent = result.server.message;
+          }
+        }
+      }
+
+      // Refresh inventory and granular delete
+      renderInventory();
+      renderGranularDelete();
+
+      // Scroll to success banner
+      successBanner?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }).catch(function() {
+      closeModal();
+      if (confirmBtn) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, delete it';
+      }
+      // Still refresh the UI since local data was likely deleted
+      renderInventory();
+      renderGranularDelete();
+      // Show partial success feedback
+      if (successBanner) {
+        var msg = successBanner.querySelector('p:first-child');
+        var note = successBanner.querySelector('p:last-child');
+        if (msg) msg.textContent = 'Local data deleted.';
+        if (note) note.textContent = 'Server deletion may have failed — try again if needed.';
+        successBanner.classList.remove('hidden');
+        successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  });
+
+  // --- Utility ---
+  function escapeHtml(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // --- Initialize on load ---
+  function init() {
+    if (!window.TSGDataManager) {
+      if (inventoryContainer) {
+        inventoryContainer.innerHTML =
+          '<p class="text-sm text-brand-stone dark:text-gray-400 italic">Could not load data manager.</p>';
+      }
+      return;
+    }
+    renderInventory();
+    renderGranularDelete();
+  }
+
+  // Small delay to ensure transparency.js is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 50);
+  }
+
+  // --- Data Concern Form ---
+  var concernForm = document.getElementById('concern-form');
+  var concernType = document.getElementById('concern-type');
+  var concernDetails = document.getElementById('concern-details');
+  var concernEmail = document.getElementById('concern-email');
+  var concernError = document.getElementById('concern-error');
+  var concernSubmitBtn = document.getElementById('concern-submit-btn');
+  var concernSuccess = document.getElementById('concern-success');
+  var concernReference = document.getElementById('concern-reference');
+  var concernCharCount = document.getElementById('concern-char-count');
+  var concernAnotherBtn = document.getElementById('concern-another-btn');
+  var formPageLoadTime = Date.now();
+
+  // Character count
+  concernDetails?.addEventListener('input', function() {
+    var len = this.value.trim().length;
+    if (concernCharCount) {
+      concernCharCount.textContent = len > 0 ? len + '/2000' : '';
+    }
+  });
+
+  // Show error
+  function showConcernError(msg) {
+    if (concernError) {
+      concernError.textContent = msg;
+      concernError.classList.remove('hidden');
+      concernError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function hideConcernError() {
+    if (concernError) concernError.classList.add('hidden');
+  }
+
+  // Get Supabase URL for Edge Function call
+  function getEdgeFunctionUrl() {
+    if (window.ThirdSpacesSupabase && window.ThirdSpacesSupabase.url) {
+      return window.ThirdSpacesSupabase.url + '/functions/v1/submit-concern';
+    }
+    return null;
+  }
+
+  // Get device ID for context
+  function getDeviceId() {
+    try { return localStorage.getItem('tsg_device_id') || null; } catch(e) { return null; }
+  }
+
+  // Submit handler
+  concernForm?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    hideConcernError();
+
+    // Timing check: reject if submitted too fast (bot protection)
+    if (Date.now() - formPageLoadTime < 3000) {
+      showConcernError('Please take a moment to fill out the form.');
+      return;
+    }
+
+    // Validate
+    var typeVal = concernType?.value;
+    var detailsVal = concernDetails?.value?.trim() || '';
+    var emailVal = concernEmail?.value?.trim() || '';
+
+    if (!typeVal) {
+      showConcernError('Please select what your concern is about.');
+      concernType?.focus();
+      return;
+    }
+
+    if (detailsVal.length < 10) {
+      showConcernError('Please provide at least 10 characters describing your concern.');
+      concernDetails?.focus();
+      return;
+    }
+
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      showConcernError('That email doesn\'t look right. Double-check or leave it blank.');
+      concernEmail?.focus();
+      return;
+    }
+
+    // Honeypot check (reuse page-level honeypot)
+    var hp = document.getElementById('hp_website');
+    if (hp && hp.value) return;
+
+    var url = getEdgeFunctionUrl();
+    if (!url) {
+      showConcernError('The form service is not configured. Please email ridp@austintexas.gov instead.');
+      return;
+    }
+
+    // Disable button
+    concernSubmitBtn.disabled = true;
+    concernSubmitBtn.querySelector('span')?.classList.add('hidden');
+    var originalHTML = concernSubmitBtn.innerHTML;
+    concernSubmitBtn.textContent = 'Submitting...';
+
+    var payload = {
+      concern_type: typeVal,
+      details: detailsVal,
+      email: emailVal || null,
+      device_id: getDeviceId()
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(function(resp) {
+      return resp.json().then(function(data) {
+        return { ok: resp.ok, status: resp.status, data: data };
+      });
+    })
+    .then(function(result) {
+      concernSubmitBtn.disabled = false;
+      concernSubmitBtn.innerHTML = originalHTML;
+
+      if (!result.ok) {
+        if (result.status === 429) {
+          showConcernError(result.data.error || 'You\'ve submitted recently. Please wait before sending another.');
+        } else {
+          showConcernError(result.data.error || 'Something went wrong. Please try again.');
+        }
+        return;
+      }
+
+      // Success — show confirmation
+      if (concernReference) {
+        concernReference.textContent = result.data.reference || '---';
+      }
+      concernForm.classList.add('hidden');
+      if (concernSuccess) concernSuccess.classList.remove('hidden');
+      concernSuccess?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    })
+    .catch(function(err) {
+      console.error('[ConcernForm] Submission error:', err);
+      concernSubmitBtn.disabled = false;
+      concernSubmitBtn.innerHTML = originalHTML;
+      showConcernError('Could not connect to the server. Please try again or email ridp@austintexas.gov.');
+    });
+  });
+
+  // "Submit another" resets the form
+  concernAnotherBtn?.addEventListener('click', function() {
+    concernForm?.reset();
+    concernForm?.classList.remove('hidden');
+    if (concernSuccess) concernSuccess.classList.add('hidden');
+    hideConcernError();
+    if (concernCharCount) concernCharCount.textContent = '';
+    formPageLoadTime = Date.now();
+  });
+})();
+</script>

@@ -216,6 +216,21 @@ layout: default
         </section>
         {% endif %}
 
+        <!-- Community Feedback Section -->
+        <section class="mt-8 rounded-2xl border border-brand-sky/10 bg-white/80 p-6
+                        dark:bg-gray-800/80 dark:border-gray-700"
+                 data-feedback-display
+                 data-submission-id="{{ page.slug }}"
+                 aria-label="Community feedback">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xl" aria-hidden="true">💬</span>
+            <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Community Feedback</h2>
+          </div>
+          <div data-feedback-list class="space-y-3">
+            <!-- Populated by feedback-display.js -->
+          </div>
+        </section>
+
       </div>
 
       <!-- Right column: Sidebar -->
