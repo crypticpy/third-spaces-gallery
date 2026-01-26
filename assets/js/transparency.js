@@ -22,6 +22,21 @@
       cookie: "ts_v2",
       storage: "Your browser + our server (if connected)",
       duration: "Until you delete it (cookie backup lasts 180 days)",
+      summary: function (items) {
+        var voteItem = items.find(function (it) {
+          return it.key === "ts:votes:v2";
+        });
+        if (voteItem) {
+          try {
+            var parsed = JSON.parse(voteItem.value);
+            var count = Object.keys(parsed.votes || {}).length;
+            return count + " design" + (count !== 1 ? "s" : "") + " voted on";
+          } catch (e) {
+            return "Vote data stored";
+          }
+        }
+        return "Vote backup cookie stored";
+      },
     },
     identity: {
       label: "Device ID",
@@ -32,6 +47,11 @@
       cookie: null,
       storage: "Your browser + our server (as a random code)",
       duration: "Until you delete it",
+      summary: function (items) {
+        var idItem = items[0];
+        var shortId = idItem ? idItem.value.substring(0, 8) + "..." : "";
+        return "Random ID: " + shortId;
+      },
     },
     feedback: {
       label: "Feedback & Tags",
@@ -42,6 +62,12 @@
       cookie: null,
       storage: "Your browser + our server (if connected)",
       duration: "Until you delete it",
+      summary: function (items) {
+        var fbCount = items.length;
+        return (
+          fbCount + " feedback entr" + (fbCount !== 1 ? "ies" : "y") + " stored"
+        );
+      },
     },
     remix: {
       label: "Remix Cart",
@@ -51,6 +77,25 @@
       cookie: null,
       storage: "Your browser only",
       duration: "Until you delete it",
+      summary: function (items) {
+        var cartItem = items.find(function (it) {
+          return it.key === "tsg_remix_cart";
+        });
+        if (cartItem) {
+          try {
+            var cart = JSON.parse(cartItem.value);
+            return (
+              cart.length +
+              " feature" +
+              (cart.length !== 1 ? "s" : "") +
+              " saved"
+            );
+          } catch (e) {
+            return "Remix data stored";
+          }
+        }
+        return "Onboarding flag only";
+      },
     },
     preferences: {
       label: "Preferences",
@@ -60,6 +105,28 @@
       cookie: null,
       storage: "Your browser only",
       duration: "Until you delete it",
+      summary: function (items) {
+        var themeItem = items.find(function (it) {
+          return it.key === "tsg_theme";
+        });
+        var viewItem = items.find(function (it) {
+          return it.key === "tsg_view_mode";
+        });
+        var parts = [];
+        if (themeItem) {
+          parts.push(
+            themeItem.value === "hype"
+              ? "Hype mode (dark)"
+              : "Chill mode (light)",
+          );
+        }
+        if (viewItem) {
+          parts.push(
+            viewItem.value === "immersive" ? "Immersive view" : "Grid view",
+          );
+        }
+        return parts.join(", ") || "Preference data stored";
+      },
     },
     history: {
       label: "Viewing History",
@@ -69,6 +136,25 @@
       cookie: null,
       storage: "Your browser only",
       duration: "Until you delete it",
+      summary: function (items) {
+        var viewedItem = items.find(function (it) {
+          return it.key === "tsg_viewed_designs";
+        });
+        if (viewedItem) {
+          try {
+            var viewed = JSON.parse(viewedItem.value);
+            return (
+              viewed.length +
+              " design" +
+              (viewed.length !== 1 ? "s" : "") +
+              " viewed"
+            );
+          } catch (e) {
+            return "Viewing data stored";
+          }
+        }
+        return "Onboarding flag only";
+      },
     },
     feedback_upvotes: {
       label: "Feedback Upvotes",
@@ -78,6 +164,26 @@
       cookie: null,
       storage: "Your browser + our server (if connected)",
       duration: "Until you delete it",
+      summary: function (items) {
+        var fuItem = items.find(function (it) {
+          return it.key === "ts:feedback_upvotes:v1";
+        });
+        if (fuItem) {
+          try {
+            var fuData = JSON.parse(fuItem.value);
+            var fuCount = Object.keys(fuData).length;
+            return (
+              fuCount +
+              " feedback comment" +
+              (fuCount !== 1 ? "s" : "") +
+              " upvoted"
+            );
+          } catch (e) {
+            return "Upvote data stored";
+          }
+        }
+        return "Upvote data stored";
+      },
     },
     published_remixes: {
       label: "Published Remixes",
@@ -87,6 +193,23 @@
       cookie: null,
       storage: "Your browser + our server (if connected)",
       duration: "Until you delete it",
+      summary: function (items) {
+        var prItem = items.find(function (it) {
+          return it.key === "ts:published_remixes:v1";
+        });
+        if (prItem) {
+          try {
+            var prData = JSON.parse(prItem.value);
+            var prCount = Object.keys(prData).length;
+            return (
+              prCount + " remix" + (prCount !== 1 ? "es" : "") + " published"
+            );
+          } catch (e) {
+            return "Remix data stored";
+          }
+        }
+        return "Remix data stored";
+      },
     },
     remix_upvotes: {
       label: "Remix Upvotes",
@@ -96,8 +219,50 @@
       cookie: null,
       storage: "Your browser + our server (if connected)",
       duration: "Until you delete it",
+      summary: function (items) {
+        var ruItem = items.find(function (it) {
+          return it.key === "ts:remix_upvotes:v1";
+        });
+        if (ruItem) {
+          try {
+            var ruData = JSON.parse(ruItem.value);
+            var ruCount = Object.keys(ruData).length;
+            return (
+              ruCount + " remix" + (ruCount !== 1 ? "es" : "") + " upvoted"
+            );
+          } catch (e) {
+            return "Upvote data stored";
+          }
+        }
+        return "Upvote data stored";
+      },
     },
   };
+
+  /**
+   * Discover all storage keys (static, dynamic-prefix, and cookie) for a category.
+   * Returns an array of { key, type } entries.
+   */
+  function getCategoryKeys(cat) {
+    var keys = [];
+    cat.keys.forEach(function (key) {
+      keys.push({ key: key, type: "local" });
+    });
+    if (cat.dynamicPrefix) {
+      try {
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf(cat.dynamicPrefix) === 0) {
+            keys.push({ key: k, type: "local" });
+          }
+        }
+      } catch (e) {}
+    }
+    if (cat.cookie) {
+      keys.push({ key: cat.cookie, type: "cookie" });
+    }
+    return keys;
+  }
 
   /**
    * Scan all localStorage keys and cookie for a given category.
@@ -108,56 +273,38 @@
     if (!cat) return null;
 
     var items = [];
+    var discovered = getCategoryKeys(cat);
 
-    // Static keys
-    cat.keys.forEach(function (key) {
-      var val;
-      try {
-        val = localStorage.getItem(key);
-      } catch (e) {
-        val = null;
-      }
-      if (val !== null) {
-        items.push({ key: key, value: val, size: val.length, type: "local" });
+    discovered.forEach(function (entry) {
+      if (entry.type === "local") {
+        var val;
+        try {
+          val = localStorage.getItem(entry.key);
+        } catch (e) {
+          val = null;
+        }
+        if (val !== null) {
+          items.push({
+            key: entry.key,
+            value: val,
+            size: val.length,
+            type: "local",
+          });
+        }
+      } else if (entry.type === "cookie") {
+        var match = document.cookie.match(
+          new RegExp("(?:^|; )" + entry.key + "=([^;]*)"),
+        );
+        if (match) {
+          items.push({
+            key: "cookie:" + entry.key,
+            value: match[1],
+            size: match[1].length,
+            type: "cookie",
+          });
+        }
       }
     });
-
-    // Dynamic prefix keys (tsg_feedback_*)
-    if (cat.dynamicPrefix) {
-      try {
-        for (var i = 0; i < localStorage.length; i++) {
-          var key = localStorage.key(i);
-          if (key && key.indexOf(cat.dynamicPrefix) === 0) {
-            var val = localStorage.getItem(key);
-            if (val !== null) {
-              items.push({
-                key: key,
-                value: val,
-                size: val.length,
-                type: "local",
-              });
-            }
-          }
-        }
-      } catch (e) {
-        /* localStorage not available */
-      }
-    }
-
-    // Cookie
-    if (cat.cookie) {
-      var match = document.cookie.match(
-        new RegExp("(?:^|; )" + cat.cookie + "=([^;]*)"),
-      );
-      if (match) {
-        items.push({
-          key: "cookie:" + cat.cookie,
-          value: match[1],
-          size: match[1].length,
-          type: "cookie",
-        });
-      }
-    }
 
     return {
       id: catId,
@@ -189,184 +336,19 @@
   function summarize() {
     var inv = inventory();
     var summaries = {};
-
-    // Votes
-    if (inv.votes.hasData) {
-      var voteItem = inv.votes.items.find(function (it) {
-        return it.key === "ts:votes:v2";
-      });
-      if (voteItem) {
-        try {
-          var parsed = JSON.parse(voteItem.value);
-          var count = Object.keys(parsed.votes || {}).length;
-          summaries.votes =
-            count + " design" + (count !== 1 ? "s" : "") + " voted on";
-        } catch (e) {
-          summaries.votes = "Vote data stored";
-        }
+    Object.keys(DATA_CATEGORIES).forEach(function (id) {
+      var cat = DATA_CATEGORIES[id];
+      var catInv = inv[id];
+      if (!catInv || !catInv.hasData) {
+        summaries[id] = "No data";
+        return;
+      }
+      if (typeof cat.summary === "function") {
+        summaries[id] = cat.summary(catInv.items);
       } else {
-        summaries.votes = "Vote backup cookie stored";
+        summaries[id] = "Data stored";
       }
-    } else {
-      summaries.votes = "No data";
-    }
-
-    // Identity
-    if (inv.identity.hasData) {
-      var idItem = inv.identity.items[0];
-      var shortId = idItem ? idItem.value.substring(0, 8) + "..." : "";
-      summaries.identity = "Random ID: " + shortId;
-    } else {
-      summaries.identity = "No data";
-    }
-
-    // Feedback
-    if (inv.feedback.hasData) {
-      var fbCount = inv.feedback.items.length;
-      summaries.feedback =
-        fbCount + " feedback entr" + (fbCount !== 1 ? "ies" : "y") + " stored";
-    } else {
-      summaries.feedback = "No data";
-    }
-
-    // Remix
-    if (inv.remix.hasData) {
-      var cartItem = inv.remix.items.find(function (it) {
-        return it.key === "tsg_remix_cart";
-      });
-      if (cartItem) {
-        try {
-          var cart = JSON.parse(cartItem.value);
-          summaries.remix =
-            cart.length +
-            " feature" +
-            (cart.length !== 1 ? "s" : "") +
-            " saved";
-        } catch (e) {
-          summaries.remix = "Remix data stored";
-        }
-      } else {
-        summaries.remix = "Onboarding flag only";
-      }
-    } else {
-      summaries.remix = "No data";
-    }
-
-    // Preferences
-    if (inv.preferences.hasData) {
-      var themeItem = inv.preferences.items.find(function (it) {
-        return it.key === "tsg_theme";
-      });
-      var viewItem = inv.preferences.items.find(function (it) {
-        return it.key === "tsg_view_mode";
-      });
-      var parts = [];
-      if (themeItem) {
-        parts.push(
-          themeItem.value === "hype"
-            ? "Hype mode (dark)"
-            : "Chill mode (light)",
-        );
-      }
-      if (viewItem) {
-        parts.push(
-          viewItem.value === "immersive" ? "Immersive view" : "Grid view",
-        );
-      }
-      summaries.preferences = parts.join(", ") || "Preference data stored";
-    } else {
-      summaries.preferences = "No data";
-    }
-
-    // History
-    if (inv.history.hasData) {
-      var viewedItem = inv.history.items.find(function (it) {
-        return it.key === "tsg_viewed_designs";
-      });
-      if (viewedItem) {
-        try {
-          var viewed = JSON.parse(viewedItem.value);
-          summaries.history =
-            viewed.length +
-            " design" +
-            (viewed.length !== 1 ? "s" : "") +
-            " viewed";
-        } catch (e) {
-          summaries.history = "Viewing data stored";
-        }
-      } else {
-        summaries.history = "Onboarding flag only";
-      }
-    } else {
-      summaries.history = "No data";
-    }
-
-    // Feedback Upvotes
-    if (inv.feedback_upvotes && inv.feedback_upvotes.hasData) {
-      var fuItem = inv.feedback_upvotes.items.find(function (it) {
-        return it.key === "ts:feedback_upvotes:v1";
-      });
-      if (fuItem) {
-        try {
-          var fuData = JSON.parse(fuItem.value);
-          var fuCount = Object.keys(fuData).length;
-          summaries.feedback_upvotes =
-            fuCount +
-            " feedback comment" +
-            (fuCount !== 1 ? "s" : "") +
-            " upvoted";
-        } catch (e) {
-          summaries.feedback_upvotes = "Upvote data stored";
-        }
-      } else {
-        summaries.feedback_upvotes = "No data";
-      }
-    } else {
-      summaries.feedback_upvotes = "No data";
-    }
-
-    // Published Remixes
-    if (inv.published_remixes && inv.published_remixes.hasData) {
-      var prItem = inv.published_remixes.items.find(function (it) {
-        return it.key === "ts:published_remixes:v1";
-      });
-      if (prItem) {
-        try {
-          var prData = JSON.parse(prItem.value);
-          var prCount = Object.keys(prData).length;
-          summaries.published_remixes =
-            prCount + " remix" + (prCount !== 1 ? "es" : "") + " published";
-        } catch (e) {
-          summaries.published_remixes = "Remix data stored";
-        }
-      } else {
-        summaries.published_remixes = "No data";
-      }
-    } else {
-      summaries.published_remixes = "No data";
-    }
-
-    // Remix Upvotes
-    if (inv.remix_upvotes && inv.remix_upvotes.hasData) {
-      var ruItem = inv.remix_upvotes.items.find(function (it) {
-        return it.key === "ts:remix_upvotes:v1";
-      });
-      if (ruItem) {
-        try {
-          var ruData = JSON.parse(ruItem.value);
-          var ruCount = Object.keys(ruData).length;
-          summaries.remix_upvotes =
-            ruCount + " remix" + (ruCount !== 1 ? "es" : "") + " upvoted";
-        } catch (e) {
-          summaries.remix_upvotes = "Upvote data stored";
-        }
-      } else {
-        summaries.remix_upvotes = "No data";
-      }
-    } else {
-      summaries.remix_upvotes = "No data";
-    }
-
+    });
     return summaries;
   }
 
@@ -391,40 +373,22 @@
     if (!cat) return 0;
 
     var removed = 0;
+    var discovered = getCategoryKeys(cat);
 
-    // Static keys
-    cat.keys.forEach(function (key) {
-      try {
-        if (localStorage.getItem(key) !== null) {
-          localStorage.removeItem(key);
-          removed++;
-        }
-      } catch (e) {}
-    });
-
-    // Dynamic prefix keys
-    if (cat.dynamicPrefix) {
-      var toRemove = [];
-      try {
-        for (var i = 0; i < localStorage.length; i++) {
-          var key = localStorage.key(i);
-          if (key && key.indexOf(cat.dynamicPrefix) === 0) {
-            toRemove.push(key);
+    discovered.forEach(function (entry) {
+      if (entry.type === "local") {
+        try {
+          if (localStorage.getItem(entry.key) !== null) {
+            localStorage.removeItem(entry.key);
+            removed++;
           }
-        }
-        toRemove.forEach(function (key) {
-          localStorage.removeItem(key);
-          removed++;
-        });
-      } catch (e) {}
-    }
-
-    // Cookie (only count as removed if it actually exists)
-    if (cat.cookie) {
-      var cookieExists = document.cookie.indexOf(cat.cookie + "=") !== -1;
-      document.cookie = cat.cookie + "=; max-age=0; path=/";
-      if (cookieExists) removed++;
-    }
+        } catch (e) {}
+      } else if (entry.type === "cookie") {
+        var cookieExists = document.cookie.indexOf(entry.key + "=") !== -1;
+        document.cookie = entry.key + "=; max-age=0; path=/";
+        if (cookieExists) removed++;
+      }
+    });
 
     return removed;
   }

@@ -24,6 +24,8 @@ title: Privacy Policy
 (function() {
   var base = document.querySelector('meta[name="baseurl"]');
   var baseurl = base ? base.content : '';
+  // Strip trailing slash to avoid double-slash in redirect
+  baseurl = baseurl.replace(/\/+$/, '');
   window.location.replace(baseurl + '/transparency/');
 })();
 </script>

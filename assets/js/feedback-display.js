@@ -61,43 +61,96 @@
    * Get the device ID from localStorage.
    */
   function getDeviceId() {
-    return localStorage.getItem(DEVICE_KEY) || null;
+    try {
+      var id = localStorage.getItem(DEVICE_KEY);
+      if (id) return id;
+      // Generate a new stable device ID
+      var newId =
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+              /[xy]/g,
+              function (c) {
+                var r = (Math.random() * 16) | 0;
+                return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+              },
+            );
+      localStorage.setItem(DEVICE_KEY, newId);
+      return newId;
+    } catch (e) {
+      // localStorage unavailable — return a per-page ephemeral ID
+      return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+        /[xy]/g,
+        function (c) {
+          var r = (Math.random() * 16) | 0;
+          return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+        },
+      );
+    }
   }
 
   /**
-   * Escape HTML to prevent XSS.
-   */
-  function escapeHtml(str) {
-    var div = document.createElement("div");
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-  }
-
-  /**
-   * Render a single feedback card as an HTML string.
+   * Render a single feedback card as a DOM element.
    */
   function renderFeedbackCard(item, isUpvoted) {
-    var authorName = item.author_name
-      ? escapeHtml(item.author_name)
-      : "Anonymous";
-    var feedbackText = item.feedback_text ? escapeHtml(item.feedback_text) : "";
+    var authorName = item.author_name || "Anonymous";
+    var feedbackText = item.feedback_text || "";
     var upvoteCount = item.upvote_count || 0;
     var timestamp = relativeTime(item.created_at);
 
-    // Build tags HTML
-    var tagsHtml = "";
+    // Card wrapper
+    var card = document.createElement("div");
+    card.className =
+      "rounded-xl border border-brand-sky/10 bg-white/50 p-4 dark:bg-gray-800/50 dark:border-gray-700";
+
+    // Flex row
+    var flexRow = document.createElement("div");
+    flexRow.className = "flex items-start justify-between gap-2";
+
+    // Content area
+    var contentArea = document.createElement("div");
+    contentArea.className = "flex-1 min-w-0";
+
+    // Author name
+    var authorSpan = document.createElement("span");
+    authorSpan.className =
+      "text-sm font-semibold text-brand-navy dark:text-gray-200";
+    authorSpan.textContent = authorName;
+    contentArea.appendChild(authorSpan);
+
+    // Timestamp
+    var timeSpan = document.createElement("span");
+    timeSpan.className = "text-xs text-brand-cloud dark:text-gray-500 ml-2";
+    timeSpan.textContent = timestamp;
+    contentArea.appendChild(timeSpan);
+
+    // Tags
     if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
-      tagsHtml = '<div class="flex flex-wrap gap-1 mt-1">';
+      var tagsContainer = document.createElement("div");
+      tagsContainer.className = "flex flex-wrap gap-1 mt-1";
       item.tags.forEach(function (tag) {
-        tagsHtml +=
-          '<span class="inline-flex rounded-full bg-brand-sky/10 px-2 py-0.5 text-xs font-medium text-brand-sky">' +
-          escapeHtml(tag) +
-          "</span>";
+        var tagSpan = document.createElement("span");
+        tagSpan.className =
+          "inline-flex rounded-full bg-brand-sky/10 px-2 py-0.5 text-xs font-medium text-brand-sky";
+        tagSpan.textContent = tag;
+        tagsContainer.appendChild(tagSpan);
       });
-      tagsHtml += "</div>";
+      contentArea.appendChild(tagsContainer);
     }
 
-    // Upvote button classes
+    // Feedback text
+    if (feedbackText) {
+      var textP = document.createElement("p");
+      textP.className = "text-sm text-brand-stone dark:text-gray-400 mt-1";
+      textP.textContent = feedbackText;
+      contentArea.appendChild(textP);
+    }
+
+    flexRow.appendChild(contentArea);
+
+    // Upvote button
+    var upvoteBtn = document.createElement("button");
+    upvoteBtn.setAttribute("data-feedback-upvote", item.id);
     var upvoteBtnClass =
       "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-semibold transition-all";
     if (isUpvoted) {
@@ -107,50 +160,37 @@
       upvoteBtnClass +=
         " border-brand-sky/15 text-brand-stone hover:border-brand-sky hover:bg-brand-sky/10";
     }
+    upvoteBtn.className = upvoteBtnClass;
+    upvoteBtn.setAttribute("aria-pressed", isUpvoted ? "true" : "false");
+    upvoteBtn.setAttribute("aria-label", "Upvote this feedback");
 
-    return (
-      '<div class="rounded-xl border border-brand-sky/10 bg-white/50 p-4 dark:bg-gray-800/50 dark:border-gray-700">' +
-      '<div class="flex items-start justify-between gap-2">' +
-      '<div class="flex-1 min-w-0">' +
-      '<span class="text-sm font-semibold text-brand-navy dark:text-gray-200">' +
-      authorName +
-      "</span>" +
-      '<span class="text-xs text-brand-cloud dark:text-gray-500 ml-2">' +
-      escapeHtml(timestamp) +
-      "</span>" +
-      tagsHtml +
-      (feedbackText
-        ? '<p class="text-sm text-brand-stone dark:text-gray-400 mt-1">' +
-          feedbackText +
-          "</p>"
-        : "") +
-      "</div>" +
-      '<button data-feedback-upvote="' +
-      escapeHtml(item.id) +
-      '" class="' +
-      upvoteBtnClass +
-      '" aria-pressed="' +
-      (isUpvoted ? "true" : "false") +
-      '" aria-label="Upvote this feedback">' +
-      '<svg class="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10V2M6 2L2 6M6 2l4 4"/></svg>' +
-      "<span data-upvote-count>" +
-      upvoteCount +
-      "</span>" +
-      "</button>" +
-      "</div>" +
-      "</div>"
-    );
+    // SVG icon (static markup, no user data)
+    var svgWrapper = document.createElement("span");
+    svgWrapper.innerHTML =
+      '<svg class="w-3 h-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10V2M6 2L2 6M6 2l4 4"/></svg>';
+    upvoteBtn.appendChild(svgWrapper.firstChild);
+
+    // Upvote count
+    var countSpan = document.createElement("span");
+    countSpan.setAttribute("data-upvote-count", "");
+    countSpan.textContent = upvoteCount;
+    upvoteBtn.appendChild(countSpan);
+
+    flexRow.appendChild(upvoteBtn);
+    card.appendChild(flexRow);
+
+    return card;
   }
 
   /**
-   * Render the empty state message.
+   * Render the empty state message as a DOM element.
    */
   function renderEmptyState() {
-    return (
-      '<p class="text-sm text-brand-stone dark:text-gray-400 text-center py-6">' +
-      "No feedback yet. Be the first to share your thoughts!" +
-      "</p>"
-    );
+    var p = document.createElement("p");
+    p.className =
+      "text-sm text-brand-stone dark:text-gray-400 text-center py-6";
+    p.textContent = "No feedback yet. Be the first to share your thoughts!";
+    return p;
   }
 
   /**
@@ -234,18 +274,17 @@
         // Only show empty state if the feedback form also exists on the page
         var feedbackForm = document.querySelector("[data-feedback-prompt]");
         if (feedbackForm) {
-          listEl.innerHTML = renderEmptyState();
+          while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+          listEl.appendChild(renderEmptyState());
         }
         return;
       }
 
-      var html = "";
+      while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
       feedbackItems.forEach(function (item) {
         var isUpvoted = upvotedIds[item.id] === true;
-        html += renderFeedbackCard(item, isUpvoted);
+        listEl.appendChild(renderFeedbackCard(item, isUpvoted));
       });
-
-      listEl.innerHTML = html;
 
       console.log(
         "[FeedbackDisplay] Rendered",

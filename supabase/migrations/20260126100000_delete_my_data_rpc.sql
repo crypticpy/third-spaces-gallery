@@ -12,9 +12,8 @@ BEGIN
   GET DIAGNOSTICS v = ROW_COUNT;
   deleted_count := deleted_count + v;
 
-  -- Delete feedback by this device (match on author submissions)
-  -- Note: feedback doesn't store device_id directly, so we skip it here.
-  -- Users can submit a data concern via the transparency page for full removal.
+  -- Note: feedback now has device_id (added in migration 20260127000000).
+  -- Feedback deletion is handled by the updated RPC in 20260127400000_update_delete_my_data.sql.
 
   RETURN deleted_count;
 END;

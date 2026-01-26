@@ -70,7 +70,7 @@ jobs:
               --exclude-dir=.bundle --exclude='package-lock.json' \
               2>/dev/null || true)
             if [ -n "$MATCHES" ]; then
-              echo "::warning::Potential secret pattern found: $pattern"
+              echo "::error::Potential secret pattern found: $pattern"
               echo "$MATCHES"
               FOUND=1
             fi
@@ -83,7 +83,8 @@ jobs:
           fi
 
           if [ "$FOUND" -eq 1 ]; then
-            echo "::warning::Review the above matches to ensure no real secrets are committed"
+            echo "::error::Potential secrets or .env files detected — review and remove before merging"
+            exit 1
           else
             echo "No secret patterns found"
           fi

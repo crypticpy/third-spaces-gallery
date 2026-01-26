@@ -769,9 +769,11 @@ title: Your Data
       pendingAction.forEach(function(catId) {
         totalRemoved += window.TSGDataManager.clearCategory(catId);
       });
-      // Server deletion only if identity or votes selected
-      var needsServer = pendingAction.indexOf('votes') !== -1 ||
-                        pendingAction.indexOf('identity') !== -1;
+      // Server deletion if any server-backed category selected
+      var serverCategories = ['votes', 'identity', 'feedback', 'feedback_upvotes', 'published_remixes', 'remix_upvotes'];
+      var needsServer = serverCategories.some(function(cat) {
+        return pendingAction.indexOf(cat) !== -1;
+      });
       if (needsServer) {
         promise = window.TSGDataManager.clearServerData(deviceId).then(function(server) {
           return { local: totalRemoved, server: server };
@@ -951,7 +953,7 @@ title: Your Data
     // Disable button
     concernSubmitBtn.disabled = true;
     concernSubmitBtn.querySelector('span')?.classList.add('hidden');
-    var originalText = concernSubmitBtn.textContent;
+    var originalHTML = concernSubmitBtn.innerHTML;
     concernSubmitBtn.textContent = 'Submitting...';
 
     var payload = {
@@ -961,23 +963,10 @@ title: Your Data
       device_id: getDeviceId()
     };
 
-    // Get anon key for auth header
-    var anonKey = '';
-    try {
-      // Read from the supabase-config global
-      if (window.ThirdSpacesSupabase && window.ThirdSpacesSupabase.url) {
-        // The key is embedded in supabase-config.js as SUPABASE_ANON_KEY
-        // Access it via the initialized client's auth header
-        anonKey = typeof SUPABASE_ANON_KEY !== 'undefined' ? SUPABASE_ANON_KEY : '';
-      }
-    } catch(ex) {}
-
     fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + anonKey,
-        'apikey': anonKey
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(payload)
     })
@@ -988,7 +977,7 @@ title: Your Data
     })
     .then(function(result) {
       concernSubmitBtn.disabled = false;
-      concernSubmitBtn.textContent = originalText;
+      concernSubmitBtn.innerHTML = originalHTML;
 
       if (!result.ok) {
         if (result.status === 429) {
@@ -1010,7 +999,7 @@ title: Your Data
     .catch(function(err) {
       console.error('[ConcernForm] Submission error:', err);
       concernSubmitBtn.disabled = false;
-      concernSubmitBtn.textContent = originalText;
+      concernSubmitBtn.innerHTML = originalHTML;
       showConcernError('Could not connect to the server. Please try again or email ridp@austintexas.gov.');
     });
   });

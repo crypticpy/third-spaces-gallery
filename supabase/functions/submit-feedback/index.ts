@@ -174,22 +174,36 @@ Deno.serve(async (req: Request) => {
 
     if (githubPat) {
       try {
+        const isPrivateRepo = Deno.env.get("GITHUB_ISSUES_PRIVATE") === "true";
         const issueTitle = `[Feedback] ${submissionId} — ${reference}`;
         const tagList =
           tags.length > 0 ? tags.map((t) => `\`${t}\``).join(", ") : "_none_";
-        const issueBody = [
+
+        const bodyLines = [
           "## Feedback Submitted for Review",
           "",
           `**Reference:** \`${reference}\``,
           `**Design:** \`${submissionId}\``,
-          `**Author:** ${authorName}`,
           `**Tags:** ${tagList}`,
           `**Submitted:** ${new Date().toISOString()}`,
           "",
-          "### Comment",
-          "",
-          sanitizedText || "_No text provided (tags only)_",
-          "",
+        ];
+
+        if (isPrivateRepo) {
+          bodyLines.push(
+            "### Comment",
+            "",
+            sanitizedText || "_No text provided (tags only)_",
+            "",
+          );
+        } else {
+          bodyLines.push(
+            `View details in Supabase using record ID: \`${insertData.id}\``,
+            "",
+          );
+        }
+
+        bodyLines.push(
           "---",
           "",
           "**To approve:** Add the `approved` label to this issue.",
@@ -198,7 +212,9 @@ Deno.serve(async (req: Request) => {
           `<!-- RECORD_ID: ${insertData.id} -->`,
           "",
           "*Auto-created by the Third Spaces Gallery feedback system.*",
-        ].join("\n");
+        );
+
+        const issueBody = bodyLines.join("\n");
 
         const ghResponse = await fetch(
           `https://api.github.com/repos/${githubRepo}/issues`,

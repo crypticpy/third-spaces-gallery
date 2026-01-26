@@ -368,17 +368,20 @@ class FeedbackPromptHandler {
 
     try {
       // Delegate to FeedbackSystem's Edge Function call
-      if (window.feedbackSystem) {
-        const result = await window.feedbackSystem.submitToServer({
-          submission_id: submissionId,
-          author_name: "Anonymous",
-          feedback_text: text || "",
-          tags: tags,
-        });
-
-        if (!result.success) {
-          throw new Error(result.error || "Submit failed");
-        }
+      if (
+        !window.feedbackSystem ||
+        typeof window.feedbackSystem.submitToServer !== "function"
+      ) {
+        throw new Error("Feedback system unavailable. Please try again later.");
+      }
+      const result = await window.feedbackSystem.submitToServer({
+        submission_id: submissionId,
+        author_name: "Anonymous",
+        feedback_text: text || "",
+        tags: tags,
+      });
+      if (!result.success) {
+        throw new Error(result.error || "Submit failed");
       }
 
       // Success

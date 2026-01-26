@@ -8,6 +8,8 @@
 (() => {
   const UPVOTE_STORAGE_KEY = "ts:remix_upvotes:v1";
 
+  let sessionDeviceId = null;
+
   // ── Helpers ────────────────────────────────────────────────────────
 
   /**
@@ -45,15 +47,16 @@
   };
 
   /**
-   * Escape HTML to prevent XSS when inserting user-generated content.
-   * @param {string} str
-   * @returns {string}
+   * Create a centered status message div for loading/error/empty states.
+   * @param {string} text - The message to display
+   * @returns {HTMLElement}
    */
-  const escapeHtml = (str) => {
-    if (!str) return "";
+  const createStatusMessage = (text) => {
     const div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
+    div.className =
+      "text-center py-8 text-brand-stone dark:text-gray-400 text-sm";
+    div.textContent = text;
+    return div;
   };
 
   // ── localStorage helpers for upvote tracking ──────────────────────
@@ -73,6 +76,41 @@
     } catch (e) {
       console.warn("[RemixCommunity] Failed to save upvote state:", e);
     }
+  };
+
+  /**
+   * Get or create a stable device ID for vote deduplication.
+   * Uses localStorage when available, falls back to a per-session UUID.
+   * @returns {string}
+   */
+  const getOrCreateDeviceId = () => {
+    try {
+      const stored = localStorage.getItem("tsg_device_id");
+      if (stored) return stored;
+    } catch (e) {
+      // localStorage unavailable
+    }
+
+    // Return cached session ID if we already generated one
+    if (sessionDeviceId) return sessionDeviceId;
+
+    // Generate a new ID
+    sessionDeviceId =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+            const r = (Math.random() * 16) | 0;
+            return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+          });
+
+    // Try to persist
+    try {
+      localStorage.setItem("tsg_device_id", sessionDeviceId);
+    } catch (e) {
+      // Storage unavailable, keep in memory only
+    }
+
+    return sessionDeviceId;
   };
 
   // ── Card rendering ────────────────────────────────────────────────
@@ -111,21 +149,35 @@
     // Header: author + timestamp
     const header = document.createElement("div");
     header.className = "flex items-center justify-between gap-2 mb-3";
-    header.innerHTML = `
-      <span class="text-base font-semibold text-brand-navy dark:text-gray-100">${escapeHtml(remix.author_name || "Anonymous")}</span>
-      <span class="text-xs text-brand-stone dark:text-gray-500 whitespace-nowrap">${relativeTime(remix.created_at)}</span>
-    `;
+    const authorSpan = document.createElement("span");
+    authorSpan.className =
+      "text-base font-semibold text-brand-navy dark:text-gray-100";
+    authorSpan.textContent = remix.author_name || "Anonymous";
+    header.appendChild(authorSpan);
+
+    const timeSpan = document.createElement("span");
+    timeSpan.className =
+      "text-xs text-brand-stone dark:text-gray-500 whitespace-nowrap";
+    timeSpan.textContent = relativeTime(remix.created_at);
+    header.appendChild(timeSpan);
     card.appendChild(header);
 
     // Badge: feature count
     if (features.length > 0) {
       const badge = document.createElement("div");
       badge.className = "mb-3";
-      badge.innerHTML = `
-        <span class="inline-flex items-center rounded-full bg-brand-sky/10 px-2.5 py-0.5 text-xs font-medium text-brand-sky">
-          ${features.length} feature${features.length !== 1 ? "s" : ""} from ${sourceCount} design${sourceCount !== 1 ? "s" : ""}
-        </span>
-      `;
+      const badgeSpan = document.createElement("span");
+      badgeSpan.className =
+        "inline-flex items-center rounded-full bg-brand-sky/10 px-2.5 py-0.5 text-xs font-medium text-brand-sky";
+      badgeSpan.textContent =
+        features.length +
+        " feature" +
+        (features.length !== 1 ? "s" : "") +
+        " from " +
+        sourceCount +
+        " design" +
+        (sourceCount !== 1 ? "s" : "");
+      badge.appendChild(badgeSpan);
       card.appendChild(badge);
     }
 
@@ -138,7 +190,11 @@
         const chip = document.createElement("span");
         chip.className =
           "inline-flex items-center gap-1 rounded-full bg-brand-purple/10 px-2.5 py-1 text-xs font-medium text-brand-purple dark:bg-purple-900/30 dark:text-purple-300";
-        chip.innerHTML = `<span aria-hidden="true">${escapeHtml(f.icon || "")}</span>${escapeHtml(f.name || f.id || "")}`;
+        const iconSpan = document.createElement("span");
+        iconSpan.setAttribute("aria-hidden", "true");
+        iconSpan.textContent = f.icon || "";
+        chip.appendChild(iconSpan);
+        chip.appendChild(document.createTextNode(f.name || f.id || ""));
         chipWrap.appendChild(chip);
       });
 
@@ -179,12 +235,24 @@
         : "bg-white border-gray-200 text-gray-500 hover:border-brand-sky hover:text-brand-sky dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:border-brand-sky dark:hover:text-sky-300",
     ].join(" ");
 
-    upvoteBtn.innerHTML = `
-      <svg class="w-4 h-4" fill="${alreadyUpvoted ? "currentColor" : "none"}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
-      </svg>
-      <span data-upvote-count>${upvoteCount}</span>
-    `;
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("class", "w-4 h-4");
+    svg.setAttribute("fill", alreadyUpvoted ? "currentColor" : "none");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2");
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+    path.setAttribute("d", "M5 15l7-7 7 7");
+    svg.appendChild(path);
+    upvoteBtn.appendChild(svg);
+
+    const countSpan = document.createElement("span");
+    countSpan.setAttribute("data-upvote-count", "");
+    countSpan.textContent = upvoteCount;
+    upvoteBtn.appendChild(countSpan);
 
     if (alreadyUpvoted) {
       upvoteBtn.setAttribute("aria-pressed", "true");
@@ -217,11 +285,8 @@
     if (!list) return;
 
     // Show loading state
-    list.innerHTML = `
-      <div class="text-center py-8 text-brand-stone dark:text-gray-400 text-sm">
-        Loading community remixes...
-      </div>
-    `;
+    list.textContent = "";
+    list.appendChild(createStatusMessage("Loading community remixes..."));
 
     try {
       // Fetch remixes and upvote counts in parallel
@@ -239,22 +304,24 @@
           "[RemixCommunity] Failed to fetch remixes:",
           remixResult.error,
         );
-        list.innerHTML = `
-          <div class="text-center py-8 text-brand-stone dark:text-gray-400 text-sm">
-            Could not load community remixes. Please try again later.
-          </div>
-        `;
+        list.textContent = "";
+        list.appendChild(
+          createStatusMessage(
+            "Could not load community remixes. Please try again later.",
+          ),
+        );
         return;
       }
 
       const remixes = remixResult.data || [];
 
       if (remixes.length === 0) {
-        list.innerHTML = `
-          <div class="text-center py-8 text-brand-stone dark:text-gray-400 text-sm">
-            No community remixes yet. Be the first to publish yours!
-          </div>
-        `;
+        list.textContent = "";
+        list.appendChild(
+          createStatusMessage(
+            "No community remixes yet. Be the first to publish yours!",
+          ),
+        );
         return;
       }
 
@@ -282,18 +349,67 @@
       const upvoted = loadUpvoted();
 
       // Render cards
-      list.innerHTML = "";
+      list.textContent = "";
       enriched.forEach((remix) => {
         const card = buildCard(remix, remix._upvotes, !!upvoted[remix.id]);
         list.appendChild(card);
       });
     } catch (e) {
       console.error("[RemixCommunity] Init error:", e);
-      list.innerHTML = `
-        <div class="text-center py-8 text-brand-stone dark:text-gray-400 text-sm">
-          Could not load community remixes. Please try again later.
-        </div>
-      `;
+      list.textContent = "";
+      list.appendChild(
+        createStatusMessage(
+          "Could not load community remixes. Please try again later.",
+        ),
+      );
+    }
+  };
+
+  // ── Upvote rollback helper ───────────────────────────────────────
+
+  /**
+   * Fully revert optimistic upvote UI on failure.
+   * Restores localStorage, count text, button classes, aria-pressed, and SVG fill.
+   */
+  const rollbackUpvoteUI = (btn, remixId, upvoted, countEl, currentCount) => {
+    // Revert localStorage
+    delete upvoted[remixId];
+    saveUpvoted(upvoted);
+
+    // Revert count
+    if (countEl) {
+      countEl.textContent = currentCount;
+    }
+
+    // Revert button classes
+    btn.classList.remove(
+      "is-upvoted",
+      "bg-brand-sky/15",
+      "border-brand-sky",
+      "text-brand-sky",
+      "dark:bg-brand-sky/20",
+      "dark:border-brand-sky/60",
+      "dark:text-sky-300",
+      "animate-pop",
+    );
+    btn.classList.add(
+      "bg-white",
+      "border-gray-200",
+      "text-gray-500",
+      "hover:border-brand-sky",
+      "hover:text-brand-sky",
+      "dark:bg-gray-800",
+      "dark:border-gray-600",
+      "dark:text-gray-400",
+      "dark:hover:border-brand-sky",
+      "dark:hover:text-sky-300",
+    );
+    btn.setAttribute("aria-pressed", "false");
+
+    // Revert SVG fill
+    const svg = btn.querySelector("svg");
+    if (svg) {
+      svg.setAttribute("fill", "none");
     }
   };
 
@@ -312,7 +428,7 @@
     const supabase = window.ThirdSpacesSupabase.getClient();
     if (!supabase) return;
 
-    const deviceId = localStorage.getItem("tsg_device_id") || "anonymous";
+    const deviceId = getOrCreateDeviceId();
 
     // Optimistic UI update
     upvoted[remixId] = true;
@@ -373,28 +489,14 @@
         }
 
         console.error("[RemixCommunity] Upvote insert failed:", error);
-
-        // Revert optimistic update on non-duplicate errors
-        delete upvoted[remixId];
-        saveUpvoted(upvoted);
-        if (countEl) {
-          countEl.textContent = currentCount;
-        }
-        btn.classList.remove("is-upvoted");
+        rollbackUpvoteUI(btn, remixId, upvoted, countEl, currentCount);
         return;
       }
 
       console.log("[RemixCommunity] Upvote recorded for", remixId);
     } catch (e) {
       console.error("[RemixCommunity] Upvote error:", e);
-
-      // Revert optimistic update
-      delete upvoted[remixId];
-      saveUpvoted(upvoted);
-      if (countEl) {
-        countEl.textContent = currentCount;
-      }
-      btn.classList.remove("is-upvoted");
+      rollbackUpvoteUI(btn, remixId, upvoted, countEl, currentCount);
     }
   };
 

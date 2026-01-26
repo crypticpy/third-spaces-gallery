@@ -72,14 +72,34 @@ Deno.serve(async (req: Request) => {
     const body: RemixRequest = await req.json();
 
     // Validate required fields
-    if (!body.device_id || !body.device_id.trim()) {
+    if (typeof body.device_id !== "string") {
+      return new Response(
+        JSON.stringify({ error: "device_id must be a string" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    if (!body.device_id.trim()) {
       return new Response(JSON.stringify({ error: "Missing device ID" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    if (!Array.isArray(body.features) || body.features.length === 0) {
+    if (!Array.isArray(body.features)) {
+      return new Response(
+        JSON.stringify({ error: "features must be an array" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    if (body.features.length === 0) {
       return new Response(
         JSON.stringify({ error: "Remix must contain at least one feature" }),
         {
@@ -101,11 +121,23 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Validate each feature has an id
+    // Validate each feature is a non-null object with a valid id
     for (const f of body.features) {
-      if (!f.id || typeof f.id !== "string") {
+      if (typeof f !== "object" || f === null) {
         return new Response(
-          JSON.stringify({ error: "Each feature must have an id" }),
+          JSON.stringify({ error: "Each feature must be a non-null object" }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          },
+        );
+      }
+
+      if (typeof f.id !== "string" || f.id.trim() === "") {
+        return new Response(
+          JSON.stringify({
+            error: "Each feature must have a non-empty string id",
+          }),
           {
             status: 400,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -130,8 +162,8 @@ Deno.serve(async (req: Request) => {
       icon: f.icon ? sanitize(f.icon, 10) : "🎯",
       sourceSubmission: f.sourceSubmission
         ? sanitize(f.sourceSubmission, 100)
-        : null,
-      sourceTitle: f.sourceTitle ? sanitize(f.sourceTitle, 200) : null,
+        : undefined,
+      sourceTitle: f.sourceTitle ? sanitize(f.sourceTitle, 200) : undefined,
     }));
 
     // Initialize Supabase client with service role key

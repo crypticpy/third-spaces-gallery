@@ -155,15 +155,32 @@ class VotingSystem {
   clearAllData() {
     // Delegate to TSGDataManager for comprehensive deletion if available
     if (window.TSGDataManager) {
-      window.TSGDataManager.clearAll().then(() => {
-        this.state = {
-          votes: {},
-          deviceId: null,
-          rateLimit: { count: 0, windowStart: new Date().toISOString() },
-        };
-        this.showMessage("Your data has been cleared", "success");
-        setTimeout(() => location.reload(), 1500);
-      });
+      window.TSGDataManager.clearAll()
+        .then(() => {
+          this.state = {
+            votes: {},
+            deviceId: null,
+            rateLimit: { count: 0, windowStart: new Date().toISOString() },
+          };
+          this.showMessage("Your data has been cleared", "success");
+          setTimeout(() => location.reload(), 1500);
+        })
+        .catch((err) => {
+          console.error(
+            "[VotingSystem] TSGDataManager.clearAll() failed:",
+            err,
+          );
+          this.state = {
+            votes: {},
+            deviceId: null,
+            rateLimit: { count: 0, windowStart: Date.now() },
+          };
+          this.showMessage(
+            "Something went wrong clearing data. Please try again.",
+            "warning",
+          );
+          setTimeout(() => location.reload(), 1500);
+        });
       return;
     }
 
