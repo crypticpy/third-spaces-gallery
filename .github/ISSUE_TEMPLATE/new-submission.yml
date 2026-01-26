@@ -1,5 +1,5 @@
 name: "✨ Add a new design"
-description: "Submit a youth design to the Third Spaces Gallery"
+description: "RIDP staff: Add a youth design to the Third Spaces Gallery"
 title: "[Design] "
 labels: ["new-submission", "needs-review"]
 assignees: []
@@ -8,9 +8,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🎨 Add your design to the gallery!
+        ## 🎨 Add a youth design to the gallery
 
-        Fill out the info below and we'll create a page for your design.
+        **For RIDP staff only.** Fill out the details below to add a youth design submission. After submitting, upload screenshots as a comment. Then add the `approved` label to auto-generate the submission PR.
 
         ---
 
@@ -18,7 +18,7 @@ body:
     id: title
     attributes:
       label: "Design Title"
-      description: "What's your design called?"
+      description: "Name of the youth's design"
       placeholder: "Third Spaces Explorer"
     validations:
       required: true
@@ -27,7 +27,7 @@ body:
     id: designer
     attributes:
       label: "Designer Name(s)"
-      description: "Who made this? (First name + last initial is fine)"
+      description: "Youth designer(s) — first name + last initial"
       placeholder: "Emma G. & Emilia B."
     validations:
       required: true
@@ -36,7 +36,7 @@ body:
     id: school
     attributes:
       label: "School"
-      description: "What school are you from?"
+      description: "Designer's school"
       placeholder: "Rawson Saunders School"
     validations:
       required: true
@@ -45,7 +45,7 @@ body:
     id: grade
     attributes:
       label: "Grade Level"
-      description: "What grade are you in?"
+      description: "Designer's grade level"
       options:
         - "Elementary (K-5)"
         - "Middle School (6-8)"
@@ -57,7 +57,7 @@ body:
     id: summary
     attributes:
       label: "Quick Summary"
-      description: "In 1-2 sentences, what does your design do?"
+      description: "1-2 sentence description of what the design does"
       placeholder: "An app that helps kids find fun places near them based on their interests."
     validations:
       required: true
@@ -65,7 +65,7 @@ body:
   - type: checkboxes
     id: features
     attributes:
-      label: "What features does your design focus on?"
+      label: "What features does this design focus on?"
       description: "Check all that apply"
       options:
         - label: "🔍 Discovery & Search (finding places)"
@@ -78,12 +78,12 @@ body:
   - type: textarea
     id: description
     attributes:
-      label: "Tell us more!"
-      description: "What inspired your design? What problem does it solve? How does it work?"
+      label: "Full Description"
+      description: "Detailed description of the design — what inspired it, what problem it solves, how it works"
       placeholder: |
-        We noticed that kids often don't know about cool places in their neighborhood...
+        This design addresses the problem of kids not knowing about cool places in their neighborhood.
 
-        Our app lets you:
+        Key features:
         - Pick your interests (gaming, sports, art, etc.)
         - See places nearby on a map
         - Get directions by walking, bus, or car
@@ -94,8 +94,8 @@ body:
   - type: textarea
     id: creator_note
     attributes:
-      label: "What inspired this design? (optional)"
-      description: "A personal note about your inspiration or what you hope this design could do"
+      label: "Designer's Note (optional)"
+      description: "A personal note from the designer about their inspiration (ask or paraphrase)"
       placeholder: "I built this because I noticed kids in my neighborhood don't know about all the cool places nearby..."
     validations:
       required: false
@@ -116,20 +116,20 @@ body:
 
         ## 📸 Screenshots
 
-        After submitting this form, **upload your screenshots** by dragging them into a comment below.
+        After submitting this form, **upload the design screenshots** by dragging them into a comment below.
 
         Tips:
         - Include 2-5 screenshots showing different screens
-        - Name them clearly (screen1.png, screen2.png, etc.)
-        - Make sure they're easy to read!
+        - The first image becomes the thumbnail
+        - The workflow will attempt to auto-download images from comments
 
   - type: checkboxes
     id: consent
     attributes:
-      label: "Permission"
-      description: "We need your OK to show your work"
+      label: "Staff Confirmation"
+      description: "Confirm before submitting"
       options:
-        - label: "I have permission to share this design publicly"
+        - label: "I have obtained permission to share this design publicly"
           required: true
-        - label: "I understand my first name and school may be displayed"
+        - label: "The designer's name and school will be displayed on the gallery"
           required: true

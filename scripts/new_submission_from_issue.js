@@ -146,13 +146,19 @@ function main() {
   const school = sections["School"] || "Unknown";
   const grade = sections["Grade Level"] || "Middle School (6-8)";
   const summary = sections["Quick Summary"] || "";
-  const description = sections["Tell us more!"] || "";
-  const creatorNote = sections["What inspired this design? (optional)"] || "";
+  const description =
+    sections["Full Description"] || sections["Tell us more!"] || "";
+  const creatorNote =
+    sections["Designer's Note (optional)"] ||
+    sections["What inspired this design? (optional)"] ||
+    "";
   const demoUrl = sections["Demo Link (optional)"] || "";
 
   // Parse feature checkboxes
   const featureText =
-    sections["What features does your design focus on?"] || "";
+    sections["What features does this design focus on?"] ||
+    sections["What features does your design focus on?"] ||
+    "";
   const checkedFeatures = parseCheckboxes(featureText);
   const featureFocus = mapFeatures(checkedFeatures);
 

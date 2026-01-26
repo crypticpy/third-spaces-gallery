@@ -7,11 +7,12 @@ How to add and modify content on the Third Spaces Youth Design Gallery.
 Content flows through an automated pipeline:
 
 ```
-Youth submits GitHub Issue → RIDP team reviews → Team adds "approved" label →
-Workflow auto-generates submission files → PR created → Team reviews/adds images → Merge → Auto-deploy
+RIDP staff fills out GitHub Issue form → Uploads screenshots as comments →
+Staff adds "approved" label → Workflow auto-generates submission files →
+PR created → Staff reviews/adds images → Merge → Auto-deploy
 ```
 
-The GitHub Issue form at `issues/new?template=new-submission.yml` is a structured intake form. When the team adds the `approved` label, the `new-submission.yml` workflow automatically:
+**This is a staff-only pipeline.** Only repo collaborators with write access can trigger the automation. The GitHub Issue form at `issues/new?template=new-submission.yml` is for RIDP team members to enter youth design details. When staff adds the `approved` label, the `new-submission.yml` workflow automatically:
 
 1. Parses the issue body into Jekyll front matter
 2. Downloads any images from issue comments
@@ -36,9 +37,9 @@ The GitHub Issue form at `issues/new?template=new-submission.yml` is a structure
 
 ## Adding a New Project (Submission)
 
-### Step 1: Collect the Submission
+### Step 1: Fill Out the Issue Form
 
-A youth submitter fills out the GitHub Issue form. The issue will have labels `new-submission` and `needs-review`. The form collects:
+An RIDP staff member fills out the GitHub Issue form on behalf of the youth designer. The issue gets labels `new-submission` and `needs-review` automatically. The form collects:
 
 | Field              | Maps to Front Matter                  |
 | ------------------ | ------------------------------------- |
@@ -48,7 +49,7 @@ A youth submitter fills out the GitHub Issue form. The issue will have labels `n
 | Grade Level        | `grade`                               |
 | Quick Summary      | `summary`                             |
 | Feature checkboxes | `feature_focus` (requires ID mapping) |
-| Tell us more!      | Markdown body content                 |
+| Full Description   | Markdown body content                 |
 | Inspiration note   | `creator_note` (optional)             |
 | Demo Link          | `links.demo_url`                      |
 
@@ -122,7 +123,7 @@ votes:
 created_at: 2025-01-25
 github_issue: 5 # The issue number
 ---
-Full description in Markdown goes here. This comes from the "Tell us more!" field in the issue.
+Full description in Markdown goes here. This comes from the "Full Description" field in the issue.
 ```
 
 ### Feature Checkbox → ID Mapping
@@ -167,7 +168,11 @@ The `features` array powers the Remix Engine (the "shopping cart" where users co
 
 Aim for 3-5 features per submission. Look at the design's screens and description to identify distinct, collectible features.
 
-### Step 6: Commit and Deploy
+### Step 6: Approve and Deploy
+
+**Automated path:** Add the `approved` label to the GitHub Issue. The workflow generates a PR automatically.
+
+**Manual path (if needed):**
 
 ```bash
 git add _submissions/2025/design-name/ assets/images/submissions/2025/design-name/
@@ -227,7 +232,7 @@ Edit `_config.yml` for `title`, `description`, `url`, `baseurl`, `giscus` settin
 
 6. **The `features` array is optional but recommended.** Submissions without it won't show the "Remix These Features" section on their detail page or in the immersive gallery.
 
-7. **Screenshots as comments.** Youth upload screenshots after submitting the issue. Wait for images before creating the submission files.
+7. **Screenshots as comments.** Upload screenshots as issue comments before adding the `approved` label. The workflow attempts to download them automatically.
 
 ---
 
