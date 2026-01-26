@@ -1,0 +1,97 @@
+name: Moderate Feedback & Remixes
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  approve-content:
+    # Only run when 'approved' label is added AND the issue is a feedback/remix review
+    if: >-
+      github.event.label.name == 'approved' &&
+      (contains(github.event.issue.labels.*.name, 'feedback-review') ||
+       contains(github.event.issue.labels.*.name, 'remix-review'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify staff permissions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PERMISSION=$(gh api "repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission" --jq '.permission')
+          echo "User ${{ github.actor }} has permission: ${PERMISSION}"
+          if [[ "$PERMISSION" != "admin" && "$PERMISSION" != "write" && "$PERMISSION" != "maintain" ]]; then
+            echo "::error::Only repository collaborators with write access can approve content."
+            exit 1
+          fi
+
+      - name: Parse issue body
+        id: parse
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          CONTENT_TYPE=$(echo "$ISSUE_BODY" | grep -oP '<!-- CONTENT_TYPE: \K[a-z]+(?= -->)')
+          RECORD_ID=$(echo "$ISSUE_BODY" | grep -oP '<!-- RECORD_ID: \K[0-9a-f-]+(?= -->)')
+
+          if [[ -z "$CONTENT_TYPE" ]]; then
+            echo "::error::Could not parse CONTENT_TYPE from issue body."
+            exit 1
+          fi
+
+          if [[ -z "$RECORD_ID" ]]; then
+            echo "::error::Could not parse RECORD_ID from issue body."
+            exit 1
+          fi
+
+          if [[ "$CONTENT_TYPE" != "feedback" && "$CONTENT_TYPE" != "remix" ]]; then
+            echo "::error::Unknown CONTENT_TYPE '${CONTENT_TYPE}'. Expected 'feedback' or 'remix'."
+            exit 1
+          fi
+
+          echo "content_type=${CONTENT_TYPE}" >> "$GITHUB_OUTPUT"
+          echo "record_id=${RECORD_ID}" >> "$GITHUB_OUTPUT"
+          echo "Parsed content_type=${CONTENT_TYPE}, record_id=${RECORD_ID}"
+
+      - name: Approve record in Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CONTENT_TYPE: ${{ steps.parse.outputs.content_type }}
+          RECORD_ID: ${{ steps.parse.outputs.record_id }}
+        run: |
+          if [[ "$CONTENT_TYPE" == "feedback" ]]; then
+            TABLE="feedback"
+          else
+            TABLE="published_remixes"
+          fi
+
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X PATCH \
+            "${SUPABASE_URL}/rest/v1/${TABLE}?id=eq.${RECORD_ID}" \
+            -H "apikey: ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_ROLE_KEY}" \
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=minimal" \
+            -d '{"approved": true}')
+
+          echo "Supabase responded with HTTP ${HTTP_STATUS}"
+
+          if [[ "$HTTP_STATUS" -lt 200 || "$HTTP_STATUS" -ge 300 ]]; then
+            echo "::error::Supabase PATCH failed with HTTP ${HTTP_STATUS}"
+            exit 1
+          fi
+
+          echo "Successfully approved ${CONTENT_TYPE} record ${RECORD_ID}"
+
+      - name: Comment on issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTENT_TYPE: ${{ steps.parse.outputs.content_type }}
+          RECORD_ID: ${{ steps.parse.outputs.record_id }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --repo "${{ github.repository }}" \
+            --body "Approved: ${CONTENT_TYPE} record \`${RECORD_ID}\` has been published by @${{ github.actor }}."

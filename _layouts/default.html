@@ -165,11 +165,11 @@
                     dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
             About
           </a>
-          <a href="{{ '/privacy/' | relative_url }}"
+          <a href="{{ '/transparency/' | relative_url }}"
              class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
                     hover:bg-brand-sky/10 hover:text-brand-navy transition-all
                     dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
-            Privacy
+            Your Data
           </a>
           <a href="https://github.com/crypticpy/third-spaces-gallery"
              target="_blank" rel="noopener noreferrer"
@@ -178,13 +178,12 @@
                     dark:text-gray-300 dark:hover:bg-white/10 dark:hover:text-white">
             GitHub
           </a>
-          <button type="button"
-                  class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
-                         hover:bg-red-50 hover:text-red-600 transition-all
-                         dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                  data-clear-vote-data>
+          <a href="{{ '/transparency/#data-snapshot' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-medium text-brand-stone
+                    hover:bg-red-50 hover:text-red-600 transition-all
+                    dark:text-gray-300 dark:hover:bg-red-900/30 dark:hover:text-red-400">
             Clear My Data
-          </button>
+          </a>
         </div>
 
         <!-- Copyright - More playful -->
@@ -236,6 +235,8 @@
   <script src="{{ '/assets/js/modal.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/remix.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/immersive.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/feedback-display.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/remix-community.js' | relative_url }}" defer></script>
 
   {% unless page.url contains '/remix' %}
   <!-- Remix FAB (Floating Action Button) -->

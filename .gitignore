@@ -36,3 +36,6 @@ supabase/.temp/
 
 # Planning docs
 Phase2/
+
+# Claude Code context
+.claude/

@@ -367,26 +367,30 @@ class FeedbackPromptHandler {
     }
 
     try {
-      // In production, send to Supabase or other backend
-      console.log("[FeedbackPromptHandler] Feedback submitted:", {
-        submission_id: submissionId,
-        type: "quick_reaction",
-        content: text || null,
-        quick_tags: tags.length ? tags : null,
-        vote_category: category,
-        fingerprint_hash: this.votingSystem?.fingerprint,
-      });
+      // Delegate to FeedbackSystem's Edge Function call
+      if (window.feedbackSystem) {
+        const result = await window.feedbackSystem.submitToServer({
+          submission_id: submissionId,
+          author_name: "Anonymous",
+          feedback_text: text || "",
+          tags: tags,
+        });
+
+        if (!result.success) {
+          throw new Error(result.error || "Submit failed");
+        }
+      }
 
       // Success
       this.hidePrompt(prompt);
       if (this.votingSystem) {
-        this.votingSystem.showMessage("Thanks for sharing! 🙌", "success");
+        this.votingSystem.showMessage("Thanks for sharing!", "success");
       }
     } catch (e) {
       console.error("[FeedbackPromptHandler] Submit error:", e);
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = "Share 💬";
+        submitBtn.textContent = "Share";
       }
       if (this.votingSystem) {
         this.votingSystem.showMessage("Oops, try again?", "error");

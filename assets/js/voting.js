@@ -153,7 +153,21 @@ class VotingSystem {
    * Called from "Clear My Data" button in footer
    */
   clearAllData() {
-    // Clear localStorage
+    // Delegate to TSGDataManager for comprehensive deletion if available
+    if (window.TSGDataManager) {
+      window.TSGDataManager.clearAll().then(() => {
+        this.state = {
+          votes: {},
+          deviceId: null,
+          rateLimit: { count: 0, windowStart: new Date().toISOString() },
+        };
+        this.showMessage("Your data has been cleared", "success");
+        setTimeout(() => location.reload(), 1500);
+      });
+      return;
+    }
+
+    // Fallback: clear only voting data (original behavior)
     localStorage.removeItem(this.config.storageKey);
     localStorage.removeItem(DEVICE_KEY);
 
@@ -268,17 +282,14 @@ class VotingSystem {
       }
     });
 
-    // "Clear My Data" button
+    // "Clear My Data" - now handled by the transparency page link in the footer.
+    // Legacy support: if a button with data-clear-vote-data still exists, redirect.
     const clearBtn = document.querySelector("[data-clear-vote-data]");
     if (clearBtn) {
       clearBtn.addEventListener("click", () => {
-        if (
-          confirm(
-            "This will clear all your votes and data. Are you sure you want to continue?",
-          )
-        ) {
-          this.clearAllData();
-        }
+        const baseurl =
+          document.querySelector('meta[name="baseurl"]')?.content || "";
+        window.location.href = baseurl + "/transparency/#data-snapshot";
       });
     }
   }

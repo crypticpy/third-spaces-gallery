@@ -141,10 +141,20 @@ description: Build your dream app by collecting features from student designs
           Share Your Remix
         </h3>
         <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
-          Add a note about your remix idea (optional)
+          Your remix will be submitted for review before appearing in the community section.
         </p>
 
-        <textarea class="mt-4 w-full rounded-xl border border-brand-sky/20 bg-white p-3
+        <input type="text"
+               class="mt-4 w-full rounded-xl border border-brand-sky/20 bg-white p-3
+                      text-sm text-brand-navy placeholder-brand-stone/50
+                      focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
+                      dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                      dark:placeholder-gray-500"
+               placeholder="Your name (optional)"
+               maxlength="50"
+               data-remix-author>
+
+        <textarea class="mt-3 w-full rounded-xl border border-brand-sky/20 bg-white p-3
                          text-sm text-brand-navy placeholder-brand-stone/50
                          focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
                          dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
@@ -370,6 +380,25 @@ description: Build your dream app by collecting features from student designs
       </div>
     </div>
   </div>
+
+  <!-- Community Remixes Section -->
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 mt-12 mb-8">
+    <section class="rounded-2xl border border-brand-sky/10 bg-white/80 p-6
+                    dark:bg-gray-800/80 dark:border-gray-700"
+             data-community-remixes
+             aria-label="Community remixes">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-xl" aria-hidden="true">🌟</span>
+        <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Community Remixes</h2>
+      </div>
+      <p class="text-sm text-brand-stone dark:text-gray-400 mb-4">
+        See what other visitors have built by mixing features from student designs.
+      </p>
+      <div data-community-remix-list class="space-y-4">
+        <!-- Populated by remix-community.js -->
+      </div>
+    </section>
+  </div>
 </div>
 
 <script>
@@ -527,13 +556,38 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- Submit remix ---
   document.querySelector('[data-remix-modal-submit]')?.addEventListener('click', async function() {
     var note = noteInput?.value?.trim() || '';
+    var authorInput = document.querySelector('[data-remix-author]');
+    var authorName = authorInput?.value?.trim() || 'Anonymous';
     var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
     var featureCount = items.length;
     var sourceCount = countUniqueSources(items);
+    var submitBtn = this;
 
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    var result = { success: false };
     if (window.TSGRemix) {
-      await window.TSGRemix.submit(note);
+      result = await window.TSGRemix.submit(note, authorName);
     }
+
+    if (!result.success) {
+      // Show error and re-enable the button
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+      // Show error toast
+      var toast = document.createElement('div');
+      toast.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] rounded-full bg-red-500 text-white px-6 py-3 text-sm font-medium shadow-lg';
+      toast.textContent = result.error || 'Something went wrong. Please try again.';
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 4000);
+      return;
+    }
+
+    // Reset button
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
 
     // Close submit modal
     closeModal(modal);
@@ -541,9 +595,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Populate confirmation modal
     var summaryEl = document.querySelector('[data-remix-confirm-summary]');
     if (summaryEl) {
-      summaryEl.textContent = 'You submitted ' + featureCount + ' feature' + (featureCount !== 1 ? 's' : '') +
+      summaryEl.textContent = 'Your remix has been submitted for review! ' +
+        featureCount + ' feature' + (featureCount !== 1 ? 's' : '') +
         ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '') +
-        (note ? '. Your note: "' + note + '"' : '') + '.';
+        (result.reference ? '. Reference: ' + result.reference : '') + '.';
     }
 
     var shareUrlEl = document.querySelector('[data-remix-share-url]');
@@ -556,6 +611,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Clear form
     if (noteInput) noteInput.value = '';
+    if (authorInput) authorInput.value = '';
   });
 
   // --- Copy share URL ---
