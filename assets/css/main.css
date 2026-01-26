@@ -199,45 +199,51 @@
 /* Phone mockup frame */
 .phone-frame {
   position: relative;
+  aspect-ratio: 9 / 16;
   border-radius: 1.75rem;
   overflow: hidden;
-  border: 3px solid rgb(var(--border, 198 197 196));
+  border: 4px solid rgba(255, 255, 255, 0.15);
   background: rgb(var(--surface, 255 255 255));
-  box-shadow: 0 20px 60px -15px rgba(34, 37, 78, 0.25);
+  box-shadow:
+    0 25px 60px -12px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .phone-frame-notch {
   position: absolute;
-  top: 0.5rem;
+  top: 0.625rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 3.5rem;
+  width: 4rem;
   height: 0.3rem;
   border-radius: 9999px;
-  background: rgb(var(--border, 198 197 196));
+  background: rgba(0, 0, 0, 0.25);
   z-index: 2;
 }
 
 .phone-frame-img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
   display: block;
 }
 
 /* Hero phone deck — 3 overlapping phones */
 .hero-phone-deck {
   position: relative;
-  height: 340px;
+  height: 380px;
 }
 
 @media (min-width: 640px) {
   .hero-phone-deck {
-    height: 440px;
+    height: 480px;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-phone-deck {
-    height: 500px;
+    height: 540px;
   }
 }
 
@@ -250,38 +256,38 @@
 
 /* Phone 1: front-left, tilted left */
 .hero-phone-1 {
-  width: 200px;
+  width: 160px;
   top: 0;
   z-index: 30;
-  transform: translateX(-65%) rotate(-7deg);
+  transform: translateX(-75%) rotate(-7deg);
 }
 
 /* Phone 2: center-right, tilted right */
 .hero-phone-2 {
-  width: 190px;
-  top: 2.5rem;
+  width: 150px;
+  top: 1.5rem;
   z-index: 20;
-  transform: translateX(-20%) rotate(6deg);
+  transform: translateX(0%) rotate(6deg);
 }
 
 /* Phone 3: back-center, no tilt */
 .hero-phone-3 {
-  width: 185px;
-  top: 4.5rem;
+  width: 145px;
+  top: 3rem;
   z-index: 10;
   transform: translateX(-50%) rotate(0deg);
 }
 
 @media (min-width: 640px) {
-  .hero-phone-1 { width: 240px; }
-  .hero-phone-2 { width: 230px; top: 3rem; }
-  .hero-phone-3 { width: 225px; top: 5.5rem; }
+  .hero-phone-1 { width: 190px; }
+  .hero-phone-2 { width: 180px; top: 2rem; }
+  .hero-phone-3 { width: 175px; top: 4rem; }
 }
 
 @media (min-width: 1024px) {
-  .hero-phone-1 { width: 270px; }
-  .hero-phone-2 { width: 260px; top: 3.5rem; }
-  .hero-phone-3 { width: 255px; top: 6rem; }
+  .hero-phone-1 { width: 220px; }
+  .hero-phone-2 { width: 210px; top: 2.5rem; }
+  .hero-phone-3 { width: 205px; top: 5rem; }
 }
 
 /* Hover lift */
@@ -290,11 +296,11 @@
 }
 
 .hero-phone-1:hover {
-  transform: translateX(-65%) rotate(-7deg) translateY(-8px);
+  transform: translateX(-75%) rotate(-7deg) translateY(-8px);
 }
 
 .hero-phone-2:hover {
-  transform: translateX(-20%) rotate(6deg) translateY(-8px);
+  transform: translateX(0%) rotate(6deg) translateY(-8px);
 }
 
 .hero-phone-3:hover {
@@ -355,11 +361,11 @@
   }
   .hero-phone-1,
   .hero-phone-1:hover {
-    transform: translateX(-65%) rotate(-7deg);
+    transform: translateX(-75%) rotate(-7deg);
   }
   .hero-phone-2,
   .hero-phone-2:hover {
-    transform: translateX(-20%) rotate(6deg);
+    transform: translateX(0%) rotate(6deg);
   }
   .hero-phone-3,
   .hero-phone-3:hover {
