@@ -336,7 +336,7 @@ class VotingSystem {
       const { error } = await this.supabase.from("votes").insert({
         submission_id: submissionId,
         category: category,
-        voter_device_id: this.deviceId,
+        voter_fingerprint: this.deviceId,
       });
 
       if (error) {
