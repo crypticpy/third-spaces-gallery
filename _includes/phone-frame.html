@@ -1,0 +1,15 @@
+<!-- _includes/phone-frame.html
+     Phone mockup frame. Parameters:
+       src   - Image URL (required)
+       alt   - Alt text (required)
+       eager - true for eager loading (optional)
+       class - Additional CSS classes (optional)
+-->
+<div class="phone-frame {{ include.class }}">
+  <div class="phone-frame-notch" aria-hidden="true"></div>
+  <img src="{{ include.src }}"
+       alt="{{ include.alt | default: '' }}"
+       {% if include.eager %}loading="eager"{% else %}loading="lazy"{% endif %}
+       decoding="async"
+       class="phone-frame-img">
+</div>

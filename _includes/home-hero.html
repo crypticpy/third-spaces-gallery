@@ -1,0 +1,166 @@
+<!-- _includes/home-hero.html — "Studio Wall" hero -->
+<section class="relative overflow-hidden" style="background: rgb(var(--bg));">
+  <!-- Decorative background: gradient blobs + wavy lines (no floating emoji) -->
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+    <div class="absolute -top-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full blur-3xl"
+         style="background: rgb(var(--accent) / 0.15);"></div>
+    <div class="absolute -bottom-24 right-0 h-72 w-72 rounded-full blur-3xl"
+         style="background: rgb(var(--accent2) / 0.12);"></div>
+
+    <!-- Faint wavy pattern -->
+    <svg class="absolute inset-0 h-full w-full opacity-[0.08]"
+         viewBox="0 0 1200 600" preserveAspectRatio="none"
+         style="color: rgb(var(--border));">
+      <defs>
+        <pattern id="hero-wavy" width="220" height="220" patternUnits="userSpaceOnUse">
+          <path d="M0 40 C60 10, 160 70, 220 40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M0 90 C70 60, 150 120, 220 90" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M0 140 C55 110, 165 170, 220 140" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M0 190 C65 160, 155 220, 220 190" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="600" fill="url(#hero-wavy)"></rect>
+    </svg>
+  </div>
+
+  <div class="relative mx-auto max-w-6xl px-4 py-12 sm:py-16 lg:py-20">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+
+      <!-- LEFT: message + actions -->
+      <div class="relative z-10">
+        <p class="tsg-chip inline-flex items-center gap-2">
+          <span aria-hidden="true">Austin</span>
+          <span class="opacity-50">&bull;</span>
+          <span>Youth design studio</span>
+        </p>
+
+        <h1 class="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
+            style="color: rgb(var(--fg));">
+          Your ideas.<br>
+          <span class="text-gradient">Real Third Spaces features.</span>
+        </h1>
+
+        <p class="mt-4 text-lg leading-relaxed" style="color: rgb(var(--fg) / 0.8);">
+          Explore prototypes designed by Austin youth.
+          React with &#x2764;&#xFE0F; &#x2728; &#x1F30D; to help decide what gets built.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-6 flex flex-wrap gap-2">
+          <a class="tsg-chip font-semibold text-white"
+             style="background: rgb(var(--accent)); border-color: transparent;"
+             href="{{ '/designs/' | relative_url }}">
+            Explore designs
+          </a>
+          <a class="tsg-chip font-semibold"
+             href="{{ '/designs/' | relative_url }}#immersive">
+            Immersive swipe view
+          </a>
+          <a class="tsg-chip font-semibold"
+             href="{{ '/remix/' | relative_url }}">
+            Build a remix
+          </a>
+        </div>
+
+        <!-- Quick-entry collection chips -->
+        <div class="mt-6">
+          <p class="text-xs font-semibold uppercase tracking-wider"
+             style="color: rgb(var(--fg) / 0.55);">Jump in</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=fresh">&#x1F195; Fresh drops</a>
+            <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=youth">&#x2B50; Youth picks</a>
+            <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=inclusive">&#x1F30D; Most inclusive</a>
+            <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=needs-love">&#x1FAF6; Needs love</a>
+          </div>
+        </div>
+
+        <!-- Authentic youth voice -->
+        <figure class="tsg-card mt-6 p-4">
+          <blockquote class="text-base leading-relaxed" style="color: rgb(var(--fg) / 0.9);">
+            &ldquo;Sometimes I just want to go somewhere that matches my energy.&rdquo;
+          </blockquote>
+          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.6);">
+            &mdash; from <a href="{{ '/designs/2025/vibe-finder/' | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid">Vibe Finder</a>
+          </figcaption>
+        </figure>
+
+        <p class="mt-3 text-xs" style="color: rgb(var(--fg) / 0.5);">
+          No login. Positive-only reactions. Clear your data anytime.
+        </p>
+      </div>
+
+      <!-- RIGHT: "Studio wall" phone deck -->
+      <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
+        <div class="hero-phone-deck">
+          {%- assign hero_designs = "access-all,vibe-finder,community-hub" | split: "," -%}
+
+          {%- for slug in hero_designs -%}
+            {%- assign sub = site.submissions | where: "slug", slug | first -%}
+            {%- if sub -%}
+              {%- assign thumb_url = sub.thumbnail | relative_url -%}
+
+              {%- case slug -%}
+                {%- when "access-all" -%}
+                  {%- assign badge = "Most inclusive" -%}
+                  {%- assign badge_icon = "&#x1F30D;" -%}
+                {%- when "vibe-finder" -%}
+                  {%- assign badge = "Most creative" -%}
+                  {%- assign badge_icon = "&#x2728;" -%}
+                {%- else -%}
+                  {%- assign badge = "Most wanted" -%}
+                  {%- assign badge_icon = "&#x2764;&#xFE0F;" -%}
+              {%- endcase -%}
+
+              <article class="hero-phone hero-phone-{{ forloop.index }}" data-design-card>
+                <button type="button"
+                        class="hero-phone-btn"
+                        data-quicklook
+                        aria-label="Quick look: {{ sub.title }} ({{ badge }})">
+                  <div class="relative">
+                    {% include phone-frame.html
+                      src=thumb_url
+                      alt=sub.title
+                      eager=forloop.first
+                    %}
+                    <!-- Badge sticker -->
+                    <span class="hero-phone-badge">
+                      <span aria-hidden="true">{{ badge_icon }}</span>
+                      {{ badge }}
+                    </span>
+                  </div>
+                </button>
+
+                <!-- Quick Look JSON payload -->
+                <script type="application/json" data-design-json>
+                {
+                  "title": {{ sub.title | jsonify }},
+                  "summary": {{ sub.summary | jsonify }},
+                  "designer": {{ sub.designer | jsonify }},
+                  "grade": {{ sub.grade | jsonify }},
+                  "feature_focus": {{ sub.feature_focus | jsonify }},
+                  "url": {{ sub.url | relative_url | jsonify }},
+                  "voteKey": {{ sub.url | relative_url | jsonify }},
+                  "votes": {
+                    "favorite": {{ sub.votes.favorite | default: 0 }},
+                    "innovative": {{ sub.votes.innovative | default: 0 }},
+                    "inclusive": {{ sub.votes.inclusive | default: 0 }}
+                  },
+                  "demo_url": {{ sub.links.demo_url | default: nil | jsonify }},
+                  "screens": [
+                    {%- for screen in sub.screens -%}
+                      { "src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: "" | jsonify }}, "caption": {{ screen.caption | default: "" | jsonify }} }{%- unless forloop.last -%},{%- endunless -%}
+                    {%- endfor -%}
+                  ]
+                }
+                </script>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <p class="hero-phone-hint">Tap a phone to preview</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -192,6 +192,181 @@
   }
 }
 
+/* ============================================
+   PHONE FRAME + HERO DECK
+   ============================================ */
+
+/* Phone mockup frame */
+.phone-frame {
+  position: relative;
+  border-radius: 1.75rem;
+  overflow: hidden;
+  border: 3px solid rgb(var(--border, 198 197 196));
+  background: rgb(var(--surface, 255 255 255));
+  box-shadow: 0 20px 60px -15px rgba(34, 37, 78, 0.25);
+}
+
+.phone-frame-notch {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3.5rem;
+  height: 0.3rem;
+  border-radius: 9999px;
+  background: rgb(var(--border, 198 197 196));
+  z-index: 2;
+}
+
+.phone-frame-img {
+  width: 100%;
+  display: block;
+}
+
+/* Hero phone deck — 3 overlapping phones */
+.hero-phone-deck {
+  position: relative;
+  height: 340px;
+}
+
+@media (min-width: 640px) {
+  .hero-phone-deck {
+    height: 440px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-phone-deck {
+    height: 500px;
+  }
+}
+
+.hero-phone {
+  position: absolute;
+  left: 50%;
+  transform-origin: center bottom;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Phone 1: front-left, tilted left */
+.hero-phone-1 {
+  width: 200px;
+  top: 0;
+  z-index: 30;
+  transform: translateX(-65%) rotate(-7deg);
+}
+
+/* Phone 2: center-right, tilted right */
+.hero-phone-2 {
+  width: 190px;
+  top: 2.5rem;
+  z-index: 20;
+  transform: translateX(-20%) rotate(6deg);
+}
+
+/* Phone 3: back-center, no tilt */
+.hero-phone-3 {
+  width: 185px;
+  top: 4.5rem;
+  z-index: 10;
+  transform: translateX(-50%) rotate(0deg);
+}
+
+@media (min-width: 640px) {
+  .hero-phone-1 { width: 240px; }
+  .hero-phone-2 { width: 230px; top: 3rem; }
+  .hero-phone-3 { width: 225px; top: 5.5rem; }
+}
+
+@media (min-width: 1024px) {
+  .hero-phone-1 { width: 270px; }
+  .hero-phone-2 { width: 260px; top: 3.5rem; }
+  .hero-phone-3 { width: 255px; top: 6rem; }
+}
+
+/* Hover lift */
+.hero-phone:hover {
+  z-index: 40;
+}
+
+.hero-phone-1:hover {
+  transform: translateX(-65%) rotate(-7deg) translateY(-8px);
+}
+
+.hero-phone-2:hover {
+  transform: translateX(-20%) rotate(6deg) translateY(-8px);
+}
+
+.hero-phone-3:hover {
+  transform: translateX(-50%) rotate(0deg) translateY(-8px);
+}
+
+/* Clickable phone button */
+.hero-phone-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Badge sticker on each phone */
+.hero-phone-badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgb(var(--surface, 255 255 255));
+  border: 1px solid rgb(var(--border, 198 197 196));
+  box-shadow: 0 2px 8px rgba(34, 37, 78, 0.12);
+  color: rgb(var(--fg, 34 37 78));
+  z-index: 5;
+}
+
+/* "Tap a phone to preview" hint */
+.hero-phone-hint {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  color: rgb(var(--fg, 34 37 78));
+  opacity: 0.5;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-phone {
+    transition: none;
+  }
+  .hero-phone:hover {
+    transform: none;
+  }
+  .hero-phone-1,
+  .hero-phone-1:hover {
+    transform: translateX(-65%) rotate(-7deg);
+  }
+  .hero-phone-2,
+  .hero-phone-2:hover {
+    transform: translateX(-20%) rotate(6deg);
+  }
+  .hero-phone-3,
+  .hero-phone-3:hover {
+    transform: translateX(-50%) rotate(0deg);
+  }
+}
+
 /* Utility styles */
 @layer utilities {
   /* Tabular numbers for vote counts */
