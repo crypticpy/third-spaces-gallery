@@ -41,8 +41,9 @@
         </h1>
 
         <p class="mt-4 text-lg leading-relaxed" style="color: rgb(var(--fg) / 0.8);">
-          Explore prototypes designed by Austin youth.
-          React with &#x2764;&#xFE0F; &#x2728; &#x1F30D; to help decide what gets built.
+          Third Spaces are the places between home and school &mdash; parks, libraries, rec centers.
+          Austin youth designed these prototypes to help you find them.
+          Vote to shape what gets built.
         </p>
 
         <!-- CTAs -->
@@ -91,7 +92,7 @@
 
       <!-- RIGHT: "Studio wall" phone deck -->
       <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
-        <div class="hero-phone-deck">
+        <div class="hero-phone-deck" data-hero-deck>
           {%- assign hero_designs = "access-all,vibe-finder,community-hub" | split: "," -%}
 
           {%- for slug in hero_designs -%}
@@ -111,7 +112,7 @@
                   {%- assign badge_icon = "&#x2764;&#xFE0F;" -%}
               {%- endcase -%}
 
-              <article class="hero-phone hero-phone-{{ forloop.index }}" data-design-card>
+              <article class="hero-phone" data-hero-phone data-pos="{{ forloop.index0 }}" data-design-card>
                 <button type="button"
                         class="hero-phone-btn"
                         data-quicklook
@@ -157,10 +158,13 @@
             {%- endif -%}
           {%- endfor -%}
 
-          <p class="hero-phone-hint">Tap a phone to preview</p>
+          <p class="hero-phone-hint">Swipe or tap a phone to preview</p>
         </div>
       </div>
 
     </div>
   </div>
 </section>
+
+<!-- Hero deck behavior: shuffle, cycle, mobile navigation -->
+<script src="{{ '/assets/js/hero-deck.js' | relative_url }}" defer></script>
