@@ -140,7 +140,7 @@
                   "grade": {{ sub.grade | jsonify }},
                   "feature_focus": {{ sub.feature_focus | jsonify }},
                   "url": {{ sub.url | relative_url | jsonify }},
-                  "voteKey": {{ sub.url | relative_url | jsonify }},
+                  "voteKey": {{ sub.slug | jsonify }},
                   "votes": {
                     "favorite": {{ sub.votes.favorite | default: 0 }},
                     "innovative": {{ sub.votes.innovative | default: 0 }},

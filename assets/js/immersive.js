@@ -351,23 +351,29 @@ class ImmersiveGallery {
 
     // Update vote buttons
     if (this.footerVotes) {
+      this.footerVotes.dataset.submissionId = submission.id;
       this.footerVotes.innerHTML = `
-        <button type="button" class="quick-vote-btn" data-vote="favorite" data-submission-id="${submission.id}" aria-label="Vote I'd use this">
+        <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="favorite" aria-pressed="false" aria-label="Vote I'd use this">
           <span class="vote-emoji">💖</span>
           <span class="vote-label">I'd use this</span>
-          <span class="vote-count" data-vote-count="favorite">${submission.votes?.favorite || 0}</span>
+          <span class="vote-count" data-vote-count>${submission.votes?.favorite || 0}</span>
         </button>
-        <button type="button" class="quick-vote-btn" data-vote="innovative" data-submission-id="${submission.id}" aria-label="Vote Creative">
+        <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="innovative" aria-pressed="false" aria-label="Vote Creative">
           <span class="vote-emoji">✨</span>
           <span class="vote-label">Creative</span>
-          <span class="vote-count" data-vote-count="innovative">${submission.votes?.innovative || 0}</span>
+          <span class="vote-count" data-vote-count>${submission.votes?.innovative || 0}</span>
         </button>
-        <button type="button" class="quick-vote-btn" data-vote="inclusive" data-submission-id="${submission.id}" aria-label="Vote For everyone">
+        <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="inclusive" aria-pressed="false" aria-label="Vote For everyone">
           <span class="vote-emoji">🌍</span>
           <span class="vote-label">For everyone</span>
-          <span class="vote-count" data-vote-count="inclusive">${submission.votes?.inclusive || 0}</span>
+          <span class="vote-count" data-vote-count>${submission.votes?.inclusive || 0}</span>
         </button>
       `;
+
+      // Restore vote states for this submission
+      if (window.TSGVoting) {
+        window.TSGVoting.hydrate(this.footerVotes);
+      }
     }
 
     // Update screen dots
@@ -459,33 +465,36 @@ class ImmersiveGallery {
             <p class="slide-designer">by ${this.escapeHtml(submission.designer)}${submission.grade ? ` • ${submission.grade.split(" ")[0]}` : ""}</p>
           </div>
 
-          <div class="quick-votes" data-quick-votes>
+          <div class="quick-votes" data-quick-votes data-submission-id="${submission.id}">
             <button type="button"
                     class="quick-vote-btn"
-                    data-vote="favorite"
-                    data-submission-id="${submission.id}"
+                    data-vote-btn
+                    data-vote-category="favorite"
+                    aria-pressed="false"
                     aria-label="Vote I'd use this">
               <span class="vote-emoji">💖</span>
               <span class="vote-label">I'd use this</span>
-              <span class="vote-count" data-vote-count="favorite">${submission.votes?.favorite || 0}</span>
+              <span class="vote-count" data-vote-count>${submission.votes?.favorite || 0}</span>
             </button>
             <button type="button"
                     class="quick-vote-btn"
-                    data-vote="innovative"
-                    data-submission-id="${submission.id}"
+                    data-vote-btn
+                    data-vote-category="innovative"
+                    aria-pressed="false"
                     aria-label="Vote Creative">
               <span class="vote-emoji">✨</span>
               <span class="vote-label">Creative</span>
-              <span class="vote-count" data-vote-count="innovative">${submission.votes?.innovative || 0}</span>
+              <span class="vote-count" data-vote-count>${submission.votes?.innovative || 0}</span>
             </button>
             <button type="button"
                     class="quick-vote-btn"
-                    data-vote="inclusive"
-                    data-submission-id="${submission.id}"
+                    data-vote-btn
+                    data-vote-category="inclusive"
+                    aria-pressed="false"
                     aria-label="Vote For everyone">
               <span class="vote-emoji">🌍</span>
               <span class="vote-label">For everyone</span>
-              <span class="vote-count" data-vote-count="inclusive">${submission.votes?.inclusive || 0}</span>
+              <span class="vote-count" data-vote-count>${submission.votes?.inclusive || 0}</span>
             </button>
           </div>
 
@@ -704,13 +713,8 @@ class ImmersiveGallery {
       }
     });
 
-    // Vote button clicks (delegated)
-    this.designStack?.addEventListener("click", (e) => {
-      const voteBtn = e.target.closest("[data-vote]");
-      if (voteBtn) {
-        this.handleVote(voteBtn);
-      }
-    });
+    // Vote buttons are handled by the global VotingSystem (voting.js)
+    // via data-vote-btn + data-vote-category attributes
 
     // Screen dot clicks (delegated)
     this.designStack?.addEventListener("click", (e) => {
@@ -1178,26 +1182,6 @@ class ImmersiveGallery {
       behavior: "smooth",
       inline: "start",
     });
-  }
-
-  /**
-   * Handle vote button click
-   */
-  handleVote(button) {
-    const category = button.dataset.vote;
-    const submissionId = button.dataset.submissionId;
-
-    // Delegate to the voting system if available
-    if (window.votingSystem) {
-      window.votingSystem.handleVote(submissionId, category, button);
-    } else {
-      // Fallback: trigger custom event
-      document.dispatchEvent(
-        new CustomEvent("immersive:vote", {
-          detail: { submissionId, category, button },
-        }),
-      );
-    }
   }
 
   /**
