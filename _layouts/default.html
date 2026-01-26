@@ -64,36 +64,82 @@
         </a>
       </div>
 
-      <!-- Nav - Friendlier buttons -->
+      <!-- Nav — desktop inline, mobile hamburger -->
       <nav class="flex items-center gap-2">
+        <!-- Desktop nav links (hidden on mobile) -->
+        <div class="hidden sm:flex items-center gap-2">
+          <a href="{{ '/designs/' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
+                    {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+            All Designs
+          </a>
+          <a href="{{ '/about/' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
+                    {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+            About
+          </a>
+          <a href="{{ '/remix/' | relative_url }}"
+             class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 inline-flex items-center gap-1.5
+                    {% if page.url contains '/remix' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+            <span aria-hidden="true">🎨</span>
+            <span>Remix</span>
+            <span class="remix-nav-badge hidden" data-remix-nav-count aria-live="polite">0</span>
+          </a>
+          <!-- Theme Toggle -->
+          <button type="button"
+                  class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
+                         text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5
+                         dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10"
+                  data-theme-toggle
+                  aria-label="Toggle theme">
+            <span aria-hidden="true" data-theme-icon>⚡</span>
+            <span data-theme-label>Hype</span>
+          </button>
+        </div>
+
+        <!-- Mobile hamburger (visible on mobile only) -->
+        <button type="button"
+                class="sm:hidden flex items-center justify-center w-10 h-10 rounded-full
+                       text-brand-stone hover:bg-brand-sky/5 dark:text-gray-300"
+                data-mobile-menu-toggle
+                aria-label="Open menu"
+                aria-expanded="false">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Mobile menu panel (hidden by default) -->
+    <div class="sm:hidden hidden border-t border-brand-sky/10 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md"
+         data-mobile-menu>
+      <div class="px-4 py-3 flex flex-col gap-1">
         <a href="{{ '/designs/' | relative_url }}"
-           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                  {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+           class="px-4 py-3 rounded-xl text-base font-semibold transition-colors
+                  {% if page.url contains '/designs' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-navy hover:bg-brand-sky/5 dark:text-gray-100 dark:hover:bg-white/10{% endif %}">
           All Designs
         </a>
         <a href="{{ '/about/' | relative_url }}"
-           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                  {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
+           class="px-4 py-3 rounded-xl text-base font-semibold transition-colors
+                  {% if page.url contains '/about' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-navy hover:bg-brand-sky/5 dark:text-gray-100 dark:hover:bg-white/10{% endif %}">
           About
         </a>
         <a href="{{ '/remix/' | relative_url }}"
-           class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 inline-flex items-center gap-1.5
-                  {% if page.url contains '/remix' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5 dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10{% endif %}">
-          <span aria-hidden="true">🎨</span>
-          <span>Remix</span>
+           class="px-4 py-3 rounded-xl text-base font-semibold transition-colors inline-flex items-center gap-2
+                  {% if page.url contains '/remix' %}bg-brand-sky/10 text-brand-sky{% else %}text-brand-navy hover:bg-brand-sky/5 dark:text-gray-100 dark:hover:bg-white/10{% endif %}">
+          <span aria-hidden="true">🎨</span> Remix
           <span class="remix-nav-badge hidden" data-remix-nav-count aria-live="polite">0</span>
         </a>
-        <!-- Theme Toggle -->
         <button type="button"
-                class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                       text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5
-                       dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10"
+                class="px-4 py-3 rounded-xl text-base font-semibold text-left transition-colors
+                       text-brand-navy hover:bg-brand-sky/5 dark:text-gray-100 dark:hover:bg-white/10"
                 data-theme-toggle
                 aria-label="Toggle theme">
           <span aria-hidden="true" data-theme-icon>⚡</span>
           <span data-theme-label>Hype</span>
         </button>
-      </nav>
+      </div>
     </div>
   </header>
 
@@ -166,6 +212,21 @@
     <label for="hp_website" class="sr-only">Do not fill this field</label>
     <input type="text" id="hp_website" name="website" tabindex="-1" autocomplete="off">
   </div>
+
+  <!-- Mobile menu toggle -->
+  <script>
+  (function(){
+    var btn = document.querySelector('[data-mobile-menu-toggle]');
+    var menu = document.querySelector('[data-mobile-menu]');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(){
+      var open = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', open);
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    });
+  })();
+  </script>
 
   <!-- Theme (loaded early to prevent flash) -->
   <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
