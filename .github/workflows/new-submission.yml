@@ -1,0 +1,139 @@
+name: Create Submission from Issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  create-submission:
+    # Only run when the 'approved' label is added
+    if: github.event.label.name == 'approved'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate submission files
+        id: generate
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: node scripts/new_submission_from_issue.js
+
+      - name: Download images from issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          SLUG: ${{ steps.generate.outputs.slug }}
+          YEAR: ${{ steps.generate.outputs.year }}
+          IMG_DIR: ${{ steps.generate.outputs.img_dir }}
+        run: |
+          echo "Looking for images for: ${SLUG} (${YEAR})"
+          echo "Image directory: ${IMG_DIR}"
+
+          # Collect image URLs from issue body and comments
+          URLS_FILE=$(mktemp)
+
+          # Extract image URLs from issue body (markdown image syntax and raw URLs)
+          ISSUE_BODY=$(gh api "repos/${{ github.repository }}/issues/${ISSUE_NUMBER}" --jq '.body')
+          echo "$ISSUE_BODY" | \
+            grep -oE '(https://[^ )\"]+\.(png|jpg|jpeg|gif|svg|webp)[^ )\"]*|https://github\.com/user-attachments/assets/[^ )\"]+)' \
+            >> "$URLS_FILE" 2>/dev/null || true
+
+          # Extract image URLs from issue comments
+          gh api "repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" \
+            --jq '.[].body' 2>/dev/null | \
+            grep -oE '(https://[^ )\"]+\.(png|jpg|jpeg|gif|svg|webp)[^ )\"]*|https://github\.com/user-attachments/assets/[^ )\"]+)' \
+            >> "$URLS_FILE" 2>/dev/null || true
+
+          # De-duplicate
+          sort -u "$URLS_FILE" -o "$URLS_FILE"
+
+          IMAGE_COUNT=$(wc -l < "$URLS_FILE" | tr -d ' ')
+          echo "Found ${IMAGE_COUNT} image URL(s)"
+
+          if [ "$IMAGE_COUNT" -eq 0 ]; then
+            echo "No images found. Team will need to add them manually to the PR."
+            exit 0
+          fi
+
+          # Download images
+          COUNTER=1
+          while IFS= read -r url; do
+            [ -z "$url" ] && continue
+
+            # Determine file extension
+            EXT=$(echo "$url" | grep -oE '\.(png|jpg|jpeg|gif|svg|webp)' | tail -1 | tr -d '.')
+            # Default to png for URLs without clear extension (e.g., GitHub user-attachments)
+            [ -z "$EXT" ] && EXT="png"
+
+            if [ $COUNTER -eq 1 ]; then
+              FILENAME="thumb.${EXT}"
+            else
+              FILENAME="screen$((COUNTER-1)).${EXT}"
+            fi
+
+            echo "Downloading image ${COUNTER}: ${FILENAME}"
+            if curl -sL --max-time 30 "$url" -o "${IMG_DIR}/${FILENAME}"; then
+              echo "  Saved: ${IMG_DIR}/${FILENAME}"
+            else
+              echo "  Failed to download: ${url}"
+            fi
+
+            COUNTER=$((COUNTER+1))
+          done < "$URLS_FILE"
+
+          # Remove .gitkeep if we downloaded actual images
+          if [ $COUNTER -gt 1 ]; then
+            rm -f "${IMG_DIR}/.gitkeep"
+          fi
+
+          echo "Image download complete. Review paths in the submission front matter."
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "feat: add ${{ github.event.issue.title }} submission (#${{ github.event.issue.number }})"
+          branch: "submission/issue-${{ github.event.issue.number }}"
+          title: "New Submission: ${{ github.event.issue.title }}"
+          body: |
+            ## Auto-generated from issue #${{ github.event.issue.number }}
+
+            This PR was automatically created from a youth design submission.
+
+            ### Before merging, please:
+
+            - [ ] Verify the generated submission content is accurate
+            - [ ] Check that screenshots were downloaded correctly (see `assets/images/submissions/` directory)
+            - [ ] If no images were auto-downloaded, manually add them from the [issue comments](https://github.com/${{ github.repository }}/issues/${{ github.event.issue.number }})
+            - [ ] Update `thumbnail`, `cover_image`, and `screens` paths in front matter if image filenames or extensions differ
+            - [ ] Author 3-5 Remix features in the `features` array (see [Content Guide](../CONTENT-GUIDE.md))
+            - [ ] Add `creator_note` if one wasn't provided in the form
+            - [ ] Review screen `alt` text and `caption` values
+
+            ---
+
+            Closes #${{ github.event.issue.number }}
+          labels: |
+            new-submission
+            auto-generated
+
+      - name: Comment on issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --repo "${{ github.repository }}" \
+            --body "A pull request has been automatically created from this submission. The RIDP team will review it, add any missing images, and publish your design to the gallery. Thanks for your contribution!"

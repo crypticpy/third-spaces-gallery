@@ -91,6 +91,15 @@ body:
     validations:
       required: false
 
+  - type: textarea
+    id: creator_note
+    attributes:
+      label: "What inspired this design? (optional)"
+      description: "A personal note about your inspiration or what you hope this design could do"
+      placeholder: "I built this because I noticed kids in my neighborhood don't know about all the cool places nearby..."
+    validations:
+      required: false
+
   - type: input
     id: demo_url
     attributes:
