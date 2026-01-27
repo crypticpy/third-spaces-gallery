@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var descriptionTextarea = document.querySelector('[data-remix-user-description]');
 
   var previousFocus = null;
-  var pendingRemixAgainIndex = null;
+  var pendingRemixAgainRef = null;
   var descriptionDebounceTimer = null;
 
   // ── escapeHtml ──────────────────────────────────────────────────
@@ -548,17 +548,61 @@ document.addEventListener('DOMContentLoaded', function() {
     return div.innerHTML;
   }
 
+  // ── Focus trap helper ───────────────────────────────────────────
+  var activeTrapListener = null;
+
+  function trapFocus(el) {
+    releaseFocusTrap();
+    activeTrapListener = function(e) {
+      if (e.key === 'Escape') {
+        closeModal(el);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      var focusables = el.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusables.length) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    el.addEventListener('keydown', activeTrapListener);
+  }
+
+  function releaseFocusTrap() {
+    if (activeTrapListener) {
+      // Remove from all modals that might have it
+      [modal, confirmModal, remixAgainModal].forEach(function(m) {
+        if (m) m.removeEventListener('keydown', activeTrapListener);
+      });
+      activeTrapListener = null;
+    }
+  }
+
   // ── Modal helpers ───────────────────────────────────────────────
   function openModal(el) {
     if (!el) return;
     previousFocus = document.activeElement;
     el.classList.remove('hidden');
     el.classList.add('flex');
+    trapFocus(el);
     var focusable = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
     if (focusable) focusable.focus();
   }
   function closeModal(el) {
     if (!el) return;
+    releaseFocusTrap();
     el.classList.add('hidden');
     el.classList.remove('flex');
     if (previousFocus) {
@@ -572,6 +616,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var bgClass = type === 'error' ? 'bg-red-500' : 'bg-brand-sea';
     var toast = document.createElement('div');
     toast.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 z-[60] rounded-full ' + bgClass + ' text-white px-6 py-3 text-sm font-medium shadow-lg';
+    toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
     toast.textContent = message;
     document.body.appendChild(toast);
     setTimeout(function() { toast.remove(); }, 4000);
@@ -641,15 +686,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {}
   }
 
-  // ── Group items by source ───────────────────────────────────────
+  // ── Group items by source (delegates to shared TSGRemix utility) ──
   function groupBySource(items) {
+    if (window.TSGRemix && window.TSGRemix.groupBySource) {
+      return window.TSGRemix.groupBySource(items, 'Other Features');
+    }
     var groups = {};
     var order = [];
     items.forEach(function(item) {
-      var key = item.sourceTitle || 'Other Features';
+      var key = item.sourceSubmission || item.sourceTitle || 'Other Features';
       if (!groups[key]) {
         groups[key] = {
-          sourceTitle: key,
+          sourceTitle: item.sourceTitle || 'Other Features',
           sourceSubmission: item.sourceSubmission,
           sourceThumbnail: item.sourceThumbnail,
           sourceDesigner: item.sourceDesigner,
@@ -663,8 +711,11 @@ document.addEventListener('DOMContentLoaded', function() {
     return order.map(function(k) { return groups[k]; });
   }
 
-  // ── Count unique sources ────────────────────────────────────────
+  // ── Count unique sources (delegates to shared TSGRemix utility) ──
   function countUniqueSources(items) {
+    if (window.TSGRemix && window.TSGRemix.countUniqueSources) {
+      return window.TSGRemix.countUniqueSources(items);
+    }
     var seen = {};
     items.forEach(function(item) {
       var key = item.sourceSubmission || item.sourceTitle || item.id;
@@ -1018,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var remixAgainBtn = document.createElement('button');
       remixAgainBtn.type = 'button';
       remixAgainBtn.className = 'inline-flex items-center gap-2 rounded-full border border-brand-sky/20 px-4 py-2 text-sm font-medium text-brand-indigo transition-all hover:bg-brand-light-blue/30 hover:border-brand-sky dark:border-gray-600 dark:text-brand-sky dark:hover:border-brand-sky/50 dark:hover:bg-gray-700';
-      remixAgainBtn.dataset.remixAgain = idx;
+      remixAgainBtn.dataset.remixAgain = remix.reference || '';
       remixAgainBtn.innerHTML = '<span aria-hidden="true">🔄</span> Remix Again';
       body.appendChild(remixAgainBtn);
 
@@ -1043,48 +1094,45 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!btn) return;
     e.preventDefault();
 
-    var idx = parseInt(btn.dataset.remixAgain, 10);
-    var remixes = getSubmittedRemixes();
-    if (idx < 0 || idx >= remixes.length) return;
+    var ref = btn.dataset.remixAgain;
+    if (!ref) return;
 
     var cartCount = window.TSGRemix ? window.TSGRemix.count() : 0;
-    pendingRemixAgainIndex = idx;
+    pendingRemixAgainRef = ref;
 
     if (cartCount > 0) {
-      // Show confirmation
       openModal(remixAgainModal);
     } else {
-      // No cart items, just load directly
-      loadRemixAgain(idx);
+      loadRemixAgain(ref);
     }
   });
 
   // Remix Again modal confirm
   document.querySelector('[data-remix-again-confirm]')?.addEventListener('click', function() {
     closeModal(remixAgainModal);
-    if (pendingRemixAgainIndex !== null) {
-      loadRemixAgain(pendingRemixAgainIndex);
-      pendingRemixAgainIndex = null;
+    if (pendingRemixAgainRef !== null) {
+      loadRemixAgain(pendingRemixAgainRef);
+      pendingRemixAgainRef = null;
     }
   });
 
   document.querySelector('[data-remix-again-cancel]')?.addEventListener('click', function() {
     closeModal(remixAgainModal);
-    pendingRemixAgainIndex = null;
+    pendingRemixAgainRef = null;
   });
 
   remixAgainModal?.addEventListener('click', function(e) {
     if (e.target === remixAgainModal) {
       closeModal(remixAgainModal);
-      pendingRemixAgainIndex = null;
+      pendingRemixAgainRef = null;
     }
   });
 
-  function loadRemixAgain(idx) {
+  function loadRemixAgain(ref) {
     var remixes = getSubmittedRemixes();
-    if (idx < 0 || idx >= remixes.length || !window.TSGRemix) return;
+    var remix = remixes.find(function(r) { return r.reference === ref; });
+    if (!remix || !window.TSGRemix) return;
 
-    var remix = remixes[idx];
     var features = Array.isArray(remix.features) ? remix.features : [];
 
     window.TSGRemix.clear();
@@ -1473,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', function() {
       closeModal(confirmModal);
       closeModal(clearModal);
       closeModal(remixAgainModal);
-      pendingRemixAgainIndex = null;
+      pendingRemixAgainRef = null;
     }
   });
 

@@ -173,12 +173,25 @@ Deno.serve(async (req: Request) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Total submission limit (2 per device, all time)
-    const { count: totalCount } = await supabase
+    const { count: totalCount, error: countError } = await supabase
       .from("published_remixes")
       .select("*", { count: "exact", head: true })
       .eq("device_id", deviceId);
 
-    if (totalCount !== null && totalCount >= MAX_SUBMISSIONS_PER_DEVICE) {
+    if (countError || totalCount === null) {
+      console.error("Submission count query failed:", countError);
+      return new Response(
+        JSON.stringify({
+          error: "Unable to verify submission limit. Please try again.",
+        }),
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    if (totalCount >= MAX_SUBMISSIONS_PER_DEVICE) {
       return new Response(
         JSON.stringify({
           error:

@@ -356,17 +356,17 @@ class ImmersiveGallery {
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="favorite" aria-pressed="false" aria-label="Vote I'd use this">
           <span class="vote-emoji">💖</span>
           <span class="vote-label">I'd use this</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.favorite || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="innovative" aria-pressed="false" aria-label="Vote Creative">
           <span class="vote-emoji">✨</span>
           <span class="vote-label">Creative</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.innovative || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="inclusive" aria-pressed="false" aria-label="Vote For everyone">
           <span class="vote-emoji">🌍</span>
           <span class="vote-label">For everyone</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.inclusive || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
         ${
           submission.features && submission.features.length > 0
@@ -375,12 +375,29 @@ class ImmersiveGallery {
                 aria-label="Remix features">
           <span class="vote-emoji">🎨</span>
           <span class="vote-label">Remix</span>
-          <span class="remix-count" data-remix-footer-count>${window.TSGRemix ? window.TSGRemix.count() : 0}</span>
+          <span class="remix-count" data-remix-footer-count></span>
         </button>
         `
             : ""
         }
       `;
+
+      // Populate counts via textContent (avoids innerHTML interpolation — XSS safe)
+      const votes = submission.votes || {};
+      this.footerVotes.querySelectorAll("[data-vote-btn]").forEach((btn) => {
+        const countEl = btn.querySelector("[data-vote-count]");
+        if (countEl) {
+          countEl.textContent = Number(votes[btn.dataset.voteCategory]) || 0;
+        }
+      });
+      const remixCountEl = this.footerVotes.querySelector(
+        "[data-remix-footer-count]",
+      );
+      if (remixCountEl) {
+        remixCountEl.textContent = window.TSGRemix
+          ? window.TSGRemix.count()
+          : 0;
+      }
 
       // Restore vote states for this submission
       if (window.TSGVoting) {

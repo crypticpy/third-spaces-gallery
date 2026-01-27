@@ -139,6 +139,47 @@
   };
 
   /**
+   * Group cart items by source design title.
+   * Shared utility used by remix page and community gallery.
+   * @param {Array} items - Array of feature objects
+   * @param {string} [fallbackLabel="Other Features"] - Label for items without sourceTitle
+   * @returns {Array} Array of group objects { sourceTitle, sourceSubmission, sourceThumbnail, sourceDesigner, sourceUrl, items }
+   */
+  const groupBySource = (items, fallbackLabel = "Other Features") => {
+    const groups = {};
+    const order = [];
+    items.forEach((item) => {
+      const key = item.sourceSubmission || item.sourceTitle || fallbackLabel;
+      if (!groups[key]) {
+        groups[key] = {
+          sourceTitle: item.sourceTitle || fallbackLabel,
+          sourceSubmission: item.sourceSubmission,
+          sourceThumbnail: item.sourceThumbnail,
+          sourceDesigner: item.sourceDesigner,
+          sourceUrl: item.sourceUrl,
+          items: [],
+        };
+        order.push(key);
+      }
+      groups[key].items.push(item);
+    });
+    return order.map((k) => groups[k]);
+  };
+
+  /**
+   * Count unique source designs in a list of features.
+   * @param {Array} items - Array of feature objects
+   * @returns {number}
+   */
+  const countUniqueSources = (items) => {
+    const seen = new Set();
+    items.forEach((item) => {
+      seen.add(item.sourceSubmission || item.sourceTitle || item.id);
+    });
+    return seen.size;
+  };
+
+  /**
    * Update all UI elements
    */
   const updateUI = () => {
@@ -164,6 +205,11 @@
       navBadge.textContent = cart.length;
       navBadge.classList.toggle("hidden", cart.length === 0);
     }
+
+    // Update immersive footer remix count badges
+    document.querySelectorAll("[data-remix-footer-count]").forEach((el) => {
+      el.textContent = cart.length;
+    });
 
     // Update Add to Remix buttons (toggle state)
     document.querySelectorAll("[data-remix-add]").forEach((btn) => {
@@ -563,6 +609,8 @@
     generatePayload,
     getShareURL,
     uniqueSources,
+    groupBySource,
+    countUniqueSources,
     updateUI,
     submittedCount: () => {
       try {

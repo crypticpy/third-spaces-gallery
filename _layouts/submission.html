@@ -296,7 +296,7 @@ layout: default
             Pick your favorite features and add them to your remix collection
           </p>
           <button type="button"
-                  onclick="document.querySelector('[aria-label=&quot;Features to remix&quot;]')?.scrollIntoView({behavior:'smooth', block:'center'})"
+                  data-scroll-to-remix
                   class="inline-flex w-full items-center justify-center gap-2 rounded-xl
                          bg-teal-500 px-4 py-3 text-sm font-semibold text-white
                          shadow-lg shadow-teal-500/25 transition-all
@@ -449,4 +449,14 @@ layout: default
   // Initial state
   updateDots();
 })();
+
+// Scroll-to-remix CTA (delegated to avoid inline onclick)
+document.addEventListener('click', function(e) {
+  if (e.target.closest('[data-scroll-to-remix]')) {
+    var target = document.querySelector('[aria-label="Features to remix"]');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+});
 </script>

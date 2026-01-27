@@ -133,16 +133,36 @@
    * @returns {HTMLElement} A container div with the summary text
    */
   const generateSummary = (features) => {
-    const groups = {};
-    const order = [];
-    features.forEach(function (f) {
-      var key = f.sourceTitle || "Unknown design";
-      if (!groups[key]) {
-        groups[key] = [];
+    var sharedGroups =
+      window.TSGRemix && window.TSGRemix.groupBySource
+        ? window.TSGRemix.groupBySource(features, "Unknown design")
+        : null;
+
+    var order;
+    var groups;
+    var titleMap = {};
+    if (sharedGroups) {
+      groups = {};
+      order = [];
+      sharedGroups.forEach(function (g) {
+        var key = g.sourceSubmission || g.sourceTitle;
+        groups[key] = g.items;
         order.push(key);
-      }
-      groups[key].push(f);
-    });
+        titleMap[key] = g.sourceTitle;
+      });
+    } else {
+      groups = {};
+      order = [];
+      features.forEach(function (f) {
+        var key = f.sourceSubmission || f.sourceTitle || "Unknown design";
+        if (!groups[key]) {
+          groups[key] = [];
+          order.push(key);
+          titleMap[key] = f.sourceTitle || "Unknown design";
+        }
+        groups[key].push(f);
+      });
+    }
 
     var total = features.length;
     var sourceCount = order.length;
@@ -173,7 +193,7 @@
           return f.name || f.id;
         })
         .join(", ");
-      li.textContent = "\u2022 From " + src + ": " + names;
+      li.textContent = "\u2022 From " + (titleMap[src] || src) + ": " + names;
       list.appendChild(li);
     });
 
@@ -191,17 +211,28 @@
     var MAX_VISIBLE = 8;
     var shown = 0;
 
-    // Group features by source
+    // Group features by source (delegates to shared utility when available)
     var groups = {};
     var order = [];
-    features.forEach(function (f) {
-      var key = f.sourceTitle || "Other";
-      if (!groups[key]) {
-        groups[key] = [];
+    var titleMap = {};
+    if (window.TSGRemix && window.TSGRemix.groupBySource) {
+      window.TSGRemix.groupBySource(features, "Other").forEach(function (g) {
+        var key = g.sourceSubmission || g.sourceTitle;
+        groups[key] = g.items;
         order.push(key);
-      }
-      groups[key].push(f);
-    });
+        titleMap[key] = g.sourceTitle;
+      });
+    } else {
+      features.forEach(function (f) {
+        var key = f.sourceSubmission || f.sourceTitle || "Other";
+        if (!groups[key]) {
+          groups[key] = [];
+          order.push(key);
+          titleMap[key] = f.sourceTitle || "Other";
+        }
+        groups[key].push(f);
+      });
+    }
 
     order.forEach(function (src) {
       if (shown >= MAX_VISIBLE) return;
@@ -210,7 +241,7 @@
       var label = document.createElement("p");
       label.className =
         "w-full text-[10px] font-semibold uppercase tracking-wider text-brand-stone/60 dark:text-gray-500 mt-1 first:mt-0";
-      label.textContent = src;
+      label.textContent = titleMap[src] || src;
       container.appendChild(label);
 
       groups[src].forEach(function (f) {
