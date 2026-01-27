@@ -628,40 +628,6 @@ class ImmersiveGallery {
             <p class="feedback-thanks" data-feedback-thanks hidden>Thanks for your feedback! 🎉</p>
           </div>
 
-          ${
-            submission.features && submission.features.length > 0
-              ? `
-            <div class="immersive-remix-section">
-              <p class="immersive-remix-label">
-                🎨 Remix Features
-              </p>
-              <div class="immersive-remix-chips">
-                ${submission.features
-                  .map(
-                    (f) => `
-                  <button type="button"
-                          class="immersive-remix-chip"
-                          data-remix-add="${this.escapeHtml(f.id)}"
-                          data-remix-name="${this.escapeHtml(f.name)}"
-                          data-remix-icon="${this.escapeHtml(f.icon)}"
-                          data-remix-source="${this.escapeHtml(submission.id)}"
-                          data-remix-source-title="${this.escapeHtml(submission.title)}"
-                          data-remix-source-thumbnail="${this.escapeHtml(submission.coverImage || "")}"
-                          data-remix-source-designer="${this.escapeHtml(submission.designer || "")}"
-                          data-remix-source-url="${this.escapeHtml(submission.url || "")}"
-                          aria-pressed="false">
-                    <span class="immersive-remix-chip-icon" aria-hidden="true">${this.escapeHtml(f.icon)}</span>
-                    <span>${this.escapeHtml(f.name)}</span>
-                    <span class="immersive-remix-chip-indicator">+</span>
-                  </button>`,
-                  )
-                  .join("")}
-              </div>
-            </div>
-          `
-              : ""
-          }
-
           <div class="details-actions">
             <a href="${submission.url}" class="details-btn details-btn-primary">
               View Full Page
@@ -765,39 +731,10 @@ class ImmersiveGallery {
     // Vote buttons are handled by the global VotingSystem (voting.js)
     // via data-vote-btn + data-vote-category attributes
 
-    // Remix button in immersive footer — scroll to details slide
+    // Remix button in immersive footer — open dedicated remix panel
     this.globalFooter?.addEventListener("click", (e) => {
       if (e.target.closest("[data-immersive-remix-btn]")) {
-        const currentSubmission =
-          this.filteredSubmissions[this.currentDesignIndex];
-        if (!currentSubmission) return;
-
-        const slides = this.designStack.querySelectorAll(
-          "[data-design-slide]:not(.design-slide-clone)",
-        );
-        const currentSlide = slides[this.currentDesignIndex];
-        if (currentSlide) {
-          const detailsSlide = currentSlide.querySelector(
-            "[data-details-slide]",
-          );
-          if (detailsSlide) {
-            detailsSlide.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-              inline: "start",
-            });
-            // Update screen index tracking
-            const screenTrack = currentSlide.querySelector(
-              "[data-screen-track]",
-            );
-            const allScreens = screenTrack
-              ? screenTrack.querySelectorAll("[data-screen-slide]")
-              : [];
-            const detailsIndex = allScreens.length - 1;
-            this.currentScreenIndexes[currentSubmission.id] = detailsIndex;
-            this.updateGlobalFooterDots(detailsIndex);
-          }
-        }
+        this.openRemixPanel();
         return;
       }
     });
@@ -821,7 +758,9 @@ class ImmersiveGallery {
 
       switch (e.key) {
         case "Escape":
-          if (this.isFilterOpen) {
+          if (this.container?.querySelector("[data-remix-panel]")) {
+            this.closeRemixPanel();
+          } else if (this.isFilterOpen) {
             this.closeFilterPanel();
           } else {
             this.deactivate();
@@ -943,8 +882,10 @@ class ImmersiveGallery {
    * but our compact chips need additional indicator/style updates.
    */
   syncRemixChips() {
-    if (!this.designStack) return;
-    this.designStack.querySelectorAll("[data-remix-add]").forEach((btn) => {
+    // Sync chips in design stack and remix panel
+    const root = this.container || this.designStack;
+    if (!root) return;
+    root.querySelectorAll("[data-remix-add]").forEach((btn) => {
       const inCart = btn.classList.contains("is-added");
       const indicator = btn.querySelector(".immersive-remix-chip-indicator");
       if (indicator) {
@@ -1448,6 +1389,200 @@ class ImmersiveGallery {
     localStorage.setItem("tsg_view_mode", "grid");
 
     console.log("[ImmersiveGallery] Deactivated");
+  }
+
+  // ─── Remix Panel ─────────────────────────────────────────────
+
+  /**
+   * Render the remix panel HTML for a given submission.
+   */
+  renderRemixPanel(submission) {
+    const features = submission.features || [];
+    const cartCount = window.TSGRemix ? window.TSGRemix.count() : 0;
+    const remixUrl =
+      document.querySelector("[data-remix-fab]")?.getAttribute("href") ||
+      "/remix/";
+
+    return `
+      <div class="remix-panel" data-remix-panel role="dialog" aria-modal="true" aria-label="Remix features">
+        <div class="remix-panel-backdrop" data-remix-panel-close></div>
+        <div class="remix-panel-sheet">
+          <div class="remix-panel-handle" aria-hidden="true"></div>
+          <header class="remix-panel-header">
+            <h3 class="remix-panel-title">
+              <span aria-hidden="true">🎨</span> Remix
+            </h3>
+            <button type="button" class="remix-panel-close-btn" data-remix-panel-close
+                    aria-label="Close remix panel">
+              ✕
+            </button>
+          </header>
+
+          <div class="remix-panel-body">
+            <div class="remix-panel-intro">
+              <p>Pick your favorite features from different designs to build your dream app.
+                 The more designs you explore, the more you can collect!</p>
+            </div>
+
+            <div class="remix-panel-context">
+              <p class="remix-panel-from-label">Features from</p>
+              <div class="remix-panel-design">
+                ${submission.coverImage ? `<img src="${this.escapeHtml(submission.coverImage)}" alt="" class="remix-panel-thumb" loading="lazy">` : ""}
+                <div>
+                  <p class="remix-panel-design-title">${this.escapeHtml(submission.title)}</p>
+                  <p class="remix-panel-design-meta">by ${this.escapeHtml(submission.designer || "Unknown")}${submission.grade ? ` · ${this.escapeHtml(submission.grade.split(" ")[0])}` : ""}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="remix-panel-features">
+              <p class="remix-panel-features-label">Tap to add or remove</p>
+              <div class="remix-panel-chips">
+                ${features
+                  .map(
+                    (f) => `
+                  <button type="button"
+                          class="immersive-remix-chip"
+                          data-remix-add="${this.escapeHtml(f.id)}"
+                          data-remix-name="${this.escapeHtml(f.name)}"
+                          data-remix-icon="${this.escapeHtml(f.icon)}"
+                          data-remix-source="${this.escapeHtml(submission.id)}"
+                          data-remix-source-title="${this.escapeHtml(submission.title)}"
+                          data-remix-source-thumbnail="${this.escapeHtml(submission.coverImage || "")}"
+                          data-remix-source-designer="${this.escapeHtml(submission.designer || "")}"
+                          data-remix-source-url="${this.escapeHtml(submission.url || "")}"
+                          aria-pressed="false">
+                    <span class="immersive-remix-chip-icon" aria-hidden="true">${this.escapeHtml(f.icon)}</span>
+                    <span>${this.escapeHtml(f.name)}</span>
+                    <span class="immersive-remix-chip-indicator">+</span>
+                  </button>`,
+                  )
+                  .join("")}
+              </div>
+            </div>
+          </div>
+
+          <footer class="remix-panel-footer">
+            <div class="remix-panel-cart-info">
+              <span class="remix-panel-cart-count" data-remix-panel-count>${cartCount}</span>
+              feature${cartCount !== 1 ? "s" : ""} in your remix
+            </div>
+            <a href="${this.escapeHtml(remixUrl)}" class="remix-panel-view-link"
+               data-remix-panel-link ${cartCount === 0 ? "hidden" : ""}>
+              View Your Remix
+              <span aria-hidden="true">→</span>
+            </a>
+          </footer>
+        </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Open the remix panel for the current design.
+   */
+  openRemixPanel() {
+    const submission = this.filteredSubmissions[this.currentDesignIndex];
+    if (!submission || !submission.features || submission.features.length === 0)
+      return;
+
+    // Remove any existing panel immediately (no animation for swap)
+    const existingPanel = this.container?.querySelector("[data-remix-panel]");
+    if (existingPanel) existingPanel.remove();
+
+    // Create and append the panel
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = this.renderRemixPanel(submission);
+    const panel = wrapper.firstElementChild;
+    this.container.appendChild(panel);
+
+    // Sync chip states with current cart
+    if (window.TSGRemix) {
+      window.TSGRemix.updateUI();
+    }
+    this.syncRemixChips();
+
+    // Force reflow before adding visible class (triggers CSS transition)
+    panel.offsetHeight; // eslint-disable-line no-unused-expressions
+    requestAnimationFrame(() => {
+      panel.classList.add("is-open");
+      // Focus the close button for keyboard/screen-reader users
+      panel.querySelector(".remix-panel-close-btn")?.focus();
+    });
+
+    // Close handlers
+    panel.addEventListener("click", (e) => {
+      // Close on backdrop or close button click
+      if (e.target.closest("[data-remix-panel-close]")) {
+        this.closeRemixPanel();
+        return;
+      }
+      // After chip toggle, update panel state
+      if (e.target.closest("[data-remix-add]")) {
+        // Let remix.js process the click first, then update panel
+        requestAnimationFrame(() => {
+          this.syncRemixChips();
+          this.updateRemixPanelState();
+        });
+      }
+    });
+
+    // Escape key is handled by the gallery-level keyboard handler (setupEventListeners)
+
+    console.log("[ImmersiveGallery] Remix panel opened for:", submission.title);
+  }
+
+  /**
+   * Close and remove the remix panel.
+   */
+  closeRemixPanel() {
+    const panel = this.container?.querySelector("[data-remix-panel]");
+    if (!panel) return;
+
+    // Animate out, then remove
+    panel.classList.remove("is-open");
+    panel.addEventListener("transitionend", () => panel.remove(), {
+      once: true,
+    });
+    // Fallback removal if transition doesn't fire
+    setTimeout(() => {
+      if (panel.parentNode) panel.remove();
+    }, 400);
+  }
+
+  /**
+   * Update the remix panel footer (count + link visibility) after a chip toggle.
+   */
+  updateRemixPanelState() {
+    const panel = this.container?.querySelector("[data-remix-panel]");
+    if (!panel) return;
+
+    const count = window.TSGRemix ? window.TSGRemix.count() : 0;
+    const countEl = panel.querySelector("[data-remix-panel-count]");
+    const link = panel.querySelector("[data-remix-panel-link]");
+    const cartInfo = panel.querySelector(".remix-panel-cart-info");
+
+    if (countEl) countEl.textContent = count;
+    if (cartInfo) {
+      // Update singular/plural
+      const text = cartInfo.childNodes;
+      // The text node after the count span
+      for (const node of text) {
+        if (
+          node.nodeType === Node.TEXT_NODE &&
+          node.textContent.includes("feature")
+        ) {
+          node.textContent = ` feature${count !== 1 ? "s" : ""} in your remix`;
+        }
+      }
+    }
+    if (link) link.hidden = count === 0;
+
+    // Also update the footer badge
+    const footerCount = this.globalFooter?.querySelector(
+      "[data-remix-footer-count]",
+    );
+    if (footerCount) footerCount.textContent = count;
   }
 
   /**
