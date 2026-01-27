@@ -1992,29 +1992,10 @@ img {
   background: #44499C; /* brand-indigo on hover */
 }
 
-/* Desktop enter immersive button */
-.immersive-enter-btn {
-  display: none;
-}
-
-@media (min-width: 1025px) {
-  .immersive-enter-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, rgb(var(--accent, 0 156 222)) 0%, rgb(var(--accent2, 68 73 156)) 100%);
-    border: none;
-    border-radius: 9999px;
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .immersive-enter-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 156, 222, 0.4);
+/* Hide "Swipe View" hero link on desktop (fine pointer + hover = mouse/trackpad).
+   On mobile/tablet the link navigates to /designs/ where immersive auto-activates. */
+@media (pointer: fine) and (hover: hover) and (min-width: 1025px) {
+  .swipe-view-link {
+    display: none;
   }
 }

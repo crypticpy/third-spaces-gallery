@@ -2,7 +2,7 @@
  * Third Spaces Gallery - Immersive View Controller
  *
  * Full-screen swipe-based design viewer for mobile/tablet devices.
- * Desktop users can opt-in via "Immersive View" button.
+ * Not available on desktop — the experience is designed for touch interaction.
  *
  * Navigation:
  * - Vertical swipe: Navigate between designs
@@ -93,9 +93,25 @@ class ImmersiveGallery {
   }
 
   /**
-   * Detect if we should show immersive mode by default
+   * Detect desktop environment via pointer/hover media queries.
+   * Desktop = fine pointer (mouse/trackpad) + hover support + wide viewport.
+   * This correctly excludes desktops even when the browser window is narrow,
+   * and correctly includes tablets/convertibles with coarse pointers.
+   */
+  static isDesktop() {
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    return finePointer && canHover && window.innerWidth > 1024;
+  }
+
+  /**
+   * Detect if we should show immersive mode by default.
+   * Returns true only for genuine mobile/tablet devices.
    */
   static shouldShowImmersive() {
+    // Desktop devices never get immersive mode
+    if (ImmersiveGallery.isDesktop()) return false;
+
     // Check for touch capability
     const isTouchDevice =
       "ontouchstart" in window || navigator.maxTouchPoints > 0;
@@ -107,11 +123,16 @@ class ImmersiveGallery {
         ua,
       );
 
-    // Check if it's a touch device with reasonable screen size
-    const touchWithSmallScreen = isTouchDevice && window.innerWidth <= 1024;
+    // Primary pointer is coarse (finger/stylus) — strong mobile signal
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
-    // Return true for mobile/tablet devices
-    return mobileUA || touchWithSmallScreen;
+    // Mobile/tablet: either mobile UA, coarse pointer with touch, or
+    // touch device with reasonable screen size
+    return (
+      mobileUA ||
+      (coarsePointer && isTouchDevice) ||
+      (isTouchDevice && window.innerWidth <= 1024)
+    );
   }
 
   /**
@@ -706,12 +727,8 @@ class ImmersiveGallery {
         this.deactivate();
       });
 
-    // Enter immersive (desktop button)
-    document
-      .querySelector("[data-enter-immersive]")
-      ?.addEventListener("click", () => {
-        this.activate();
-      });
+    // Note: desktop "Enter immersive" button has been removed.
+    // Immersive mode is mobile/tablet only (auto-activated via shouldShowImmersive).
 
     // Filter panel clicks (delegated for all interactions)
     this.filterPanel?.addEventListener("click", (e) => {
@@ -1371,6 +1388,12 @@ class ImmersiveGallery {
    */
   activate() {
     if (!this.container) return;
+
+    // Block activation on desktop — immersive is mobile/tablet only
+    if (ImmersiveGallery.isDesktop()) {
+      console.warn("[ImmersiveGallery] Blocked activation on desktop");
+      return;
+    }
 
     this.container.hidden = false;
     this.isActive = true;
