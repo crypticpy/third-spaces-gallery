@@ -174,15 +174,40 @@
 
     currentIndex = 0;
     updateDots(0);
-
-    // Hide arrows if not needed
-    const count = track.children.length;
-    const showArrows = count > 1;
-    if (prevBtn) prevBtn.classList.toggle("hidden", !showArrows);
-    if (nextBtn) nextBtn.classList.toggle("hidden", !showArrows);
+    updateArrows(0);
 
     // Start at beginning
     track.scrollLeft = 0;
+  };
+
+  /**
+   * Update arrow button visibility based on current position
+   */
+  const updateArrows = (idx) => {
+    const count = track.children.length;
+    if (count <= 1) {
+      if (prevBtn) {
+        prevBtn.classList.add("hidden");
+        prevBtn.classList.remove("sm:inline-flex");
+      }
+      if (nextBtn) {
+        nextBtn.classList.add("hidden");
+        nextBtn.classList.remove("sm:inline-flex");
+      }
+      return;
+    }
+
+    const atFirst = idx === 0;
+    const atLast = idx === count - 1;
+
+    if (prevBtn) {
+      prevBtn.classList.toggle("hidden", atFirst);
+      prevBtn.classList.toggle("sm:inline-flex", !atFirst);
+    }
+    if (nextBtn) {
+      nextBtn.classList.toggle("hidden", atLast);
+      nextBtn.classList.toggle("sm:inline-flex", !atLast);
+    }
   };
 
   /**
@@ -234,6 +259,7 @@
 
     currentIndex = clamped;
     updateDots(currentIndex);
+    updateArrows(currentIndex);
 
     target.scrollIntoView({
       behavior: prefersReducedMotion ? "auto" : "smooth",
@@ -346,6 +372,7 @@
         if (idx !== currentIndex) {
           currentIndex = idx;
           updateDots(currentIndex);
+          updateArrows(currentIndex);
         }
       });
     };

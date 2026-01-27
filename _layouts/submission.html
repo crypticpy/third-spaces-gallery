@@ -174,15 +174,17 @@ layout: default
 
         <!-- Remixable Features Section -->
         {% if page.features and page.features.size > 0 %}
-        <section class="mt-8 rounded-2xl border-2 border-dashed border-brand-purple/30 bg-brand-purple/5 p-6
-                        dark:border-brand-purple/50 dark:bg-brand-purple/10" aria-label="Features to remix">
+        <section class="mt-8 rounded-2xl border-2 border-dashed border-teal-400/40 bg-teal-50/30 p-6
+                        shadow-[0_0_20px_rgba(20,184,166,0.1)]
+                        dark:border-teal-400/50 dark:bg-teal-950/15
+                        dark:shadow-[0_0_20px_rgba(20,184,166,0.15)]" aria-label="Features to remix">
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-2">
               <span class="text-2xl" aria-hidden="true">🎨</span>
               <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
             </div>
             <a href="{{ '/remix/' | relative_url }}"
-               class="text-xs font-medium text-brand-purple hover:text-brand-indigo transition dark:text-brand-purple/80 dark:hover:text-brand-purple">
+               class="text-xs font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition">
               View your Remix →
             </a>
           </div>
@@ -200,12 +202,15 @@ layout: default
           <div class="flex flex-wrap gap-2">
             {% for feature in page.features %}
             <button type="button"
-                    class="tsg-chip transition-all hover:bg-brand-purple/20 hover:border-brand-purple"
+                    class="tsg-chip transition-all hover:bg-teal-500/15 hover:border-teal-400"
                     data-remix-add="{{ feature.id }}"
                     data-remix-name="{{ feature.name }}"
                     data-remix-icon="{{ feature.icon | default: '🎯' }}"
                     data-remix-source="{{ page.slug }}"
                     data-remix-source-title="{{ page.title }}"
+                    data-remix-source-thumbnail="{{ page.cover_image | default: page.thumbnail | relative_url }}"
+                    data-remix-source-designer="{{ page.designer }}"
+                    data-remix-source-url="{{ page.url | relative_url }}"
                     aria-pressed="false">
               <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
               <span class="font-medium">{{ feature.name }}</span>
@@ -277,6 +282,30 @@ layout: default
           <!-- Feedback prompt (shown after voting) -->
           {% include feedback-prompt.html submission_id=page.slug %}
         </div>
+
+        {% if page.features and page.features.size > 0 %}
+        <!-- Remix CTA -->
+        <div class="rounded-2xl border-2 border-teal-400/30 bg-teal-50/30 p-5
+                    shadow-[0_0_15px_rgba(20,184,166,0.08)]
+                    dark:border-teal-400/40 dark:bg-teal-950/20
+                    dark:shadow-[0_0_15px_rgba(20,184,166,0.12)]">
+          <h3 class="mb-2 text-lg font-semibold text-brand-navy dark:text-gray-100">
+            Remix This Design
+          </h3>
+          <p class="text-sm text-brand-stone dark:text-gray-400 mb-3">
+            Pick your favorite features and add them to your remix collection
+          </p>
+          <button type="button"
+                  data-scroll-to-remix
+                  class="inline-flex w-full items-center justify-center gap-2 rounded-xl
+                         bg-teal-500 px-4 py-3 text-sm font-semibold text-white
+                         shadow-lg shadow-teal-500/25 transition-all
+                         hover:-translate-y-0.5 hover:bg-teal-600 hover:shadow-xl">
+            <span aria-hidden="true">🎨</span>
+            Browse Features Below
+          </button>
+        </div>
+        {% endif %}
 
         <!-- Links -->
         {% if page.links.demo_url %}
@@ -420,4 +449,14 @@ layout: default
   // Initial state
   updateDots();
 })();
+
+// Scroll-to-remix CTA (delegated to avoid inline onclick)
+document.addEventListener('click', function(e) {
+  if (e.target.closest('[data-scroll-to-remix]')) {
+    var target = document.querySelector('[aria-label="Features to remix"]');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+});
 </script>

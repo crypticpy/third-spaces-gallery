@@ -71,6 +71,9 @@
       icon: meta?.icon || "🎯",
       sourceSubmission: meta?.sourceSubmission || null,
       sourceTitle: meta?.sourceTitle || null,
+      sourceThumbnail: meta?.sourceThumbnail || null,
+      sourceDesigner: meta?.sourceDesigner || null,
+      sourceUrl: meta?.sourceUrl || null,
       addedAt: new Date().toISOString(),
     };
 
@@ -136,6 +139,47 @@
   };
 
   /**
+   * Group cart items by source design title.
+   * Shared utility used by remix page and community gallery.
+   * @param {Array} items - Array of feature objects
+   * @param {string} [fallbackLabel="Other Features"] - Label for items without sourceTitle
+   * @returns {Array} Array of group objects { sourceTitle, sourceSubmission, sourceThumbnail, sourceDesigner, sourceUrl, items }
+   */
+  const groupBySource = (items, fallbackLabel = "Other Features") => {
+    const groups = {};
+    const order = [];
+    items.forEach((item) => {
+      const key = item.sourceSubmission || item.sourceTitle || fallbackLabel;
+      if (!groups[key]) {
+        groups[key] = {
+          sourceTitle: item.sourceTitle || fallbackLabel,
+          sourceSubmission: item.sourceSubmission,
+          sourceThumbnail: item.sourceThumbnail,
+          sourceDesigner: item.sourceDesigner,
+          sourceUrl: item.sourceUrl,
+          items: [],
+        };
+        order.push(key);
+      }
+      groups[key].items.push(item);
+    });
+    return order.map((k) => groups[k]);
+  };
+
+  /**
+   * Count unique source designs in a list of features.
+   * @param {Array} items - Array of feature objects
+   * @returns {number}
+   */
+  const countUniqueSources = (items) => {
+    const seen = new Set();
+    items.forEach((item) => {
+      seen.add(item.sourceSubmission || item.sourceTitle || item.id);
+    });
+    return seen.size;
+  };
+
+  /**
    * Update all UI elements
    */
   const updateUI = () => {
@@ -161,6 +205,11 @@
       navBadge.textContent = cart.length;
       navBadge.classList.toggle("hidden", cart.length === 0);
     }
+
+    // Update immersive footer remix count badges
+    document.querySelectorAll("[data-remix-footer-count]").forEach((el) => {
+      el.textContent = cart.length;
+    });
 
     // Update Add to Remix buttons (toggle state)
     document.querySelectorAll("[data-remix-add]").forEach((btn) => {
@@ -375,6 +424,9 @@
         icon: item.icon,
         sourceSubmission: item.sourceSubmission,
         sourceTitle: item.sourceTitle,
+        sourceThumbnail: item.sourceThumbnail,
+        sourceDesigner: item.sourceDesigner,
+        sourceUrl: item.sourceUrl,
       })),
       createdAt: new Date().toISOString(),
     };
@@ -387,6 +439,20 @@
    * @returns {{ success: boolean, error?: string, reference?: string }}
    */
   const submit = async (userNote, authorName) => {
+    // Client-side 2-remix limit
+    try {
+      const submitted = JSON.parse(
+        localStorage.getItem("ts:submitted_remixes:v1") || "[]",
+      );
+      if (submitted.length >= 2) {
+        return {
+          success: false,
+          error:
+            "You've reached the maximum of 2 remix submissions. Thank you for contributing!",
+        };
+      }
+    } catch (e) {}
+
     const payload = generatePayload();
 
     // Get device_id for rate limiting
@@ -429,7 +495,25 @@
 
       console.log("[Remix] Published, reference:", data.reference);
 
-      // Track locally for transparency page
+      // Store full remix snapshot for "My Remixes" tab
+      try {
+        const submitted = JSON.parse(
+          localStorage.getItem("ts:submitted_remixes:v1") || "[]",
+        );
+        submitted.push({
+          reference: data.reference,
+          authorName: authorName || "Anonymous",
+          userNote: userNote || "",
+          features: payload.features,
+          submittedAt: new Date().toISOString(),
+        });
+        localStorage.setItem(
+          "ts:submitted_remixes:v1",
+          JSON.stringify(submitted),
+        );
+      } catch (e) {}
+
+      // Also keep old key for transparency page backward compat
       try {
         const stored = JSON.parse(
           localStorage.getItem("ts:published_remixes:v1") || "{}",
@@ -465,6 +549,9 @@
         icon: addBtn.dataset.remixIcon || "🎯",
         sourceSubmission: addBtn.dataset.remixSource || null,
         sourceTitle: addBtn.dataset.remixSourceTitle || null,
+        sourceThumbnail: addBtn.dataset.remixSourceThumbnail || null,
+        sourceDesigner: addBtn.dataset.remixSourceDesigner || null,
+        sourceUrl: addBtn.dataset.remixSourceUrl || null,
       };
 
       if (has(featureId)) {
@@ -522,7 +609,27 @@
     generatePayload,
     getShareURL,
     uniqueSources,
+    groupBySource,
+    countUniqueSources,
     updateUI,
+    submittedCount: () => {
+      try {
+        return JSON.parse(
+          localStorage.getItem("ts:submitted_remixes:v1") || "[]",
+        ).length;
+      } catch (e) {
+        return 0;
+      }
+    },
+    getSubmitted: () => {
+      try {
+        return JSON.parse(
+          localStorage.getItem("ts:submitted_remixes:v1") || "[]",
+        );
+      } catch (e) {
+        return [];
+      }
+    },
   };
 
   console.log("[Remix] Engine initialized, cart has", cart.length, "items");

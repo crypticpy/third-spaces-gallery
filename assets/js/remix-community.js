@@ -128,6 +128,153 @@
   };
 
   /**
+   * Generate a summary DOM element that groups features by source design.
+   * @param {Array} features - Array of feature objects with sourceTitle, name, id
+   * @returns {HTMLElement} A container div with the summary text
+   */
+  const generateSummary = (features) => {
+    var sharedGroups =
+      window.TSGRemix && window.TSGRemix.groupBySource
+        ? window.TSGRemix.groupBySource(features, "Unknown design")
+        : null;
+
+    var order;
+    var groups;
+    var titleMap = {};
+    if (sharedGroups) {
+      groups = {};
+      order = [];
+      sharedGroups.forEach(function (g) {
+        var key = g.sourceSubmission || g.sourceTitle;
+        groups[key] = g.items;
+        order.push(key);
+        titleMap[key] = g.sourceTitle;
+      });
+    } else {
+      groups = {};
+      order = [];
+      features.forEach(function (f) {
+        var key = f.sourceSubmission || f.sourceTitle || "Unknown design";
+        if (!groups[key]) {
+          groups[key] = [];
+          order.push(key);
+          titleMap[key] = f.sourceTitle || "Unknown design";
+        }
+        groups[key].push(f);
+      });
+    }
+
+    var total = features.length;
+    var sourceCount = order.length;
+
+    var container = document.createElement("div");
+    container.className = "mt-2 text-xs text-brand-stone dark:text-gray-400";
+
+    var intro = document.createElement("p");
+    intro.className = "font-medium text-brand-navy/70 dark:text-gray-300";
+    intro.textContent =
+      total +
+      " feature" +
+      (total !== 1 ? "s" : "") +
+      " from " +
+      sourceCount +
+      " design" +
+      (sourceCount !== 1 ? "s" : "") +
+      ":";
+    container.appendChild(intro);
+
+    var list = document.createElement("ul");
+    list.className = "mt-1 space-y-0.5";
+
+    order.forEach(function (src) {
+      var li = document.createElement("li");
+      var names = groups[src]
+        .map(function (f) {
+          return f.name || f.id;
+        })
+        .join(", ");
+      li.textContent = "\u2022 From " + (titleMap[src] || src) + ": " + names;
+      list.appendChild(li);
+    });
+
+    container.appendChild(list);
+    return container;
+  };
+
+  /**
+   * Render feature chips grouped by source design into a container element.
+   * Respects a MAX_VISIBLE limit across all groups and appends an overflow indicator.
+   * @param {Array} features - Array of feature objects
+   * @param {HTMLElement} container - The DOM element to append chips into
+   */
+  const renderGroupedChips = (features, container) => {
+    var MAX_VISIBLE = 8;
+    var shown = 0;
+
+    // Group features by source (delegates to shared utility when available)
+    var groups = {};
+    var order = [];
+    var titleMap = {};
+    if (window.TSGRemix && window.TSGRemix.groupBySource) {
+      window.TSGRemix.groupBySource(features, "Other").forEach(function (g) {
+        var key = g.sourceSubmission || g.sourceTitle;
+        groups[key] = g.items;
+        order.push(key);
+        titleMap[key] = g.sourceTitle;
+      });
+    } else {
+      features.forEach(function (f) {
+        var key = f.sourceSubmission || f.sourceTitle || "Other";
+        if (!groups[key]) {
+          groups[key] = [];
+          order.push(key);
+          titleMap[key] = f.sourceTitle || "Other";
+        }
+        groups[key].push(f);
+      });
+    }
+
+    order.forEach(function (src) {
+      if (shown >= MAX_VISIBLE) return;
+
+      // Source label
+      var label = document.createElement("p");
+      label.className =
+        "w-full text-[10px] font-semibold uppercase tracking-wider text-brand-stone/60 dark:text-gray-500 mt-1 first:mt-0";
+      label.textContent = titleMap[src] || src;
+      container.appendChild(label);
+
+      groups[src].forEach(function (f) {
+        if (shown >= MAX_VISIBLE) return;
+
+        var chip = document.createElement("span");
+        chip.className =
+          "inline-flex items-center gap-1 rounded-full bg-brand-purple/10 px-2 py-0.5 text-xs font-medium text-brand-indigo dark:bg-brand-purple/20 dark:text-brand-purple";
+
+        var iconSpan = document.createElement("span");
+        iconSpan.textContent = f.icon || "\uD83C\uDFAF";
+        chip.appendChild(iconSpan);
+
+        var nameSpan = document.createElement("span");
+        nameSpan.textContent = f.name || f.id;
+        chip.appendChild(nameSpan);
+
+        container.appendChild(chip);
+        shown++;
+      });
+    });
+
+    // Overflow indicator
+    if (features.length > MAX_VISIBLE) {
+      var overflow = document.createElement("span");
+      overflow.className =
+        "inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400";
+      overflow.textContent = "+" + (features.length - MAX_VISIBLE) + " more";
+      container.appendChild(overflow);
+    }
+  };
+
+  /**
    * Build a single remix card element.
    * @param {object} remix - Remix row from Supabase
    * @param {number} upvoteCount - Aggregated upvote count
@@ -137,9 +284,6 @@
   const buildCard = (remix, upvoteCount, alreadyUpvoted) => {
     const features = Array.isArray(remix.features) ? remix.features : [];
     const sourceCount = countUniqueSources(features);
-    const MAX_VISIBLE = 8;
-    const visibleFeatures = features.slice(0, MAX_VISIBLE);
-    const overflowCount = features.length - MAX_VISIBLE;
 
     const card = document.createElement("div");
     card.className =
@@ -181,31 +325,16 @@
       card.appendChild(badge);
     }
 
-    // Feature chips
-    if (visibleFeatures.length > 0) {
+    // Auto-generated summary (grouped by source design)
+    if (features.length > 0) {
+      card.appendChild(generateSummary(features));
+    }
+
+    // Feature chips (grouped by source design)
+    if (features.length > 0) {
       const chipWrap = document.createElement("div");
-      chipWrap.className = "flex flex-wrap gap-1.5 mb-3";
-
-      visibleFeatures.forEach((f) => {
-        const chip = document.createElement("span");
-        chip.className =
-          "inline-flex items-center gap-1 rounded-full bg-brand-purple/10 px-2.5 py-1 text-xs font-medium text-brand-purple dark:bg-purple-900/30 dark:text-purple-300";
-        const iconSpan = document.createElement("span");
-        iconSpan.setAttribute("aria-hidden", "true");
-        iconSpan.textContent = f.icon || "";
-        chip.appendChild(iconSpan);
-        chip.appendChild(document.createTextNode(f.name || f.id || ""));
-        chipWrap.appendChild(chip);
-      });
-
-      if (overflowCount > 0) {
-        const more = document.createElement("span");
-        more.className =
-          "inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-gray-700 dark:text-gray-400";
-        more.textContent = `+${overflowCount} more`;
-        chipWrap.appendChild(more);
-      }
-
+      chipWrap.className = "flex flex-wrap gap-1.5 mb-3 mt-3";
+      renderGroupedChips(features, chipWrap);
       card.appendChild(chipWrap);
     }
 

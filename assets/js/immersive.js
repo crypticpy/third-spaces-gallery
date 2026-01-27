@@ -356,19 +356,48 @@ class ImmersiveGallery {
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="favorite" aria-pressed="false" aria-label="Vote I'd use this">
           <span class="vote-emoji">💖</span>
           <span class="vote-label">I'd use this</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.favorite || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="innovative" aria-pressed="false" aria-label="Vote Creative">
           <span class="vote-emoji">✨</span>
           <span class="vote-label">Creative</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.innovative || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
         <button type="button" class="quick-vote-btn" data-vote-btn data-vote-category="inclusive" aria-pressed="false" aria-label="Vote For everyone">
           <span class="vote-emoji">🌍</span>
           <span class="vote-label">For everyone</span>
-          <span class="vote-count" data-vote-count>${submission.votes?.inclusive || 0}</span>
+          <span class="vote-count" data-vote-count></span>
         </button>
+        ${
+          submission.features && submission.features.length > 0
+            ? `
+        <button type="button" class="quick-remix-btn" data-immersive-remix-btn
+                aria-label="Remix features">
+          <span class="vote-emoji">🎨</span>
+          <span class="vote-label">Remix</span>
+          <span class="remix-count" data-remix-footer-count></span>
+        </button>
+        `
+            : ""
+        }
       `;
+
+      // Populate counts via textContent (avoids innerHTML interpolation — XSS safe)
+      const votes = submission.votes || {};
+      this.footerVotes.querySelectorAll("[data-vote-btn]").forEach((btn) => {
+        const countEl = btn.querySelector("[data-vote-count]");
+        if (countEl) {
+          countEl.textContent = Number(votes[btn.dataset.voteCategory]) || 0;
+        }
+      });
+      const remixCountEl = this.footerVotes.querySelector(
+        "[data-remix-footer-count]",
+      );
+      if (remixCountEl) {
+        remixCountEl.textContent = window.TSGRemix
+          ? window.TSGRemix.count()
+          : 0;
+      }
 
       // Restore vote states for this submission
       if (window.TSGVoting) {
@@ -596,6 +625,9 @@ class ImmersiveGallery {
                           data-remix-icon="${this.escapeHtml(f.icon)}"
                           data-remix-source="${this.escapeHtml(submission.id)}"
                           data-remix-source-title="${this.escapeHtml(submission.title)}"
+                          data-remix-source-thumbnail="${this.escapeHtml(submission.coverImage || "")}"
+                          data-remix-source-designer="${this.escapeHtml(submission.designer || "")}"
+                          data-remix-source-url="${this.escapeHtml(submission.url || "")}"
                           aria-pressed="false">
                     <span class="immersive-remix-chip-icon" aria-hidden="true">${this.escapeHtml(f.icon)}</span>
                     <span>${this.escapeHtml(f.name)}</span>
@@ -715,6 +747,43 @@ class ImmersiveGallery {
 
     // Vote buttons are handled by the global VotingSystem (voting.js)
     // via data-vote-btn + data-vote-category attributes
+
+    // Remix button in immersive footer — scroll to details slide
+    this.globalFooter?.addEventListener("click", (e) => {
+      if (e.target.closest("[data-immersive-remix-btn]")) {
+        const currentSubmission =
+          this.filteredSubmissions[this.currentDesignIndex];
+        if (!currentSubmission) return;
+
+        const slides = this.designStack.querySelectorAll(
+          "[data-design-slide]:not(.design-slide-clone)",
+        );
+        const currentSlide = slides[this.currentDesignIndex];
+        if (currentSlide) {
+          const detailsSlide = currentSlide.querySelector(
+            "[data-details-slide]",
+          );
+          if (detailsSlide) {
+            detailsSlide.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "start",
+            });
+            // Update screen index tracking
+            const screenTrack = currentSlide.querySelector(
+              "[data-screen-track]",
+            );
+            const allScreens = screenTrack
+              ? screenTrack.querySelectorAll("[data-screen-slide]")
+              : [];
+            const detailsIndex = allScreens.length - 1;
+            this.currentScreenIndexes[currentSubmission.id] = detailsIndex;
+            this.updateGlobalFooterDots(detailsIndex);
+          }
+        }
+        return;
+      }
+    });
 
     // Screen dot clicks (delegated)
     this.designStack?.addEventListener("click", (e) => {
