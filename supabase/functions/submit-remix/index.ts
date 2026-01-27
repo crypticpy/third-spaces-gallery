@@ -18,6 +18,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 
 const RATE_LIMIT_WINDOW_HOURS = 1;
 const RATE_LIMIT_MAX = 3;
+const MAX_SUBMISSIONS_PER_DEVICE = 2;
 const MAX_NOTE_LENGTH = 500;
 const MAX_NAME_LENGTH = 50;
 const MAX_FEATURES = 20;
@@ -170,6 +171,25 @@ Deno.serve(async (req: Request) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Total submission limit (2 per device, all time)
+    const { count: totalCount } = await supabase
+      .from("published_remixes")
+      .select("*", { count: "exact", head: true })
+      .eq("device_id", deviceId);
+
+    if (totalCount !== null && totalCount >= MAX_SUBMISSIONS_PER_DEVICE) {
+      return new Response(
+        JSON.stringify({
+          error:
+            "You've reached the maximum of 2 remix submissions. Thank you for contributing!",
+        }),
+        {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
+      );
+    }
 
     // Rate limit check
     const windowStart = new Date(

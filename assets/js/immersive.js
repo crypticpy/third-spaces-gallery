@@ -368,6 +368,18 @@ class ImmersiveGallery {
           <span class="vote-label">For everyone</span>
           <span class="vote-count" data-vote-count>${submission.votes?.inclusive || 0}</span>
         </button>
+        ${
+          submission.features && submission.features.length > 0
+            ? `
+        <button type="button" class="quick-remix-btn" data-immersive-remix-btn
+                aria-label="Remix features">
+          <span class="vote-emoji">🎨</span>
+          <span class="vote-label">Remix</span>
+          <span class="remix-count" data-remix-footer-count>${window.TSGRemix ? window.TSGRemix.count() : 0}</span>
+        </button>
+        `
+            : ""
+        }
       `;
 
       // Restore vote states for this submission
@@ -596,6 +608,9 @@ class ImmersiveGallery {
                           data-remix-icon="${this.escapeHtml(f.icon)}"
                           data-remix-source="${this.escapeHtml(submission.id)}"
                           data-remix-source-title="${this.escapeHtml(submission.title)}"
+                          data-remix-source-thumbnail="${this.escapeHtml(submission.coverImage || "")}"
+                          data-remix-source-designer="${this.escapeHtml(submission.designer || "")}"
+                          data-remix-source-url="${this.escapeHtml(submission.url || "")}"
                           aria-pressed="false">
                     <span class="immersive-remix-chip-icon" aria-hidden="true">${this.escapeHtml(f.icon)}</span>
                     <span>${this.escapeHtml(f.name)}</span>
@@ -715,6 +730,43 @@ class ImmersiveGallery {
 
     // Vote buttons are handled by the global VotingSystem (voting.js)
     // via data-vote-btn + data-vote-category attributes
+
+    // Remix button in immersive footer — scroll to details slide
+    this.globalFooter?.addEventListener("click", (e) => {
+      if (e.target.closest("[data-immersive-remix-btn]")) {
+        const currentSubmission =
+          this.filteredSubmissions[this.currentDesignIndex];
+        if (!currentSubmission) return;
+
+        const slides = this.designStack.querySelectorAll(
+          "[data-design-slide]:not(.design-slide-clone)",
+        );
+        const currentSlide = slides[this.currentDesignIndex];
+        if (currentSlide) {
+          const detailsSlide = currentSlide.querySelector(
+            "[data-details-slide]",
+          );
+          if (detailsSlide) {
+            detailsSlide.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "start",
+            });
+            // Update screen index tracking
+            const screenTrack = currentSlide.querySelector(
+              "[data-screen-track]",
+            );
+            const allScreens = screenTrack
+              ? screenTrack.querySelectorAll("[data-screen-slide]")
+              : [];
+            const detailsIndex = allScreens.length - 1;
+            this.currentScreenIndexes[currentSubmission.id] = detailsIndex;
+            this.updateGlobalFooterDots(detailsIndex);
+          }
+        }
+        return;
+      }
+    });
 
     // Screen dot clicks (delegated)
     this.designStack?.addEventListener("click", (e) => {
