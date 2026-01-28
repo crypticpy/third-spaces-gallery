@@ -6,7 +6,7 @@ year: 2025
 
 designer: "Marcus T."
 school: "LASA High School"
-grade: "High School (9-12)"
+grade: "HS"
 
 summary: "Match your current mood to the perfect third space. Feeling creative? Social? Need quiet focus time? Vibe Finder knows a spot."
 feature_focus:

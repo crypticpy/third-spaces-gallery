@@ -6,7 +6,7 @@ year: 2025
 
 designer: "Sofia R. & James K."
 school: "Ann Richards School"
-grade: "Middle School (6-8)"
+grade: "MS"
 
 summary: "An accessibility-first design that makes Third Spaces work for everyone, including users with disabilities, language barriers, and different needs."
 feature_focus:

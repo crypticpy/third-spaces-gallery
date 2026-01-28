@@ -47,9 +47,9 @@ body:
       label: "Grade Level"
       description: "Designer's grade level"
       options:
-        - "Elementary (K-5)"
-        - "Middle School (6-8)"
-        - "High School (9-12)"
+        - "K-5"
+        - "MS"
+        - "HS"
     validations:
       required: true
 
