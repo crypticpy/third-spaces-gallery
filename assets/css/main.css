@@ -88,6 +88,120 @@
 
 /* Component styles */
 @layer components {
+  /* ============================================
+     Theme Toggle Slider
+     ============================================ */
+  .theme-toggle-slider {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    background: rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+  }
+
+  .theme-toggle-slider:hover {
+    background: rgba(0, 0, 0, 0.10);
+  }
+
+  .theme-toggle-slider:focus-visible {
+    outline: 3px solid rgb(var(--accent, 0 156 222));
+    outline-offset: 2px;
+  }
+
+  [data-theme="hype"] .theme-toggle-slider,
+  .dark .theme-toggle-slider {
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  [data-theme="hype"] .theme-toggle-slider:hover,
+  .dark .theme-toggle-slider:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .theme-toggle-option {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgb(var(--fg) / 0.5);
+    transition: color 0.2s ease;
+  }
+
+  .theme-toggle-option[data-active="true"] {
+    color: rgb(var(--fg));
+  }
+
+  .theme-toggle-indicator {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    width: calc(50% - 0.25rem);
+    height: calc(100% - 0.5rem);
+    border-radius: 9999px;
+    background: rgb(var(--surface, 255 255 255));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  [data-theme="hype"] .theme-toggle-indicator,
+  .dark .theme-toggle-indicator {
+    transform: translateX(100%);
+    background: rgb(var(--surface, 44 47 88));
+  }
+
+  /* Mobile variant - full width */
+  .theme-toggle-slider.mobile {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .theme-toggle-slider.mobile .theme-toggle-option {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .theme-toggle-slider.mobile .theme-toggle-indicator {
+    width: calc(50% - 0.25rem);
+  }
+
+  /* ============================================
+     Theme-Aware Section Backgrounds
+     ============================================ */
+  .section-dark-bg {
+    background: #f7f6f5; /* Light mode: cream */
+  }
+
+  [data-theme="hype"] .section-dark-bg,
+  .dark .section-dark-bg {
+    background: #22254E; /* Dark mode: navy */
+  }
+
+  .section-gradient-bg {
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 0%, rgba(0, 156, 222, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 100%, rgba(159, 60, 201, 0.06) 0%, transparent 50%),
+      #f7f6f5;
+  }
+
+  [data-theme="hype"] .section-gradient-bg,
+  .dark .section-gradient-bg {
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 0%, rgba(0, 156, 222, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 100%, rgba(159, 60, 201, 0.1) 0%, transparent 50%),
+      #22254E;
+  }
+
   /* Design System Card */
   .tsg-card {
     @apply rounded-2xl border;
@@ -451,6 +565,11 @@
   100% { opacity: 0.7; }
 }
 
+/* Hide sparkles in light mode - they're designed for dark backgrounds */
+[data-theme="chill"] .sparkle-field::before {
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sparkle-field::before,
   .hero-mesh::after { animation: none; opacity: 0.8; }
@@ -741,8 +860,7 @@
 
   /* High-contrast gradient for dark backgrounds */
   [data-theme="hype"] .text-gradient,
-  .dark .text-gradient,
-  .sparkle-field .text-gradient {
+  .dark .text-gradient {
     background: linear-gradient(135deg, #5BC4F0 0%, #A8ABE0 45%, #CDA0E5 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1297,6 +1415,18 @@ img {
 
 .design-stack::-webkit-scrollbar {
   display: none;
+}
+
+/* Grab cursor for mouse-drag navigation on desktop */
+@media (pointer: fine) {
+  .design-stack,
+  .screen-track {
+    cursor: grab;
+  }
+  .design-stack:active,
+  .screen-track:active {
+    cursor: grabbing;
+  }
 }
 
 /* Each design slide */
@@ -2214,5 +2344,144 @@ img {
 @media (pointer: fine) and (hover: hover) and (min-width: 1025px) {
   .swipe-view-link {
     display: none;
+  }
+}
+
+/* ============================================
+   Image Lightbox Modal (Desktop only)
+   ============================================ */
+.image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.image-lightbox[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Backdrop */
+.image-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+/* Container for content */
+.image-lightbox__container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: calc(100vw - 6rem);
+  max-height: calc(100vh - 6rem);
+  padding: 1rem;
+}
+
+/* Close button */
+.image-lightbox__close {
+  position: absolute;
+  top: -2.5rem;
+  right: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.image-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.image-lightbox__close:focus {
+  outline: 2px solid #009CDE;
+  outline-offset: 2px;
+}
+
+/* Figure wrapper */
+.image-lightbox__figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  max-height: calc(100vh - 10rem);
+}
+
+/* Image itself — maintains aspect ratio, fits within bounds */
+.image-lightbox__image {
+  max-width: 100%;
+  max-height: calc(100vh - 12rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0.75rem;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+}
+
+.image-lightbox[aria-hidden="false"] .image-lightbox__image {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Caption */
+.image-lightbox__caption {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.5rem;
+}
+
+/* Hint text */
+.image-lightbox__hint {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.image-lightbox__hint kbd {
+  display: inline-block;
+  padding: 0.125rem 0.375rem;
+  font-family: inherit;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+}
+
+/* Body scroll lock class */
+body.lightbox-open {
+  overflow: hidden;
+}
+
+/* Mobile: hide lightbox entirely, let default link behavior work */
+@media (max-width: 1023px) {
+  .image-lightbox {
+    display: none !important;
   }
 }
