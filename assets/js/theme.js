@@ -95,55 +95,74 @@
   };
 
   /**
-   * Update toggle button UI
+   * Update toggle UI (slider style)
    */
-  const updateToggleButton = (btn) => {
-    if (!btn) return;
+  const updateToggleUI = (toggle) => {
+    if (!toggle) return;
 
     const theme = root.dataset.theme || "chill";
     const config = THEMES[theme];
-    const nextConfig = THEMES[theme === "chill" ? "hype" : "chill"];
 
-    btn.setAttribute(
+    // Update aria attributes
+    toggle.setAttribute("aria-checked", config.isDark ? "true" : "false");
+    toggle.setAttribute(
       "aria-label",
-      `Switch to ${nextConfig.label} mode (currently ${config.label})`,
+      `Theme mode: ${config.label}. Press to switch.`,
     );
-    btn.setAttribute("aria-pressed", config.isDark ? "true" : "false");
 
-    // Update button content
-    const iconEl = btn.querySelector("[data-theme-icon]");
-    const labelEl = btn.querySelector("[data-theme-label]");
-
-    if (iconEl) {
-      iconEl.textContent = nextConfig.icon;
-    }
-    if (labelEl) {
-      labelEl.textContent = nextConfig.label;
-    }
-
-    // If button has simple text content, update it
-    if (!iconEl && !labelEl) {
-      btn.innerHTML = `<span aria-hidden="true">${nextConfig.icon}</span> ${nextConfig.label}`;
-    }
+    // Update active states on options
+    const options = toggle.querySelectorAll("[data-theme-option]");
+    options.forEach((option) => {
+      const isActive = option.dataset.themeOption === theme;
+      option.dataset.active = isActive ? "true" : "false";
+    });
   };
 
   // Apply theme immediately (before DOM content loaded to prevent flash)
   applyTheme(getPreferredTheme());
 
-  // Bind toggle button once DOM is ready
+  /**
+   * Update all toggle UIs on the page
+   */
+  const updateAllToggles = () => {
+    document.querySelectorAll("[data-theme-toggle]").forEach(updateToggleUI);
+  };
+
+  // Bind toggle buttons once DOM is ready
   window.addEventListener("DOMContentLoaded", () => {
-    const toggleBtn = document.querySelector("[data-theme-toggle]");
+    const toggles = document.querySelectorAll("[data-theme-toggle]");
 
-    if (toggleBtn) {
-      // Initial button state
-      updateToggleButton(toggleBtn);
+    toggles.forEach((toggle) => {
+      // Initial state
+      updateToggleUI(toggle);
 
-      // Click handler
-      toggleBtn.addEventListener("click", () => {
-        toggleTheme();
-        updateToggleButton(toggleBtn);
+      // Click handler - check if click was on a specific option
+      toggle.addEventListener("click", (e) => {
+        const option = e.target.closest("[data-theme-option]");
+        if (option) {
+          // Clicked a specific option - switch to that theme
+          const targetTheme = option.dataset.themeOption;
+          if (targetTheme && targetTheme !== root.dataset.theme) {
+            applyTheme(targetTheme);
+            saveTheme(targetTheme);
+            updateAllToggles();
+          }
+        } else {
+          // Clicked the toggle itself - toggle between themes
+          toggleTheme();
+          updateAllToggles();
+        }
       });
-    }
+
+      // Keyboard support (Enter/Space)
+      toggle.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleTheme();
+          updateAllToggles();
+        }
+      });
+    });
 
     // Listen for system preference changes
     if (window.matchMedia) {
@@ -153,7 +172,7 @@
           // Only auto-switch if user hasn't set a preference
           if (!localStorage.getItem(THEME_KEY)) {
             applyTheme(e.matches ? "hype" : "chill");
-            updateToggleButton(toggleBtn);
+            updateAllToggles();
           }
         });
     }
