@@ -91,6 +91,55 @@ layout: default
         </blockquote>
         {% endif %}
 
+        <!-- Remixable Features Section -->
+        {% if page.features and page.features.size > 0 %}
+        <section class="rounded-2xl border-2 border-dashed border-teal-400/40 bg-teal-50/30 p-6
+                        shadow-[0_0_20px_rgba(20,184,166,0.1)]
+                        dark:border-teal-400/50 dark:bg-teal-950/15
+                        dark:shadow-[0_0_20px_rgba(20,184,166,0.15)]" aria-label="Features to remix">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="text-2xl" aria-hidden="true">🎨</span>
+              <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
+            </div>
+            <a href="{{ '/remix/' | relative_url }}"
+               class="text-xs font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition">
+              View your Remix →
+            </a>
+          </div>
+          <p class="text-sm text-brand-stone dark:text-gray-400 mb-3">
+            This design has the following features. Select your favorites to send to your remix.
+          </p>
+          <details class="mb-4 text-xs text-brand-stone/70 dark:text-gray-500">
+            <summary class="cursor-pointer hover:text-brand-stone dark:hover:text-gray-400 transition inline-flex items-center gap-1">
+              What is Remix?
+            </summary>
+            <p class="mt-1 pl-0.5">
+              Your Remix is like a wishlist — collect features from any design, then share your ideal combo.
+            </p>
+          </details>
+          <div class="flex flex-wrap gap-2">
+            {% for feature in page.features %}
+            <button type="button"
+                    class="tsg-chip transition-all hover:bg-teal-500/15 hover:border-teal-400"
+                    data-remix-add="{{ feature.id }}"
+                    data-remix-name="{{ feature.name }}"
+                    data-remix-icon="{{ feature.icon | default: '🎯' }}"
+                    data-remix-source="{{ page.slug }}"
+                    data-remix-source-title="{{ page.title }}"
+                    data-remix-source-thumbnail="{{ page.cover_image | default: page.thumbnail | relative_url }}"
+                    data-remix-source-designer="{{ page.designer }}"
+                    data-remix-source-url="{{ page.url | relative_url }}"
+                    aria-pressed="false">
+              <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
+              <span class="font-medium">{{ feature.name }}</span>
+              <span data-remix-label class="text-xs opacity-70">+ Add</span>
+            </button>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+
         <!-- Screen Carousel (horizontal swipe) -->
         {% if page.screens.size > 0 or page.images.size > 0 %}
         <section class="space-y-4" aria-label="Design screens">
@@ -172,55 +221,6 @@ layout: default
         </div>
         {% endif %}
 
-        <!-- Remixable Features Section -->
-        {% if page.features and page.features.size > 0 %}
-        <section class="mt-8 rounded-2xl border-2 border-dashed border-teal-400/40 bg-teal-50/30 p-6
-                        shadow-[0_0_20px_rgba(20,184,166,0.1)]
-                        dark:border-teal-400/50 dark:bg-teal-950/15
-                        dark:shadow-[0_0_20px_rgba(20,184,166,0.15)]" aria-label="Features to remix">
-          <div class="flex items-center justify-between mb-1">
-            <div class="flex items-center gap-2">
-              <span class="text-2xl" aria-hidden="true">🎨</span>
-              <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
-            </div>
-            <a href="{{ '/remix/' | relative_url }}"
-               class="text-xs font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition">
-              View your Remix →
-            </a>
-          </div>
-          <p class="text-sm text-brand-stone dark:text-gray-400 mb-3">
-            Pick features you love from any design. They'll be saved to your Remix collection — your personal wishlist for the perfect app.
-          </p>
-          <details class="mb-4 text-xs text-brand-stone/70 dark:text-gray-500">
-            <summary class="cursor-pointer hover:text-brand-stone dark:hover:text-gray-400 transition inline-flex items-center gap-1">
-              What is Remix?
-            </summary>
-            <p class="mt-1 pl-0.5">
-              Your Remix is like a wishlist — collect features from any design, then share your ideal combo.
-            </p>
-          </details>
-          <div class="flex flex-wrap gap-2">
-            {% for feature in page.features %}
-            <button type="button"
-                    class="tsg-chip transition-all hover:bg-teal-500/15 hover:border-teal-400"
-                    data-remix-add="{{ feature.id }}"
-                    data-remix-name="{{ feature.name }}"
-                    data-remix-icon="{{ feature.icon | default: '🎯' }}"
-                    data-remix-source="{{ page.slug }}"
-                    data-remix-source-title="{{ page.title }}"
-                    data-remix-source-thumbnail="{{ page.cover_image | default: page.thumbnail | relative_url }}"
-                    data-remix-source-designer="{{ page.designer }}"
-                    data-remix-source-url="{{ page.url | relative_url }}"
-                    aria-pressed="false">
-              <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
-              <span class="font-medium">{{ feature.name }}</span>
-              <span data-remix-label class="text-xs opacity-70">+ Add</span>
-            </button>
-            {% endfor %}
-          </div>
-        </section>
-        {% endif %}
-
         <!-- Community Feedback Section -->
         <section class="mt-8 rounded-2xl border border-brand-sky/10 bg-white/80 p-6
                         dark:bg-gray-800/80 dark:border-gray-700"
@@ -283,8 +283,9 @@ layout: default
           {% include feedback-prompt.html submission_id=page.slug %}
         </div>
 
+        {% comment %}
         {% if page.features and page.features.size > 0 %}
-        <!-- Remix CTA -->
+        <!-- Remix CTA — commented out: remix section moved above design screens -->
         <div class="rounded-2xl border-2 border-teal-400/30 bg-teal-50/30 p-5
                     shadow-[0_0_15px_rgba(20,184,166,0.08)]
                     dark:border-teal-400/40 dark:bg-teal-950/20
@@ -306,6 +307,7 @@ layout: default
           </button>
         </div>
         {% endif %}
+        {% endcomment %}
 
         <!-- Links -->
         {% if page.links.demo_url %}
@@ -332,31 +334,75 @@ layout: default
         <!-- Share -->
         <div class="rounded-2xl border border-brand-sky/10 bg-white p-6
                     shadow-[0_4px_20px_rgba(34,37,78,0.08)]
-                    dark:border-gray-700 dark:bg-gray-800">
+                    dark:border-gray-700 dark:bg-gray-800"
+             data-share-widget
+             data-share-title="{{ page.title }}"
+             data-share-designer="{{ page.designer }}"
+             data-share-summary="{{ page.summary | truncate: 100 }}"
+             data-share-url="{{ page.url | absolute_url }}">
           <h3 class="mb-4 text-lg font-semibold text-brand-navy dark:text-gray-100">Share this design</h3>
-          <div class="flex gap-2">
-            <button onclick="navigator.clipboard.writeText(window.location.href); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy link', 2000)"
+          <!-- Native share button — uses Web Share API where available, clipboard fallback everywhere else -->
+          <button type="button" data-share-native
+                  class="mb-3 inline-flex w-full rounded-lg bg-brand-sky px-4 py-2.5
+                         text-sm font-semibold text-white transition
+                         hover:bg-brand-indigo
+                         dark:bg-brand-sky dark:hover:bg-brand-indigo
+                         items-center justify-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+            </svg>
+            Share
+          </button>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-share-copy
                     class="flex-1 rounded-lg border border-brand-sky/20 bg-white px-4 py-2
                            text-sm font-medium text-brand-navy transition
                            hover:border-brand-sky hover:bg-brand-sky/5
                            dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
-                           dark:hover:border-brand-sky dark:hover:bg-brand-sky/10">
-              Copy link
-            </button>
-            <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}%20-%20Check%20out%20this%20youth%20design!&url={{ page.url | absolute_url | url_encode }}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
-                      bg-white px-3 py-2 text-brand-navy transition
-                      hover:border-brand-sky hover:bg-brand-sky/5
-                      dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
-                      dark:hover:border-brand-sky dark:hover:bg-brand-sky/10"
-               title="Share on Twitter">
-              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                           dark:hover:border-brand-sky dark:hover:bg-brand-sky/10
+                           inline-flex items-center justify-center gap-1.5">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
               </svg>
-            </a>
+              <span>Copy link</span>
+            </button>
+            <button type="button" data-share-instagram
+                    class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
+                           bg-white px-3 py-2 text-brand-navy transition
+                           hover:border-pink-400 hover:bg-pink-50
+                           dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                           dark:hover:border-pink-400 dark:hover:bg-pink-900/20"
+                    title="Copy message &amp; open Instagram">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+            </button>
+            <button type="button" data-share-tiktok
+                    class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
+                           bg-white px-3 py-2 text-brand-navy transition
+                           hover:border-gray-800 hover:bg-gray-100
+                           dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                           dark:hover:border-gray-400 dark:hover:bg-gray-600"
+                    title="Copy message &amp; open TikTok">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.18 8.18 0 004.77 1.52V6.84a4.86 4.86 0 01-1-.15z"/>
+              </svg>
+            </button>
+            <button type="button" data-share-threads
+                    class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
+                           bg-white px-3 py-2 text-brand-navy transition
+                           hover:border-gray-800 hover:bg-gray-100
+                           dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
+                           dark:hover:border-gray-400 dark:hover:bg-gray-600"
+                    title="Share on Threads">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.187.408-2.26 1.33-3.017.88-.724 2.104-1.139 3.446-1.17 1.076-.024 2.055.138 2.91.467.023-.937-.093-1.748-.35-2.387-.345-.853-.99-1.307-1.865-1.312-.596 0-1.108.158-1.48.456-.336.268-.553.653-.636 1.13l-2.074-.283c.174-1.011.698-1.847 1.517-2.42.866-.606 1.978-.918 3.308-.93h.013c1.628.018 2.89.607 3.751 1.749.658.87 1.053 2.072 1.172 3.573l.009.134c1.047.596 1.88 1.416 2.414 2.382.855 1.544.96 4.147-1.168 6.237-1.838 1.806-4.062 2.58-7.206 2.604zM10.205 14.9c.012.22.14.6.574.87.484.302 1.16.452 1.9.415.994-.054 1.726-.395 2.244-1.04.39-.488.67-1.123.832-1.89-.64-.178-1.325-.27-2.04-.258-.96.022-1.747.238-2.278.627-.466.343-.63.76-.623 1.03z"/>
+              </svg>
+            </button>
           </div>
+          <p class="mt-2 text-[11px] text-brand-stone/60 dark:text-gray-500" data-share-hint hidden>
+            Message copied — paste it in your post!
+          </p>
         </div>
       </aside>
     </div>
@@ -459,4 +505,109 @@ document.addEventListener('click', function(e) {
     }
   }
 });
+
+// ── Share widget ────────────────────────────────────────────────
+(function() {
+  var widget = document.querySelector('[data-share-widget]');
+  if (!widget) return;
+
+  var title    = widget.dataset.shareTitle || '';
+  var designer = widget.dataset.shareDesigner || '';
+  var summary  = widget.dataset.shareSummary || '';
+  var pageUrl  = widget.dataset.shareUrl || window.location.href;
+
+  // Build contextual blurbs
+  // Short: for platforms with limits or clipboard copy (under 200 chars)
+  var shortBlurb = title + ' by ' + designer +
+    ' — a student-designed feature for the Third Spaces app. Check it out!\n' + pageUrl;
+
+  // Social: casual tone for social platforms
+  var socialBlurb = 'Check out ' + title + ' by ' + designer +
+    ' — a student-designed feature for the Third Spaces app!\n' + pageUrl;
+
+  // Native share payload (Web Share API)
+  var sharePayload = {
+    title: title,
+    text: title + ' by ' + designer + ' — a student-designed feature for the Third Spaces app.',
+    url: pageUrl
+  };
+
+  /** Flash a hint message below the share buttons */
+  function showHint(msg) {
+    var hint = widget.querySelector('[data-share-hint]');
+    if (!hint) return;
+    hint.textContent = msg;
+    hint.hidden = false;
+    clearTimeout(hint._timer);
+    hint._timer = setTimeout(function() { hint.hidden = true; }, 3000);
+  }
+
+  /** Copy text to clipboard and show feedback */
+  function copyAndFeedback(text, btn, originalLabel, hintMsg) {
+    navigator.clipboard.writeText(text).then(function() {
+      var label = btn.querySelector('span:last-child') || btn;
+      if (label.tagName) {
+        var orig = label.textContent;
+        label.textContent = 'Copied!';
+        setTimeout(function() { label.textContent = originalLabel || orig; }, 2000);
+      }
+      if (hintMsg) showHint(hintMsg);
+    }).catch(function() {
+      showHint('Could not copy — try manually.');
+    });
+  }
+
+  // Native share button — Web Share API where available, clipboard fallback otherwise
+  var nativeBtn = widget.querySelector('[data-share-native]');
+  if (nativeBtn) {
+    nativeBtn.addEventListener('click', function() {
+      if (navigator.share) {
+        navigator.share(sharePayload).catch(function(err) {
+          if (err.name !== 'AbortError') {
+            copyAndFeedback(shortBlurb, nativeBtn, 'Share', 'Copied! Ready to paste.');
+          }
+        });
+      } else {
+        copyAndFeedback(shortBlurb, nativeBtn, 'Share', 'Copied! Ready to paste.');
+      }
+    });
+  }
+
+  // Copy link (copies blurb + URL)
+  var copyBtn = widget.querySelector('[data-share-copy]');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+      copyAndFeedback(shortBlurb, copyBtn, 'Copy link', 'Copied! Ready to paste.');
+    });
+  }
+
+  // Instagram — copy blurb to clipboard, open app
+  var igBtn = widget.querySelector('[data-share-instagram]');
+  if (igBtn) {
+    igBtn.addEventListener('click', function() {
+      copyAndFeedback(socialBlurb, igBtn, null, 'Copied — paste it in your Instagram post!');
+      window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  // TikTok — copy blurb to clipboard, open app
+  var ttBtn = widget.querySelector('[data-share-tiktok]');
+  if (ttBtn) {
+    ttBtn.addEventListener('click', function() {
+      copyAndFeedback(socialBlurb, ttBtn, null, 'Copied — paste it in your TikTok!');
+      window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
+    });
+  }
+
+  // Threads — open intent URL with pre-populated text (max 500 chars)
+  var thBtn = widget.querySelector('[data-share-threads]');
+  if (thBtn) {
+    thBtn.addEventListener('click', function() {
+      var text = socialBlurb;
+      // Threads supports intent/post with text param
+      var url = 'https://www.threads.net/intent/post?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener,noreferrer,width=600,height=500');
+    });
+  }
+})();
 </script>

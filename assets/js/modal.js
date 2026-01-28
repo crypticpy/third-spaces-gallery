@@ -411,19 +411,26 @@
   };
 
   /**
-   * Handle share action
+   * Handle share action.
+   * Uses Web Share API on mobile; falls back to clipboard with blurb + URL.
    */
   const handleShare = async () => {
     if (!currentData) return;
 
+    const title = currentData.title || "Third Spaces design";
+    const designer = currentData.designer || "";
     const url = new URL(
       currentData.url || window.location.href,
       window.location.origin,
     ).toString();
 
+    const blurb = designer
+      ? `${title} by ${designer} — a student-designed feature for the Third Spaces app.`
+      : `${title} — a student-designed feature for the Third Spaces app.`;
+
     const payload = {
-      title: currentData.title || "Third Spaces design",
-      text: currentData.summary || "",
+      title,
+      text: blurb,
       url,
     };
 
@@ -432,8 +439,8 @@
         await navigator.share(payload);
         setToast("Shared!");
       } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(url);
-        setToast("Link copied!");
+        await navigator.clipboard.writeText(blurb + "\n" + url);
+        setToast("Copied! Ready to paste.");
       } else {
         setToast("Copy failed on this browser.");
       }

@@ -335,22 +335,32 @@ description: Build your dream app by collecting features from student designs
         <!-- Social sharing buttons -->
         <div class="mt-4 flex items-center justify-center gap-3">
           <button type="button"
+                  class="inline-flex items-center gap-1.5 rounded-full border border-pink-300
+                         bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400
+                         px-4 py-2 text-xs font-semibold text-white
+                         transition-all hover:shadow-md hover:brightness-110
+                         dark:border-pink-700"
+                  data-remix-share-instagram>
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            Instagram
+          </button>
+          <button type="button"
                   class="inline-flex items-center gap-1.5 rounded-full border border-gray-300
                          bg-gray-900 px-4 py-2 text-xs font-semibold text-white
                          transition-all hover:bg-black hover:shadow-md
                          dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  data-remix-share-x>
-            <span class="text-sm font-bold" aria-hidden="true">&#x1D54F;</span>
-            Share
+                  data-remix-share-tiktok>
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.18 8.18 0 004.77 1.52V6.84a4.86 4.86 0 01-1-.15z"/></svg>
+            TikTok
           </button>
           <button type="button"
-                  class="inline-flex items-center gap-1.5 rounded-full border border-green-300
-                         bg-green-600 px-4 py-2 text-xs font-semibold text-white
-                         transition-all hover:bg-green-700 hover:shadow-md
-                         dark:border-green-700 dark:bg-green-700 dark:hover:bg-green-600"
-                  data-remix-share-whatsapp>
-            <span class="text-sm" aria-hidden="true">💬</span>
-            WhatsApp
+                  class="inline-flex items-center gap-1.5 rounded-full border border-gray-300
+                         bg-gray-800 px-4 py-2 text-xs font-semibold text-white
+                         transition-all hover:bg-gray-900 hover:shadow-md
+                         dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  data-remix-share-threads>
+            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.187.408-2.26 1.33-3.017.88-.724 2.104-1.139 3.446-1.17 1.076-.024 2.055.138 2.91.467.023-.937-.093-1.748-.35-2.387-.345-.853-.99-1.307-1.865-1.312-.596 0-1.108.158-1.48.456-.336.268-.553.653-.636 1.13l-2.074-.283c.174-1.011.698-1.847 1.517-2.42.866-.606 1.978-.918 3.308-.93h.013c1.628.018 2.89.607 3.751 1.749.658.87 1.053 2.072 1.172 3.573l.009.134c1.047.596 1.88 1.416 2.414 2.382.855 1.544.96 4.147-1.168 6.237-1.838 1.806-4.062 2.58-7.206 2.604zM10.205 14.9c.012.22.14.6.574.87.484.302 1.16.452 1.9.415.994-.054 1.726-.395 2.244-1.04.39-.488.67-1.123.832-1.89-.64-.178-1.325-.27-2.04-.258-.96.022-1.747.238-2.278.627-.466.343-.63.76-.623 1.03z"/></svg>
+            Threads
           </button>
         </div>
 
@@ -1276,13 +1286,18 @@ document.addEventListener('DOMContentLoaded', function() {
     updateMyRemixesTabBadge();
   });
 
-  // ── Copy share URL ──────────────────────────────────────────────
+  // ── Copy share URL (with blurb) ─────────────────────────────────
   document.querySelector('[data-remix-copy-share]')?.addEventListener('click', function() {
     var url = document.querySelector('[data-remix-share-url]')?.textContent || '';
     if (!url) return;
 
+    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    var n = items.length;
+    var blurb = 'Check out my Third Spaces Remix — I collected ' + n +
+      ' feature' + (n !== 1 ? 's' : '') + ' from student designs:\n' + url;
+
     var btn = this;
-    navigator.clipboard.writeText(url).then(function() {
+    navigator.clipboard.writeText(blurb).then(function() {
       var originalText = btn.textContent;
       btn.textContent = 'Copied!';
       btn.classList.add('bg-brand-sea');
@@ -1304,24 +1319,50 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // ── Share on X/Twitter ──────────────────────────────────────────
-  document.querySelector('[data-remix-share-x]')?.addEventListener('click', function() {
+  /** Build a remix share blurb with feature count */
+  function getRemixBlurb() {
     var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
-    var featureCount = items.length;
+    var n = items.length;
     var url = getShareURL();
-    var text = 'I built my dream Third Spaces app by remixing ' + featureCount + ' features from student designs! \uD83C\uDFA8';
-    var shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
-    window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=400');
+    return 'I remixed ' + n + ' feature' + (n !== 1 ? 's' : '') +
+      ' from student designs for the Third Spaces app! Check it out:\n' + url;
+  }
+
+  /** Flash feedback on a share button */
+  function flashShareBtn(btn, feedbackText, origText) {
+    if (!btn) return;
+    var textNode = btn.lastChild;
+    if (textNode && textNode.nodeType === 3) {
+      textNode.textContent = ' ' + feedbackText;
+      setTimeout(function() { textNode.textContent = ' ' + origText; }, 2000);
+    }
+  }
+
+  // ── Share on Instagram (copy blurb + open) ────────────────────
+  document.querySelector('[data-remix-share-instagram]')?.addEventListener('click', function() {
+    var blurb = getRemixBlurb();
+    var btn = this;
+    navigator.clipboard.writeText(blurb).then(function() {
+      flashShareBtn(btn, 'Copied!', 'Instagram');
+    }).catch(function() {});
+    window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
   });
 
-  // ── Share on WhatsApp ───────────────────────────────────────────
-  document.querySelector('[data-remix-share-whatsapp]')?.addEventListener('click', function() {
-    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
-    var featureCount = items.length;
-    var url = getShareURL();
-    var text = 'Check out my Third Spaces Remix! I collected ' + featureCount + ' features from student designs: ' + url;
-    var shareUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
-    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+  // ── Share on TikTok (copy blurb + open) ───────────────────────
+  document.querySelector('[data-remix-share-tiktok]')?.addEventListener('click', function() {
+    var blurb = getRemixBlurb();
+    var btn = this;
+    navigator.clipboard.writeText(blurb).then(function() {
+      flashShareBtn(btn, 'Copied!', 'TikTok');
+    }).catch(function() {});
+    window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
+  });
+
+  // ── Share on Threads ──────────────────────────────────────────
+  document.querySelector('[data-remix-share-threads]')?.addEventListener('click', function() {
+    var blurb = getRemixBlurb();
+    var shareUrl = 'https://www.threads.net/intent/post?text=' + encodeURIComponent(blurb);
+    window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=500');
   });
 
   // ── Start Fresh from confirmation modal ─────────────────────────
