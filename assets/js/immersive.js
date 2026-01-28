@@ -1,8 +1,9 @@
 /**
  * Third Spaces Gallery - Immersive View Controller
  *
- * Full-screen swipe-based design viewer for mobile/tablet devices.
- * Not available on desktop — the experience is designed for touch interaction.
+ * Full-screen swipe-based design viewer.
+ * Primarily designed for mobile/tablet touch interaction.
+ * Supports mouse-drag navigation for desktop browsers.
  *
  * Navigation:
  * - Vertical swipe: Navigate between designs
@@ -834,6 +835,9 @@ class ImmersiveGallery {
 
     // Touch event handling for overscroll loop detection
     this.setupTouchLoopDetection();
+
+    // Mouse drag navigation for desktop browsers
+    this.setupMouseDragNavigation();
   }
 
   /**
@@ -1003,6 +1007,138 @@ class ImmersiveGallery {
           },
           { passive: true },
         );
+      });
+  }
+
+  /**
+   * Set up mouse drag navigation for desktop browsers.
+   * Translates mousedown→mousemove→mouseup into scroll gestures,
+   * enabling desktop users to click-and-drag through designs and screens.
+   *
+   * Uses a centralized drag controller with single global document listeners
+   * to avoid multiple per-element handlers and simplify cleanup.
+   */
+  setupMouseDragNavigation() {
+    if (!this.designStack) return;
+
+    // Only add mouse drag on devices that have a fine pointer (mouse/trackpad)
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const SWIPE_THRESHOLD = 50; // minimum px to count as a swipe
+    const VELOCITY_THRESHOLD = 0.3; // px/ms — fast swipe detection
+
+    // Axis-specific configuration to avoid repetitive if-else branches
+    const axisConfig = {
+      vertical: {
+        scrollProp: "scrollTop",
+        snap: "y mandatory",
+        navigate: (direction) => this.navigateDesign(direction),
+      },
+      horizontal: {
+        scrollProp: "scrollLeft",
+        snap: "x mandatory",
+        navigate: (direction) => this.navigateScreen(direction),
+      },
+    };
+
+    // Single drag state object (only one element can be dragged at a time)
+    let currentDrag = null;
+
+    /**
+     * Start dragging an element
+     */
+    const startDrag = (el, axis, e) => {
+      currentDrag = {
+        el,
+        axis,
+        config: axisConfig[axis],
+        startX: e.clientX,
+        startY: e.clientY,
+        startTime: Date.now(),
+        startScrollTop: el.scrollTop,
+        startScrollLeft: el.scrollLeft,
+      };
+      el.style.cursor = "grabbing";
+      el.style.userSelect = "none";
+      el.style.scrollSnapType = "none";
+      e.preventDefault();
+    };
+
+    /**
+     * Handle mouse movement during drag
+     */
+    const moveDrag = (e) => {
+      if (!currentDrag) return;
+      const { el, axis, startX, startY, startScrollTop, startScrollLeft } =
+        currentDrag;
+      const deltaX = startX - e.clientX;
+      const deltaY = startY - e.clientY;
+      if (axis === "vertical") {
+        el.scrollTop = startScrollTop + deltaY;
+      } else {
+        el.scrollLeft = startScrollLeft + deltaX;
+      }
+    };
+
+    /**
+     * End the drag and handle navigation/snap
+     */
+    const endDrag = (e) => {
+      if (!currentDrag) return;
+      const { el, axis, config, startX, startY, startTime } = currentDrag;
+      currentDrag = null;
+
+      el.style.cursor = "";
+      el.style.userSelect = "";
+      el.style.scrollSnapType = config.snap;
+
+      const deltaX = startX - e.clientX;
+      const deltaY = startY - e.clientY;
+      const delta = axis === "vertical" ? deltaY : deltaX;
+      const elapsed = Date.now() - startTime;
+      const velocity = Math.abs(delta) / Math.max(elapsed, 1);
+
+      if (Math.abs(delta) > SWIPE_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
+        const direction = delta > 0 ? 1 : -1;
+        config.navigate(direction);
+      } else {
+        // Force snap realignment by nudging the correct scroll property
+        el[config.scrollProp] = el[config.scrollProp];
+      }
+    };
+
+    // Single set of global document listeners
+    document.addEventListener("mousemove", moveDrag);
+    document.addEventListener("mouseup", endDrag);
+    document.addEventListener("mouseleave", (e) => {
+      if (e.target === document.documentElement) endDrag(e);
+    });
+
+    /**
+     * Attach mousedown handler to a scrollable element
+     */
+    const attachDrag = (el, axis) => {
+      el.addEventListener("mousedown", (e) => {
+        // Ignore right-click, or clicks on interactive elements
+        if (e.button !== 0) return;
+        if (
+          e.target.closest(
+            "button, a, input, select, textarea, [data-quicklook], [data-remix-add]",
+          )
+        )
+          return;
+        startDrag(el, axis, e);
+      });
+    };
+
+    // Attach vertical drag to the design stack
+    attachDrag(this.designStack, "vertical");
+
+    // Attach horizontal drag to each screen track
+    this.designStack
+      .querySelectorAll("[data-screen-track]")
+      .forEach((track) => {
+        attachDrag(track, "horizontal");
       });
   }
 

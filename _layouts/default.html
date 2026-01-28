@@ -78,16 +78,16 @@
             <span>Remix</span>
             <span class="remix-nav-badge hidden" data-remix-nav-count aria-live="polite">0</span>
           </a>
-          <!-- Theme Toggle -->
-          <button type="button"
-                  class="px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200
-                         text-brand-stone hover:text-brand-navy hover:bg-brand-sky/5
-                         dark:text-gray-300 dark:hover:text-white dark:hover:bg-white/10"
-                  data-theme-toggle
-                  aria-label="Toggle theme">
-            <span aria-hidden="true" data-theme-icon>⚡</span>
-            <span data-theme-label>Hype</span>
-          </button>
+          <!-- Theme Toggle (Slider Style) -->
+          <div class="theme-toggle-slider" data-theme-toggle role="switch" aria-label="Toggle theme mode" tabindex="0">
+            <span class="theme-toggle-option" data-theme-option="chill">
+              <span aria-hidden="true">🌿</span> Chill
+            </span>
+            <span class="theme-toggle-option" data-theme-option="hype">
+              <span aria-hidden="true">⚡</span> Hype
+            </span>
+            <span class="theme-toggle-indicator" aria-hidden="true"></span>
+          </div>
         </div>
 
         <!-- Mobile hamburger (visible on mobile only) -->
@@ -124,14 +124,16 @@
           <span aria-hidden="true">🎨</span> Remix
           <span class="remix-nav-badge hidden" data-remix-nav-count aria-live="polite">0</span>
         </a>
-        <button type="button"
-                class="px-4 py-3 rounded-xl text-base font-semibold text-left transition-colors
-                       text-brand-navy hover:bg-brand-sky/5 dark:text-gray-100 dark:hover:bg-white/10"
-                data-theme-toggle
-                aria-label="Toggle theme">
-          <span aria-hidden="true" data-theme-icon>⚡</span>
-          <span data-theme-label>Hype</span>
-        </button>
+        <!-- Theme Toggle (Slider Style) - Mobile -->
+        <div class="theme-toggle-slider mobile" data-theme-toggle role="switch" aria-label="Toggle theme mode" tabindex="0">
+          <span class="theme-toggle-option" data-theme-option="chill">
+            <span aria-hidden="true">🌿</span> Chill
+          </span>
+          <span class="theme-toggle-option" data-theme-option="hype">
+            <span aria-hidden="true">⚡</span> Hype
+          </span>
+          <span class="theme-toggle-indicator" aria-hidden="true"></span>
+        </div>
       </div>
     </div>
   </header>
@@ -237,6 +239,7 @@
   <script src="{{ '/assets/js/immersive.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/feedback-display.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/remix-community.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/lightbox.js' | relative_url }}" defer></script>
 
   {% unless page.url contains '/remix' %}
   <!-- Remix FAB (Floating Action Button) -->
@@ -283,6 +286,9 @@
                 dark:border-t-gray-800"></div>
   </div>
   {% endunless %}
+
+  <!-- Image Lightbox (Desktop only) -->
+  {% include image-lightbox.html %}
 
   <!-- Quick Look Modal -->
   {% include quick-look-modal.html %}

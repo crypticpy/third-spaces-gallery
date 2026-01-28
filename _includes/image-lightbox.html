@@ -1,0 +1,35 @@
+<!-- Image Lightbox Modal (Desktop only) -->
+<div id="image-lightbox"
+     class="image-lightbox"
+     role="dialog"
+     aria-modal="true"
+     aria-label="Image preview"
+     aria-hidden="true"
+     hidden>
+  <!-- Backdrop (click to close) -->
+  <div class="image-lightbox__backdrop" data-lightbox-close></div>
+
+  <!-- Content container -->
+  <div class="image-lightbox__container">
+    <!-- Close button -->
+    <button type="button"
+            class="image-lightbox__close"
+            data-lightbox-close
+            aria-label="Close image preview">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <!-- Image wrapper (handles aspect ratios) -->
+    <figure class="image-lightbox__figure">
+      <img src="" alt="" class="image-lightbox__image" data-lightbox-image>
+      <figcaption class="image-lightbox__caption" data-lightbox-caption hidden></figcaption>
+    </figure>
+
+    <!-- Navigation hint -->
+    <p class="image-lightbox__hint">
+      Press <kbd>Esc</kbd> or click outside to close
+    </p>
+  </div>
+</div>

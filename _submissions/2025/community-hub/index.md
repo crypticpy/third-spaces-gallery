@@ -6,7 +6,7 @@ year: 2025
 
 designer: "Aiden P., Maya L., & Chris W."
 school: "Kealing Middle School"
-grade: "Middle School (6-8)"
+grade: "MS"
 
 summary: "Turn Third Spaces into actual communities with group chats, event planning, and ways to meet other people who share your interests."
 feature_focus:

@@ -6,7 +6,7 @@ year: 2025
 
 designer: "Emma G. & Emilia B."
 school: "Rawson Saunders School"
-grade: "Elementary (K-5)"
+grade: "K-5"
 
 summary: "An app that helps kids find fun places near them based on their interests, with easy directions and ratings from other kids."
 feature_focus:
