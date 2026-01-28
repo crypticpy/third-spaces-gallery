@@ -1,8 +1,9 @@
 /**
  * Third Spaces Gallery - Immersive View Controller
  *
- * Full-screen swipe-based design viewer for mobile/tablet devices.
- * Not available on desktop — the experience is designed for touch interaction.
+ * Full-screen swipe-based design viewer.
+ * Primarily designed for mobile/tablet touch interaction.
+ * Supports mouse-drag navigation for desktop browsers.
  *
  * Navigation:
  * - Vertical swipe: Navigate between designs
@@ -834,6 +835,9 @@ class ImmersiveGallery {
 
     // Touch event handling for overscroll loop detection
     this.setupTouchLoopDetection();
+
+    // Mouse drag navigation for desktop browsers
+    this.setupMouseDragNavigation();
   }
 
   /**
@@ -1003,6 +1007,140 @@ class ImmersiveGallery {
           },
           { passive: true },
         );
+      });
+  }
+
+  /**
+   * Set up mouse drag navigation for desktop browsers.
+   * Translates mousedown→mousemove→mouseup into scroll gestures,
+   * enabling desktop users to click-and-drag through designs and screens.
+   */
+  setupMouseDragNavigation() {
+    if (!this.designStack) return;
+
+    // Only add mouse drag on devices that have a fine pointer (mouse/trackpad)
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const SWIPE_THRESHOLD = 50; // minimum px to count as a swipe
+    const VELOCITY_THRESHOLD = 0.3; // px/ms — fast swipe detection
+
+    /**
+     * Attach drag-to-scroll to a scrollable element.
+     * @param {HTMLElement} el - The scroll container
+     * @param {'vertical'|'horizontal'} axis - Scroll direction
+     */
+    const attachDrag = (el, axis) => {
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let startTime = 0;
+      let startScrollTop = 0;
+      let startScrollLeft = 0;
+
+      el.addEventListener("mousedown", (e) => {
+        // Ignore right-click, or clicks on interactive elements
+        if (e.button !== 0) return;
+        if (
+          e.target.closest(
+            "button, a, input, select, textarea, [data-quicklook], [data-remix-add]",
+          )
+        )
+          return;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startTime = Date.now();
+        startScrollTop = el.scrollTop;
+        startScrollLeft = el.scrollLeft;
+
+        // Prevent text selection while dragging
+        e.preventDefault();
+        el.style.cursor = "grabbing";
+        el.style.userSelect = "none";
+
+        // Temporarily disable scroll-snap during drag for smooth movement
+        el.style.scrollSnapType = "none";
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+
+        const deltaX = startX - e.clientX;
+        const deltaY = startY - e.clientY;
+
+        if (axis === "vertical") {
+          el.scrollTop = startScrollTop + deltaY;
+        } else {
+          el.scrollLeft = startScrollLeft + deltaX;
+        }
+      });
+
+      const endDrag = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        el.style.cursor = "";
+        el.style.userSelect = "";
+
+        const deltaX = startX - e.clientX;
+        const deltaY = startY - e.clientY;
+        const elapsed = Date.now() - startTime;
+
+        // Re-enable scroll-snap so it snaps to nearest item
+        if (axis === "vertical") {
+          el.style.scrollSnapType = "y mandatory";
+        } else {
+          el.style.scrollSnapType = "x mandatory";
+        }
+
+        const delta = axis === "vertical" ? deltaY : deltaX;
+        const velocity = Math.abs(delta) / Math.max(elapsed, 1);
+
+        // If the gesture was strong enough, navigate to next/prev
+        if (
+          Math.abs(delta) > SWIPE_THRESHOLD ||
+          velocity > VELOCITY_THRESHOLD
+        ) {
+          const direction = delta > 0 ? 1 : -1;
+
+          if (axis === "vertical") {
+            this.navigateDesign(direction);
+          } else {
+            this.navigateScreen(direction);
+          }
+        } else {
+          // Snap back to current position (re-enable snap handles it)
+          // Force a small scroll to trigger snap realignment
+          el.scrollTop = el.scrollTop;
+        }
+      };
+
+      document.addEventListener("mouseup", endDrag);
+
+      // Cancel drag if mouse leaves the window
+      document.addEventListener("mouseleave", (e) => {
+        if (isDragging && e.target === document.documentElement) {
+          isDragging = false;
+          el.style.cursor = "";
+          el.style.userSelect = "";
+          if (axis === "vertical") {
+            el.style.scrollSnapType = "y mandatory";
+          } else {
+            el.style.scrollSnapType = "x mandatory";
+          }
+        }
+      });
+    };
+
+    // Attach vertical drag to the design stack
+    attachDrag(this.designStack, "vertical");
+
+    // Attach horizontal drag to each screen track
+    this.designStack
+      .querySelectorAll("[data-screen-track]")
+      .forEach((track) => {
+        attachDrag(track, "horizontal");
       });
   }
 
