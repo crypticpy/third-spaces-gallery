@@ -544,6 +544,12 @@ document.addEventListener('click', function(e) {
 
   /** Copy text to clipboard and show feedback */
   function copyAndFeedback(text, btn, originalLabel, hintMsg) {
+    // Feature-detect clipboard API (not available in non-secure contexts or older browsers)
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      showHint('Copy not supported in this browser.');
+      return;
+    }
+
     navigator.clipboard.writeText(text).then(function() {
       var label = btn.querySelector('span:last-child') || btn;
       if (label.tagName) {

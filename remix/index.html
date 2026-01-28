@@ -1287,6 +1287,15 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ── Copy share URL (with blurb) ─────────────────────────────────
+  /** Feature-detect and copy to clipboard with fallback */
+  function safeCopyToClipboard(text, onSuccess, onFail) {
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      if (onFail) onFail();
+      return;
+    }
+    navigator.clipboard.writeText(text).then(onSuccess).catch(onFail);
+  }
+
   document.querySelector('[data-remix-copy-share]')?.addEventListener('click', function() {
     var url = document.querySelector('[data-remix-share-url]')?.textContent || '';
     if (!url) return;
@@ -1297,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ' feature' + (n !== 1 ? 's' : '') + ' from student designs:\n' + url;
 
     var btn = this;
-    navigator.clipboard.writeText(blurb).then(function() {
+    safeCopyToClipboard(blurb, function() {
       var originalText = btn.textContent;
       btn.textContent = 'Copied!';
       btn.classList.add('bg-brand-sea');
@@ -1307,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.classList.remove('bg-brand-sea');
         btn.classList.add('bg-brand-indigo');
       }, 2000);
-    }).catch(function() {
+    }, function() {
       var range = document.createRange();
       var shareEl = document.querySelector('[data-remix-share-url]');
       if (shareEl) {
@@ -1342,9 +1351,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('[data-remix-share-instagram]')?.addEventListener('click', function() {
     var blurb = getRemixBlurb();
     var btn = this;
-    navigator.clipboard.writeText(blurb).then(function() {
+    safeCopyToClipboard(blurb, function() {
       flashShareBtn(btn, 'Copied!', 'Instagram');
-    }).catch(function() {});
+    });
     window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
   });
 
@@ -1352,9 +1361,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('[data-remix-share-tiktok]')?.addEventListener('click', function() {
     var blurb = getRemixBlurb();
     var btn = this;
-    navigator.clipboard.writeText(blurb).then(function() {
+    safeCopyToClipboard(blurb, function() {
       flashShareBtn(btn, 'Copied!', 'TikTok');
-    }).catch(function() {});
+    });
     window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
   });
 

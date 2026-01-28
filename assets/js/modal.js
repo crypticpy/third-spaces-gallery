@@ -438,15 +438,15 @@
       if (navigator.share) {
         await navigator.share(payload);
         setToast("Shared!");
-      } else if (navigator.clipboard) {
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(blurb + "\n" + url);
         setToast("Copied! Ready to paste.");
       } else {
-        setToast("Copy failed on this browser.");
+        setToast("Copy not supported in this browser.");
       }
     } catch (err) {
       if (err.name !== "AbortError") {
-        setToast("Share canceled.");
+        setToast("Could not copy — try manually.");
       }
     }
   };

@@ -107,6 +107,10 @@
         const link = e.target.closest('[data-screen-track] a[target="_blank"]');
         if (!link) return;
 
+        // Allow default new-tab behavior for modifier or middle-clicks
+        if (e.button === 1 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+          return;
+
         // Get the image URL from the link href
         const imageUrl = link.getAttribute("href");
         if (!imageUrl) return;
