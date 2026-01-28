@@ -116,19 +116,14 @@
     </ul>
   </div>
 
-  <!-- Card Actions (Quick Look + Open) -->
-  <div class="flex gap-2 border-t border-brand-sky/10 p-3 dark:border-gray-700">
+  <!-- Card Actions -->
+  <div class="border-t border-brand-sky/10 p-3 dark:border-gray-700">
     <button type="button"
-            class="tsg-chip flex-1 justify-center hover:bg-brand-sky/20"
+            class="tsg-chip w-full justify-center hover:bg-brand-sky/20"
             data-quicklook>
       <span aria-hidden="true">👀</span>
       <span>Quick Look</span>
     </button>
-    <a class="tsg-chip justify-center hover:bg-brand-indigo/20"
-       href="{{ include.submission.url | relative_url }}">
-      <span aria-hidden="true">↗</span>
-      <span>Open</span>
-    </a>
   </div>
 
   <!-- JSON payload for Quick Look modal (zero network latency) -->
