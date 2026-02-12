@@ -29,7 +29,7 @@ module.exports = {
           purple: "#9F3CC9",
           // Neutrals
           cream: "#f7f6f5",
-          stone: "#636262",
+          stone: "#555555",
           cloud: "#C6C5C4",
         },
         surface: {

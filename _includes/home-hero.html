@@ -48,12 +48,11 @@
         <!-- Quick-entry collection chips -->
         <div class="mt-8">
           <p class="text-xs font-bold uppercase tracking-wider"
-             style="color: rgb(var(--fg) / 0.45);">Jump in</p>
+             style="color: rgb(var(--fg) / 0.7);">Jump in</p>
           <div class="mt-2 flex flex-wrap gap-2">
             <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=fresh">&#x1F195; Fresh drops</a>
             <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=youth">&#x2B50; Youth picks</a>
             <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=inclusive">&#x1F30D; Most inclusive</a>
-            <a class="tsg-chip text-xs" href="{{ '/designs/' | relative_url }}?collection=needs-love">&#x1FAF6; Needs love</a>
           </div>
         </div>
 
@@ -63,7 +62,7 @@
           <blockquote class="text-base leading-relaxed" style="color: rgb(var(--fg) / 0.9);" data-quote-text>
             {%- if first_quote_sub -%}&ldquo;{{ first_quote_sub.creator_note | truncate: 140 }}&rdquo;{%- endif -%}
           </blockquote>
-          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.55);" data-quote-attribution>
+          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.7);" data-quote-attribution>
             {%- if first_quote_sub -%}&mdash; {{ first_quote_sub.designer }}, <a href="{{ first_quote_sub.url | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">{{ first_quote_sub.title }}</a>{%- endif -%}
           </figcaption>
         </figure>
@@ -118,81 +117,51 @@
         })();
         </script>
 
-        <p class="mt-4 text-xs" style="color: rgb(var(--fg) / 0.4);">
+        <p class="mt-4 text-xs" style="color: rgb(var(--fg) / 0.65);">
           No login. Positive-only reactions. Clear your data anytime.
         </p>
       </div>
 
-      <!-- RIGHT: "Studio wall" phone deck -->
+      <!-- RIGHT: "Studio wall" phone deck — JS picks 3 random designs each load -->
       <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
         <div class="hero-phone-deck" data-hero-deck>
-          {%- assign hero_designs = "art-space,wave,infinity-mall" | split: "," -%}
-
-          {%- for slug in hero_designs -%}
-            {%- assign sub = site.submissions | where: "slug", slug | first -%}
-            {%- if sub -%}
-              {%- assign thumb_url = sub.thumbnail | relative_url -%}
-
-              {%- case slug -%}
-                {%- when "art-space" -%}
-                  {%- assign badge = "Most inclusive" -%}
-                  {%- assign badge_icon = "&#x1F30D;" -%}
-                {%- when "wave" -%}
-                  {%- assign badge = "Most creative" -%}
-                  {%- assign badge_icon = "&#x2728;" -%}
-                {%- else -%}
-                  {%- assign badge = "Most wanted" -%}
-                  {%- assign badge_icon = "&#x2764;&#xFE0F;" -%}
-              {%- endcase -%}
-
-              <article class="hero-phone" data-hero-phone data-pos="{{ forloop.index0 }}" data-design-card>
-                <button type="button"
-                        class="hero-phone-btn"
-                        data-quicklook
-                        aria-label="Quick look: {{ sub.title }} ({{ badge }})">
-                  <div class="relative">
-                    {% include phone-frame.html
-                      src=thumb_url
-                      alt=sub.title
-                      eager=forloop.first
-                    %}
-                    <!-- Badge sticker -->
-                    <span class="hero-phone-badge">
-                      <span aria-hidden="true">{{ badge_icon }}</span>
-                      {{ badge }}
-                    </span>
-                  </div>
-                </button>
-
-                <!-- Quick Look JSON payload -->
-                <script type="application/json" data-design-json>
-                {
-                  "title": {{ sub.title | jsonify }},
-                  "summary": {{ sub.summary | jsonify }},
-                  "designer": {{ sub.designer | jsonify }},
-                  "grade": {{ sub.grade | jsonify }},
-                  "feature_focus": {{ sub.feature_focus | jsonify }},
-                  "url": {{ sub.url | relative_url | jsonify }},
-                  "voteKey": {{ sub.slug | jsonify }},
-                  "votes": {
-                    "favorite": {{ sub.votes.favorite | default: 0 }},
-                    "innovative": {{ sub.votes.innovative | default: 0 }},
-                    "inclusive": {{ sub.votes.inclusive | default: 0 }}
-                  },
-                  "demo_url": {{ sub.links.demo_url | default: nil | jsonify }},
-                  "screens": [
-                    {%- for screen in sub.screens -%}
-                      { "src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: "" | jsonify }}, "caption": {{ screen.caption | default: "" | jsonify }} }{%- unless forloop.last -%},{%- endunless -%}
-                    {%- endfor -%}
-                  ]
-                }
-                </script>
-              </article>
-            {%- endif -%}
-          {%- endfor -%}
-
+          <!-- 3 placeholder phones, populated by hero-deck.js -->
+          <article class="hero-phone" data-hero-phone data-pos="0" data-design-card></article>
+          <article class="hero-phone" data-hero-phone data-pos="1" data-design-card></article>
+          <article class="hero-phone" data-hero-phone data-pos="2" data-design-card></article>
           <p class="hero-phone-hint">Swipe or tap a phone to preview</p>
         </div>
+
+        <!-- All submissions manifest for random hero picks -->
+        <script type="application/json" data-hero-manifest>
+        [
+          {%- for sub in site.submissions -%}
+            {%- assign thumb_url = sub.thumbnail | relative_url -%}
+            {
+              "title": {{ sub.title | jsonify }},
+              "summary": {{ sub.summary | jsonify }},
+              "designer": {{ sub.designer | jsonify }},
+              "grade": {{ sub.grade | jsonify }},
+              "feature_focus": {{ sub.feature_focus | jsonify }},
+              "url": {{ sub.url | relative_url | jsonify }},
+              "voteKey": {{ sub.slug | jsonify }},
+              "thumbnail": {{ thumb_url | jsonify }},
+              "thumbnailWebp": {{ thumb_url | replace: '.png', '.webp' | replace: '.jpeg', '.webp' | jsonify }},
+              "votes": {
+                "favorite": {{ sub.votes.favorite | default: 0 }},
+                "innovative": {{ sub.votes.innovative | default: 0 }},
+                "inclusive": {{ sub.votes.inclusive | default: 0 }}
+              },
+              "demo_url": {{ sub.links.demo_url | default: nil | jsonify }},
+              "screens": [
+                {%- for screen in sub.screens -%}
+                  { "src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: "" | jsonify }}, "caption": {{ screen.caption | default: "" | jsonify }} }{%- unless forloop.last -%},{%- endunless -%}
+                {%- endfor -%}
+              ]
+            }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+        </script>
       </div>
 
     </div>

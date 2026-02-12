@@ -46,7 +46,7 @@ First production release with full feature set: immersive gallery, remix engine,
 - **Theme System** — Chill/Hype toggle (light/dark mode) with Tailwind class strategy and CSS custom properties
 - **Quick Look Modal** — bottom sheet on mobile, centered modal on desktop; screen carousel with swipe + arrow keys; integrated voting
 - **Screen Carousel** — horizontal scroll snap on detail pages with dot indicators
-- **Collection Strip** — Netflix-style horizontal curated views (Fresh drops, Most inclusive, Youth picks, Needs love)
+- **Collection Strip** — Netflix-style horizontal curated views (Fresh drops, Most inclusive, Youth picks)
 - All 4 submissions updated with cover images, screen metadata, creator notes, and Remix features
 
 ### Voting System

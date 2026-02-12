@@ -333,6 +333,17 @@
     modal.classList.remove("hidden");
     document.body.classList.add("overflow-hidden");
 
+    // Ensure carousel starts at first screen now that modal is visible
+    requestAnimationFrame(function () {
+      track.scrollLeft = 0;
+    });
+
+    // Reset vote button states before hydrating new design
+    modal.querySelectorAll("[data-vote-btn]").forEach(function (btn) {
+      btn.classList.remove("is-voted");
+      btn.setAttribute("aria-pressed", "false");
+    });
+
     // Hydrate voting buttons if voting system is available
     if (window.TSGVoting && typeof window.TSGVoting.hydrate === "function") {
       window.TSGVoting.hydrate(modal);

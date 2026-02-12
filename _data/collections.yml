@@ -30,9 +30,3 @@
     - "2025/third-spaces-explorer"
     - "2025/build-a-brain"
     - "2025/atx-third-spaces"
-
-- id: needs-love
-  label: Needs love
-  icon: "🫶"
-  description: Great ideas that haven't gotten many votes yet.
-  sort: least_total

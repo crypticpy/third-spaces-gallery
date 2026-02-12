@@ -27,6 +27,7 @@
 <button type="button"
         class="vote-btn group flex w-full items-center justify-between
                rounded-xl border border-brand-sky/15 bg-white
+               dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700
                font-semibold text-brand-navy
                transition-all duration-200
                hover:-translate-y-0.5 hover:shadow-md
@@ -35,12 +36,15 @@
                {% if cat_color == 'vote-favorite' %}
                hover:border-pink-300 hover:bg-pink-50/50
                aria-pressed:bg-pink-100 aria-pressed:border-pink-300
+               dark:aria-pressed:bg-pink-900/30 dark:aria-pressed:border-pink-700
                {% elsif cat_color == 'brand-gold' %}
                hover:border-amber-300 hover:bg-amber-50/50
                aria-pressed:bg-amber-100 aria-pressed:border-amber-300
+               dark:aria-pressed:bg-amber-900/30 dark:aria-pressed:border-amber-700
                {% elsif cat_color == 'brand-sea' %}
                hover:border-emerald-300 hover:bg-emerald-50/50
                aria-pressed:bg-emerald-100 aria-pressed:border-emerald-300
+               dark:aria-pressed:bg-emerald-900/30 dark:aria-pressed:border-emerald-700
                {% endif %}
                aria-pressed:cursor-default aria-pressed:hover:translate-y-0"
         data-vote-btn
@@ -55,10 +59,13 @@
                  group-hover:scale-110
                  {% if cat_color == 'vote-favorite' %}
                  bg-pink-100 group-aria-pressed:bg-pink-200
+                 dark:bg-pink-900/30 dark:group-aria-pressed:bg-pink-800/40
                  {% elsif cat_color == 'brand-gold' %}
                  bg-amber-100 group-aria-pressed:bg-amber-200
+                 dark:bg-amber-900/30 dark:group-aria-pressed:bg-amber-800/40
                  {% elsif cat_color == 'brand-sea' %}
                  bg-emerald-100 group-aria-pressed:bg-emerald-200
+                 dark:bg-emerald-900/30 dark:group-aria-pressed:bg-emerald-800/40
                  {% endif %}"
           data-vote-emoji
           aria-hidden="true">
@@ -73,10 +80,13 @@
                transition-all duration-200
                {% if cat_color == 'vote-favorite' %}
                bg-pink-100/50 group-aria-pressed:bg-pink-200 group-aria-pressed:text-pink-700
+               dark:bg-pink-900/20 dark:group-aria-pressed:bg-pink-800/40 dark:group-aria-pressed:text-pink-300
                {% elsif cat_color == 'brand-gold' %}
                bg-amber-100/50 group-aria-pressed:bg-amber-200 group-aria-pressed:text-amber-700
+               dark:bg-amber-900/20 dark:group-aria-pressed:bg-amber-800/40 dark:group-aria-pressed:text-amber-300
                {% elsif cat_color == 'brand-sea' %}
                bg-emerald-100/50 group-aria-pressed:bg-emerald-200 group-aria-pressed:text-emerald-700
+               dark:bg-emerald-900/20 dark:group-aria-pressed:bg-emerald-800/40 dark:group-aria-pressed:text-emerald-300
                {% endif %}"
         data-vote-count
         aria-label="{{ include.count | default: 0 }} votes">

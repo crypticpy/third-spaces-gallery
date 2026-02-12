@@ -183,12 +183,6 @@ class GalleryFilters {
             parseInt(b.dataset.submissionVotesInclusive, 10) || 0;
           return bInclusive - aInclusive;
         }
-        case "least_total": {
-          // Sort by fewest total votes first (needs love)
-          const aTotal = this.getTotalVotes(a);
-          const bTotal = this.getTotalVotes(b);
-          return aTotal - bTotal;
-        }
         case "recent":
         default: {
           const aDate = new Date(a.dataset.submissionDate || 0);
