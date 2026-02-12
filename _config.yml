@@ -4,8 +4,8 @@
 title: "Third Spaces Gallery"
 description: "Youth-designed features for Austin's Third Spaces app"
 tagline: "Designs by Austin youth, voted on by you"
-url: "" # Set to your GitHub Pages URL
-baseurl: "/third-spaces-gallery"
+url: "https://createtocode.studio"
+baseurl: ""
 
 # Build settings
 markdown: kramdown
