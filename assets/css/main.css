@@ -686,8 +686,8 @@
 /* Hero phone deck — 3 overlapping phones */
 .hero-phone-deck {
   position: relative;
-  height: 400px;
-  padding-top: 1rem;
+  height: 420px;
+  padding-top: 2rem;
   touch-action: pan-y; /* JS handles horizontal swipes */
 }
 
