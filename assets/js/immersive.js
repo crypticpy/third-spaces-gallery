@@ -141,7 +141,7 @@ class ImmersiveGallery {
    */
   init() {
     if (!this.container) {
-      console.warn("[ImmersiveGallery] Container not found");
+      // Container only exists on gallery page — silent return
       return;
     }
 

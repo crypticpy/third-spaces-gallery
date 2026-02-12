@@ -686,19 +686,20 @@
 /* Hero phone deck — 3 overlapping phones */
 .hero-phone-deck {
   position: relative;
-  height: 380px;
+  height: 400px;
+  padding-top: 1rem;
   touch-action: pan-y; /* JS handles horizontal swipes */
 }
 
 @media (min-width: 640px) {
   .hero-phone-deck {
-    height: 480px;
+    height: 500px;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-phone-deck {
-    height: 540px;
+    height: 560px;
   }
 }
 

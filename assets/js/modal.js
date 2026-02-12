@@ -126,7 +126,7 @@
 
     used.forEach((screen, idx) => {
       const fig = document.createElement("figure");
-      fig.className = "snap-start shrink-0 w-[85%] sm:w-full";
+      fig.className = "snap-start shrink-0 w-full";
 
       // Frame container
       const frame = document.createElement("div");
@@ -139,7 +139,8 @@
       img.alt = screen.alt || "";
       img.decoding = "async";
       img.loading = idx === 0 ? "eager" : "lazy";
-      img.className = "w-full object-contain";
+      img.className = "w-full h-auto object-contain";
+      img.style.maxHeight = "50vh";
 
       // Handle image load errors gracefully
       img.addEventListener("error", () => {
