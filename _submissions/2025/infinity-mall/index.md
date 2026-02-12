@@ -80,12 +80,12 @@ votes:
 created_at: 2025-02-12
 ---
 
-Imagine a place where every kid belongs -- a massive, welcoming hub packed with clubs, activities, and safe spaces for every age and interest. That is Infinity Mall, dreamed up by Layla and Stella, two 6th graders from Austin who wanted to solve a real problem: helping families (especially single parents) find trustworthy places where kids can have fun while parents know exactly where they are.
+Infinity Mall is a big, fun hub with clubs, activities, and safe spaces for every age and interest. Layla and Stella, two 6th graders from Austin, came up with it because they wanted to help families — especially single parents — find places where kids can have fun and parents always know where they are.
 
 ## How It Works
 
-Infinity Mall centers on a smart wristband system that makes safety feel effortless. When kids arrive, they scan their wristband to check into a club -- whether it is the workout gym, cooking club, dance floor, movie theater, or an obstacle-course playroom for high-energy moments. The instant a kid checks in, their parent or guardian gets a notification with the club name, location, and estimated pick-up time. Activities are age-gated so younger kids see only what is right for them, and security guards verify IDs at the mall entrance. Everything is designed so families can trust the space completely.
+The whole thing runs on a wristband system. When you get to the mall, you scan your wristband to check into a club — the workout gym, cooking club, dance floor, movie theater, or an obstacle-course playroom for when you have a lot of energy. As soon as you check in, your parent or guardian gets a notification with the club name, where it is, and when to pick you up. Activities are sorted by age so younger kids only see what's right for them, and security guards check IDs at the entrance.
 
-## Why It Matters
+## Why They Made It
 
-Layla and Stella built Infinity Mall with heart. They thought about kids going through tough times -- divorce, loss, loneliness -- and wanted to create a place where those kids could escape, explore new interests, and feel like they belong. With visual-first icons for every activity, wheelchair accessibility baked in, and a search experience that filters by cost, distance, and sensory needs, Infinity Mall is not just fun -- it is designed for everyone. As Layla put it during their presentation: they want every kid to know "there's somewhere safe to go, somewhere fun, somewhere you belong."
+Layla and Stella were thinking about kids going through tough times — divorce, losing someone, feeling lonely — and wanted a place where those kids could go to have fun and feel like they belong. The app has picture icons for every activity, wheelchair accessibility built in, and filters for cost, distance, and sensory needs. As Layla said: they want every kid to know "there's somewhere safe to go, somewhere fun, somewhere you belong."

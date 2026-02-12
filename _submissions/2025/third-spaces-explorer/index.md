@@ -81,39 +81,35 @@ created_at: 2025-01-15
 github_issue: 1
 ---
 
-Emma and Emilia both love Juiceland, which is close to their school and walkable. They wished an app existed that showed them places like it and helped them prepare before going. As kids with dyslexia themselves, they designed EPGo (Explore, Pick, GO!) to solve real accessibility problems they face every day: colorblindness, difficulty reading text-heavy menus, and anxiety about new places when you don't know what to expect.
+Emma and Emilia both love Juiceland — it's close to their school and they can walk there. They wished there was an app that showed them places like it and helped them know what to expect before going. Since they both have dyslexia, they designed EPGo (Explore, Pick, GO!) around the stuff that makes things harder for them: colorblindness, menus with too much text, and that nervous feeling when you don't know what a new place will be like.
 
 ## The Problem
 
-Kids want to hang out at cool places after school but don't know what's nearby, how to get there, what to expect when they arrive, and whether the place is accessible for their needs. Sometimes there are amazing programs happening at the library or rec center, but nobody knows about them.
+Kids want to hang out at cool places after school but don't know what's nearby, how to get there, or what to expect. Sometimes there are awesome things happening at the library or rec center, but nobody tells you about them.
 
-## Our Solution — EPGo
+## What EPGo Does
 
-Our app lets you:
+- **Pick your colors** — colorblind kids can choose the color palette that works best for their eyes
+- **Pictures instead of text** — visual icons for everything so you don't have to read a bunch of words to figure things out
+- **See what's popular** — preview popular items with ingredients, so you know what to order before you even get there
+- **Plan your route** — get bus or walking directions from school to wherever you're going
+- **Talk instead of type** — voice-to-text so you don't have to worry about spelling
+- **Listen instead of read** — the app can read everything out loud
 
-- **Pick customizable colors** so colorblind users can choose the palette that works best for them
-- **See visual icons for everything** instead of text-heavy menus — pictures help you understand quickly without having to "search and do all the investigation"
-- **Preview popular items with ingredients** so you know what to order before you even arrive
-- **Plan your bus route** or walking directions from school to any third space
-- **Use voice-to-text** so kids with dyslexia don't have to worry about spelling
-- **Listen with text-to-speech** so the app can read everything aloud
+## Accessibility Comes First
 
-## Why Accessibility Is the Design
+Emma and Emilia didn't add accessibility on top of a regular app — they built the whole thing around it. Every feature is there because it helps kids with dyslexia, colorblindness, or anxiety about new places. Like Emma said: "It helps kids have their ideas down."
 
-This isn't an app with accessibility features added on. Accessibility IS the design. Emma said it best: "It helps kids have their ideas down." Every feature — customizable colors, visual icons, voice-to-text, popular items preview — serves kids with dyslexia, colorblindness, and anxiety about new places.
+## Features Up Close
 
-If you removed the accessibility features, the app loses its soul. It becomes just another generic third-spaces finder. Emma and Emilia designed this from their lived experience, and that's what makes it different.
+1. **Customizable Color Themes**: You can switch between color options including high contrast, deuteranopia-friendly, and protanopia-friendly. Emma said: "Sometimes when people are colorblind they can't really see colors as well. It lets them pick what color helps them best."
 
-## Key Features
+2. **Visual Icons**: Every place and thing has a picture so you can understand it fast without reading a ton of text.
 
-1. **Customizable Color Themes**: Users can toggle between color palettes including high contrast, deuteranopia-friendly, and protanopia-friendly modes. Emma explained: "Sometimes when people are colorblind they can't really see colors as well. It lets them pick what color helps them best."
+3. **Popular Items Preview**: For a place like Juiceland, you can see the most popular smoothies with photos and ingredients — like the Wunder Shwzen (Peanut Butter, Banana, Spinach, Almond Milk, Hemp Protein). It helps you know what to expect so you're not anxious when you get there.
 
-2. **Visual Icons for Everything**: Instead of text-heavy menus, every place and amenity has a clear illustrated icon. "It helps them see what it is quickly" without needing to read walls of text.
+4. **Bus Route Planning**: Not everyone has a car. Emma and Emilia asked, "What if someone wanted to take a bus?" So the app shows you exactly how to get there.
 
-3. **Popular Items Preview**: When viewing a place like Juiceland, see the most popular items with photos and ingredients — like the Wunder Shwzen (Peanut Butter, Banana, Spinach, Almond Milk, Hemp Protein). This helps neurodiverse kids prepare mentally and reduces anxiety about new places.
+5. **Voice-to-Text & Read Aloud**: Emilia said: "Sometimes I don't know how to spell a word so that helps." And for reading: "Maybe if kids have dyslexia like we do, then it could read to them."
 
-4. **Bus Route Planning**: Emma and Emilia asked, "What if someone wanted to take a bus?" Not all kids have car access, and knowing the exact route empowers independence.
-
-5. **Voice-to-Text & Read Aloud**: Emilia shared: "Sometimes I don't know how to spell a word so that helps." And for reading, "Maybe if kids have dyslexia like we do, then it could read to them."
-
-6. **Kid Reviews**: See ratings from other kids your age, not just adults, so you know if a place is actually fun.
+6. **Kid Reviews**: Ratings from other kids, not just adults, so you actually know if a place is fun.

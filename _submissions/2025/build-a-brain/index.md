@@ -75,12 +75,12 @@ votes:
 created_at: 2025-02-12
 ---
 
-Build a Brain is an app that flips the script on how kids with disabilities find places to hang out. Instead of making kids fit into generic spaces, it connects them to activity centers specifically designed for how their brains work. Whether you have ADHD, dyslexia, autism, Down syndrome, or dysgraphia, this app finds your people and your places.
+Build a Brain helps kids with disabilities find places to hang out that are actually made for them. Instead of trying to fit into spaces that weren't built with you in mind, this app connects you to activity centers designed for how your brain works. Whether you have ADHD, dyslexia, autism, Down syndrome, or dysgraphia, it helps you find your people and your places.
 
 ## How It Works
 
-The app starts by asking what kind of brain you have, then curates everything around that. ADHD rooms have high-energy activities with space to run around and burn off steam. Dyslexia rooms tap into imagination with drawing stations and art. Each disability gets activities that treat your brain as a superpower, not a problem. You can search by brain type, activity style, and accessibility needs, or explore an interactive map to see what is close by -- including bus routes for kids who do not have a ride.
+The app asks what kind of brain you have, then shows you stuff based on that. ADHD rooms have high-energy activities with space to run around and burn off steam. Dyslexia rooms have drawing stations and art projects. Each brain type gets activities that match how you think and learn. You can search by brain type, activity style, and what you need for accessibility, or check out the map to see what's nearby — including bus routes if you don't have a ride.
 
-## More Than Just a Hangout
+## Learn About Your Brain
 
-What makes Build a Brain truly special is the educational layer. Every activity center includes a digital library that teaches kids about their disability -- what it means, what strengths come with it, and famous people who share it. There is even an audiobook mode for kids who struggle with reading. Fuller and Major wanted kids to go home excited, telling their parents "I just learned something awesome about my brain!" That blend of fun, community, and empowerment is what sets this design apart.
+Every activity center has a digital library where you can learn about your disability — what it means, what's cool about it, and famous people who have the same thing. There's an audiobook mode too, so you don't have to read everything. Fuller and Major wanted kids to go home and tell their parents, "I just learned something awesome about my brain!" It's a hangout spot and a place to learn at the same time.

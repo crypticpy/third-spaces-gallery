@@ -78,12 +78,12 @@ votes:
 created_at: 2025-02-12
 ---
 
-ATX Third Spaces is a thoughtfully designed mobile app that helps Austin teens ages 12-18 discover free, safe third spaces across the city. What sets it apart is its wellness-centered approach: instead of just listing places, the app wraps discovery in a calming, supportive experience. From a "Map of Calm" that highlights serene destinations like the Umlauf Sculpture Garden and Blanton Museum of Art, to a built-in Wellness Check-In that asks "How are you feeling today?" before you even start exploring, every screen is designed to make teens feel grounded and welcome.
+ATX Third Spaces helps Austin teens ages 12-18 find free, safe places to hang out across the city. But it's not just a list of places — it also checks in on how you're feeling. There's a "Map of Calm" showing chill spots like the Umlauf Sculpture Garden and Blanton Museum of Art, and before you start exploring, the app asks "How are you feeling today?" so it can suggest places that match your mood.
 
-## Accessibility as the Foundation
+## Built for Accessibility
 
-Nischal's core design philosophy is that accessibility should never be an afterthought. The app features dedicated filters for wheelchair-accessible spaces, sensory-friendly environments, quiet study spots, and outdoor areas. Category icons for Art & Culture, Parks & Nature, Quiet Study, Mindfulness, and Community Centers let users quickly zero in on spaces that match their needs and mood. Every space listing is designed to answer the question teens actually care about: "Will I feel comfortable when I get there?"
+Nischal wanted accessibility to be part of the app from the start, not something tacked on later. You can filter for wheelchair-accessible spaces, sensory-friendly spots, quiet study areas, and outdoor hangouts. Categories like Art & Culture, Parks & Nature, Quiet Study, Mindfulness, and Community Centers help you find what fits. The big question it tries to answer: "Will I feel comfortable when I get there?"
 
-## Wellness Meets Discovery
+## Mood Check-Ins and Calm Streaks
 
-One of the most original features is the Wellness Check-In, where users can log their mood — Calm, Happy, Thoughtful, Stressed, or Tired — and receive a daily mindfulness prompt before heading out. A weekly tracker and "Calm Streaks" on the profile page turn self-care into a gentle, rewarding habit. Combined with saved places, walking directions via the "Serene Path" toggle, and a soft watercolor visual style that feels warm rather than clinical, ATX Third Spaces reimagines what a discovery app can be when it puts the whole person — not just the destination — at the center.
+One of the coolest features is the Wellness Check-In. You pick your mood — Calm, Happy, Thoughtful, Stressed, or Tired — and get a little mindfulness tip before you head out. There's a weekly tracker and "Calm Streaks" on your profile, kind of like a streak counter for taking care of yourself. You can also save favorite places, get walking directions with the "Serene Path" option, and everything has a soft, watercolor style that just feels nice to look at.

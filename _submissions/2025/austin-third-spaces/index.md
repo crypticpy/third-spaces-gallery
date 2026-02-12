@@ -79,12 +79,12 @@ votes:
 created_at: 2025-02-12
 ---
 
-What if finding your next favorite hangout in Austin was as easy as telling an app what you're into? Austin Third Spaces is built around a powerful idea: **design WITH kids instead of FOR kids.** Eric created a comprehensive youth discovery platform where every feature circles back to one question — _How does this help a kid feel like they have a place in Austin and a community of peers who get them?_
+What if finding your next favorite hangout in Austin was as easy as telling an app what you're into? That's what Eric was going for with Austin Third Spaces. He wanted an app that's **designed WITH kids instead of FOR kids** — where every feature helps you find your place in Austin and connect with people who get you.
 
-## A Belonging Engine, Not Just an App
+## What It Does
 
-At its heart, Austin Third Spaces is powered by six standout features. **Go Together** lets you see other youth (ages 10-17) who are planning to visit the same place, so you never have to show up alone. **Interest-Based Discovery** helps you find spaces that match your passions — from art and creativity to gaming, music, sports, and quiet chill zones. **Youth Reviews** give you honest, moderated peer feedback with emoji-based ratings so you know what to expect before you arrive. And **Transportation Made Simple** lays out walking, biking, bus, and driving routes in a clear, youth-friendly way that makes getting there feel doable.
+Austin Third Spaces has some cool features. **Go Together** shows you other youth (ages 10-17) who are planning to visit the same place, so you don't have to show up alone. **Interest-Based Discovery** helps you find spaces that match what you're into — art, gaming, music, sports, or just quiet chill zones. **Youth Reviews** give you honest peer feedback with emoji ratings so you know what to expect. And **Transportation Made Simple** shows walking, biking, bus, and driving routes in a way that actually makes sense.
 
-## Accessibility Is the Design, Not an Afterthought
+## Accessibility Built In
 
-What truly sets this design apart is how it treats inclusion. Accessibility and inclusivity filters are front-and-center search options — not buried in settings. You can filter for wheelchair-accessible, sensory-friendly, LGBTQ+-affirming, multilingual, and free spaces right from the explore screen. Eric's vision ensures that marginalized youth — disabled, trans, immigrant, low-income — see themselves reflected and welcomed. Combined with city challenges, badge rewards, and a check-in system that feels like stamping a passport, Austin Third Spaces turns exploring your city into something genuinely fun and community-building.
+Eric made sure accessibility filters aren't buried in some settings menu — they're right on the explore screen. You can filter for wheelchair-accessible, sensory-friendly, LGBTQ+-affirming, multilingual, and free spaces. He wanted kids who are disabled, trans, immigrant, or low-income to see themselves in the app and feel welcome. There are also city challenges, badge rewards, and a check-in system that works like stamping a passport — so exploring Austin is actually fun.
