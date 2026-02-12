@@ -901,7 +901,7 @@ title: Your Data
 
     var url = getEdgeFunctionUrl();
     if (!url) {
-      showConcernError('The form service is not configured. Please email ridp@austintexas.gov instead.');
+      showConcernError('The form service is not configured. Please email CreatetoCode@austintexas.gov instead.');
       return;
     }
 
@@ -955,7 +955,7 @@ title: Your Data
       console.error('[ConcernForm] Submission error:', err);
       concernSubmitBtn.disabled = false;
       concernSubmitBtn.innerHTML = originalHTML;
-      showConcernError('Could not connect to the server. Please try again or email ridp@austintexas.gov.');
+      showConcernError('Could not connect to the server. Please try again or email CreatetoCode@austintexas.gov.');
     });
   });
 

@@ -73,9 +73,9 @@ links:
   demo_url: "https://www.figma.com/example-link"
 
 votes:
-  favorite: 47
-  innovative: 32
-  inclusive: 28
+  favorite: 0
+  innovative: 0
+  inclusive: 0
 
 created_at: 2025-01-15
 github_issue: 1
