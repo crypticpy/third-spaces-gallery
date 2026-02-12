@@ -24,8 +24,12 @@
   icon: "⭐"
   description: Hand-picked by youth curators.
   ids:
-    - "2025/community-hub"
-    - "2025/access-all"
+    - "2025/art-space"
+    - "2025/wave"
+    - "2025/infinity-mall"
+    - "2025/third-spaces-explorer"
+    - "2025/build-a-brain"
+    - "2025/atx-third-spaces"
 
 - id: needs-love
   label: Needs love

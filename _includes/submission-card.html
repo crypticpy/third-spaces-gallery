@@ -32,12 +32,15 @@
      class="block relative aspect-[16/10] overflow-hidden">
     {% assign cover_img = include.submission.cover_image | default: include.submission.thumbnail %}
     {% if cover_img %}
-    <img class="h-full w-full object-cover transition-transform duration-500
-                group-hover:scale-105"
-         src="{{ cover_img | relative_url }}"
-         alt="{{ include.submission.thumbnail_alt | default: include.submission.title }}"
-         loading="lazy"
-         decoding="async">
+    <picture>
+      <source srcset="{{ cover_img | replace: '.png', '.webp' | replace: '.jpeg', '.webp' | relative_url }}" type="image/webp">
+      <img class="h-full w-full object-cover transition-transform duration-500
+                  group-hover:scale-105"
+           src="{{ cover_img | relative_url }}"
+           alt="{{ include.submission.thumbnail_alt | default: include.submission.title }}"
+           loading="lazy"
+           decoding="async">
+    </picture>
     {% else %}
     <div class="h-full w-full bg-gradient-to-br from-brand-sky/20 to-brand-indigo/20
                 flex items-center justify-center dark:from-brand-sky/10 dark:to-brand-indigo/10">
@@ -58,7 +61,7 @@
       </span>
       {% if include.submission.grade %}
       <span class="rounded-full bg-brand-gold/90 px-2 py-0.5
-                   text-[10px] font-bold uppercase tracking-wide text-brand-navy
+                   text-[11px] font-bold uppercase tracking-wide text-brand-navy
                    shadow-sm">
         {{ include.submission.grade | split: ' ' | first }}
       </span>
@@ -88,7 +91,7 @@
         {% assign feature_data = site.feature_categories | where: "id", feature | first %}
         <span class="inline-flex items-center gap-1 rounded-full
                      bg-brand-sky/10 px-2 py-0.5
-                     text-[10px] font-semibold uppercase tracking-wide text-brand-indigo
+                     text-[11px] font-semibold uppercase tracking-wide text-brand-indigo
                      dark:bg-brand-sky/20 dark:text-brand-sky">
           {{ feature_data.label | default: feature }}
         </span>

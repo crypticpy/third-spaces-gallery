@@ -57,15 +57,66 @@
           </div>
         </div>
 
-        <!-- Authentic youth voice — glass card -->
-        <figure class="glass-card mt-8 p-5">
-          <blockquote class="text-base leading-relaxed" style="color: rgb(var(--fg) / 0.9);">
-            &ldquo;Sometimes I just want to go somewhere that matches my energy.&rdquo;
+        <!-- Authentic youth voice — rotating student quotes -->
+        {%- assign first_quote_sub = site.submissions | where_exp: "s", "s.creator_note != nil" | first -%}
+        <figure class="glass-card mt-8 p-5" data-quote-rotator>
+          <blockquote class="text-base leading-relaxed" style="color: rgb(var(--fg) / 0.9);" data-quote-text>
+            {%- if first_quote_sub -%}&ldquo;{{ first_quote_sub.creator_note | truncate: 140 }}&rdquo;{%- endif -%}
           </blockquote>
-          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.55);">
-            &mdash; from <a href="{{ '/designs/2025/vibe-finder/' | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">Vibe Finder</a>
+          <figcaption class="mt-2 text-sm" style="color: rgb(var(--fg) / 0.55);" data-quote-attribution>
+            {%- if first_quote_sub -%}&mdash; {{ first_quote_sub.designer }}, <a href="{{ first_quote_sub.url | relative_url }}" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">{{ first_quote_sub.title }}</a>{%- endif -%}
           </figcaption>
         </figure>
+        <script type="application/json" data-student-quotes>
+        [
+          {%- for sub in site.submissions -%}
+            {%- if sub.creator_note -%}
+              {
+                "quote": {{ sub.creator_note | jsonify }},
+                "designer": {{ sub.designer | jsonify }},
+                "title": {{ sub.title | jsonify }},
+                "url": {{ sub.url | relative_url | jsonify }}
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+        </script>
+        <script>
+        (function() {
+          var el = document.querySelector('[data-student-quotes]');
+          if (!el) return;
+          var quotes;
+          try { quotes = JSON.parse(el.textContent); } catch(e) { return; }
+          if (!quotes.length) return;
+
+          var textEl = document.querySelector('[data-quote-text]');
+          var attrEl = document.querySelector('[data-quote-attribution]');
+          if (!textEl || !attrEl) return;
+
+          // Fisher-Yates shuffle
+          for (var i = quotes.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = quotes[i]; quotes[i] = quotes[j]; quotes[j] = tmp;
+          }
+
+          var idx = 0;
+          function showQuote() {
+            var q = quotes[idx];
+            var text = q.quote;
+            if (text.length > 140) {
+              text = text.substring(0, 137).replace(/\s+\S*$/, '') + '...';
+            }
+            textEl.innerHTML = '\u201c' + text.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '\u201d';
+            attrEl.innerHTML = '\u2014 ' + q.designer + ', <a href="' + q.url +
+              '" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">' +
+              q.title + '</a>';
+            idx = (idx + 1) % quotes.length;
+          }
+
+          showQuote();
+          setInterval(showQuote, 8000);
+        })();
+        </script>
 
         <p class="mt-4 text-xs" style="color: rgb(var(--fg) / 0.4);">
           No login. Positive-only reactions. Clear your data anytime.
@@ -75,7 +126,7 @@
       <!-- RIGHT: "Studio wall" phone deck -->
       <div class="relative mx-auto w-full max-w-sm lg:max-w-none">
         <div class="hero-phone-deck" data-hero-deck>
-          {%- assign hero_designs = "access-all,vibe-finder,community-hub" | split: "," -%}
+          {%- assign hero_designs = "art-space,wave,infinity-mall" | split: "," -%}
 
           {%- for slug in hero_designs -%}
             {%- assign sub = site.submissions | where: "slug", slug | first -%}
@@ -83,10 +134,10 @@
               {%- assign thumb_url = sub.thumbnail | relative_url -%}
 
               {%- case slug -%}
-                {%- when "access-all" -%}
+                {%- when "art-space" -%}
                   {%- assign badge = "Most inclusive" -%}
                   {%- assign badge_icon = "&#x1F30D;" -%}
-                {%- when "vibe-finder" -%}
+                {%- when "wave" -%}
                   {%- assign badge = "Most creative" -%}
                   {%- assign badge_icon = "&#x2728;" -%}
                 {%- else -%}

@@ -7,9 +7,12 @@
 -->
 <div class="phone-frame {{ include.class }}">
   <div class="phone-frame-notch" aria-hidden="true"></div>
-  <img src="{{ include.src }}"
-       alt="{{ include.alt | default: '' }}"
-       {% if include.eager %}loading="eager"{% else %}loading="lazy"{% endif %}
-       decoding="async"
-       class="phone-frame-img">
+  <picture>
+    <source srcset="{{ include.src | replace: '.png', '.webp' | replace: '.jpeg', '.webp' }}" type="image/webp">
+    <img src="{{ include.src }}"
+         alt="{{ include.alt | default: '' }}"
+         {% if include.eager %}loading="eager"{% else %}loading="lazy"{% endif %}
+         decoding="async"
+         class="phone-frame-img">
+  </picture>
 </div>

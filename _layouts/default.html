@@ -18,10 +18,29 @@
   <link rel="icon" href="{{ '/assets/images/favicon.svg' | relative_url }}" type="image/svg+xml">
 
   <!-- Theme color for mobile browsers -->
-  <meta name="theme-color" content="#f8faf2">
+  <meta name="theme-color" content="#f8faf2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#030712" media="(prefers-color-scheme: dark)">
+
+  <!-- Mobile web app -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
   <!-- Base URL for JavaScript -->
   <meta name="baseurl" content="{{ site.baseurl }}">
+
+  <!-- OpenGraph / Social sharing -->
+  <meta property="og:title" content="{{ page.title | default: site.title }}">
+  <meta property="og:description" content="{{ page.summary | default: page.description | default: site.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  {% if page.cover_image %}<meta property="og:image" content="{{ page.cover_image | absolute_url }}">{% elsif page.thumbnail %}<meta property="og:image" content="{{ page.thumbnail | absolute_url }}">{% endif %}
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Preconnect to API endpoints -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+  <!-- Prevent FOUC: apply saved theme before paint -->
+  <script>try{var t=localStorage.getItem('tsg_theme');if(t==='hype'){document.documentElement.dataset.theme='hype';document.documentElement.classList.add('dark')}}catch(e){}</script>
 </head>
 <body class="min-h-screen bg-surface-base text-brand-navy antialiased transition-colors duration-300
              dark:bg-gray-950 dark:text-gray-100">
@@ -226,8 +245,8 @@
   <script src="{{ '/assets/js/theme.js' | relative_url }}"></script>
 
   <!-- Supabase (for centralized voting + feedback) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="{{ '/assets/js/supabase-config.js' | relative_url }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="{{ '/assets/js/supabase-config.js' | relative_url }}" defer></script>
 
   <!-- Scripts -->
   <script src="{{ '/assets/js/voting.js' | relative_url }}" defer></script>
@@ -244,7 +263,7 @@
   {% unless page.url contains '/remix' %}
   <!-- Remix FAB (Floating Action Button) -->
   <a href="{{ '/remix/' | relative_url }}"
-     class="fixed bottom-6 right-6 z-40 flex items-center gap-2
+     class="fixed right-4 z-40 flex items-center gap-2
             rounded-full bg-gradient-to-r from-brand-purple via-brand-indigo to-brand-sky
             px-5 py-3 text-sm font-bold text-white
             shadow-xl shadow-brand-indigo/30
@@ -253,6 +272,7 @@
             focus:outline-none focus:ring-4 focus:ring-brand-sky/50
             dark:from-brand-sky dark:via-brand-indigo dark:to-brand-purple
             remix-fab-empty"
+     style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))"
      data-remix-fab
      aria-label="View your remix">
     <span aria-hidden="true">🎨</span>
@@ -264,9 +284,10 @@
   </a>
 
   <!-- Remix onboarding tooltip (first visit only) -->
-  <div class="fixed bottom-[5.5rem] right-6 z-40 max-w-[260px] rounded-xl
+  <div class="fixed right-4 z-40 max-w-[260px] rounded-xl
               bg-white p-4 shadow-xl opacity-0 translate-y-2 transition-all duration-300
               pointer-events-none dark:bg-gray-800 dark:shadow-gray-900/50"
+       style="bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px))"
        data-remix-tooltip
        role="tooltip"
        hidden>

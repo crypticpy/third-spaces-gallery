@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<article class="py-8 lg:py-12">
+<article class="py-8 lg:py-12 overflow-x-hidden">
   <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
     <!-- Breadcrumb -->
     <nav class="mb-6" aria-label="Breadcrumb">
@@ -22,7 +22,7 @@ layout: default
     <!-- Main grid -->
     <div class="grid gap-8 lg:grid-cols-[1fr_380px] lg:gap-12">
       <!-- Left column: Content -->
-      <div class="space-y-8">
+      <div class="space-y-8 min-w-0">
         <!-- Header -->
         <header>
           <!-- Feature badges -->
@@ -40,7 +40,7 @@ layout: default
           </div>
           {% endif %}
 
-          <h1 class="text-3xl font-bold text-brand-navy sm:text-4xl lg:text-5xl dark:text-gray-100">
+          <h1 class="text-3xl font-bold text-brand-navy sm:text-4xl lg:text-5xl dark:text-gray-100 break-words">
             {{ page.title }}
           </h1>
 
@@ -140,83 +140,125 @@ layout: default
         </section>
         {% endif %}
 
-        <!-- Screen Carousel (horizontal swipe) -->
+        <!-- Screen Gallery (one at a time with navigation) -->
         {% if page.screens.size > 0 or page.images.size > 0 %}
+        {% assign screen_count = page.screens.size | default: page.images.size %}
         <section class="space-y-4" aria-label="Design screens">
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-semibold text-brand-navy dark:text-gray-100">Design Screens</h2>
-            <p class="text-sm text-brand-stone dark:text-gray-500">
-              Swipe to explore <span class="hidden sm:inline">or use ← → keys</span>
+            <p class="text-sm text-brand-stone dark:text-gray-500" data-screen-counter>
+              1 / {{ screen_count }}
             </p>
           </div>
 
-          <!-- Carousel track -->
-          <div class="relative">
-            <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide"
-                 tabindex="0"
-                 aria-roledescription="carousel"
-                 aria-label="Screen carousel"
-                 data-screen-track>
-              {% if page.screens.size > 0 %}
-                {% for screen in page.screens %}
-                <figure class="snap-start shrink-0 w-[85%] sm:w-[420px]">
-                  <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
-                              shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <!-- Single-image viewer with navigation -->
+          <div class="relative" data-screen-viewer>
+            <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
+                        shadow-lg dark:border-gray-700 dark:bg-gray-800">
+              <div class="flex snap-x snap-mandatory overflow-x-auto scrollbar-hide"
+                   tabindex="0"
+                   aria-roledescription="carousel"
+                   aria-label="Screen carousel"
+                   data-screen-track>
+                {% if page.screens.size > 0 %}
+                  {% for screen in page.screens %}
+                  <figure class="snap-start snap-always shrink-0 w-full">
                     <a href="{{ screen.src | relative_url }}"
                        target="_blank"
-                       class="block overflow-hidden">
-                      <img src="{{ screen.src | relative_url }}"
-                           alt="{{ screen.alt | default: page.title | append: ' screen' }}"
-                           class="w-full object-contain transition-transform duration-300 hover:scale-105"
-                           loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                           decoding="async">
+                       class="block">
+                      <picture>
+                        <source srcset="{{ screen.src | replace: '.png', '.webp' | replace: '.jpeg', '.webp' | relative_url }}" type="image/webp">
+                        <img src="{{ screen.src | relative_url }}"
+                             alt="{{ screen.alt | default: page.title | append: ' screen' }}"
+                             class="w-full object-contain"
+                             loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                             decoding="async">
+                      </picture>
                     </a>
-                  </div>
-                  {% if screen.caption %}
-                  <figcaption class="mt-2 text-sm text-brand-stone dark:text-gray-400 text-center">
-                    {{ screen.caption }}
-                  </figcaption>
-                  {% endif %}
-                </figure>
-                {% endfor %}
-              {% else %}
-                {% for image in page.images %}
-                <figure class="snap-start shrink-0 w-[85%] sm:w-[420px]">
-                  <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
-                              shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    {% if screen.caption %}
+                    <figcaption class="px-4 py-2 text-sm text-brand-stone dark:text-gray-400 text-center
+                                       bg-white/80 dark:bg-gray-800/80">
+                      {{ screen.caption }}
+                    </figcaption>
+                    {% endif %}
+                  </figure>
+                  {% endfor %}
+                {% else %}
+                  {% for image in page.images %}
+                  <figure class="snap-start snap-always shrink-0 w-full">
                     <a href="{{ image | relative_url }}"
                        target="_blank"
-                       class="block overflow-hidden">
-                      <img src="{{ image | relative_url }}"
-                           alt="Screen {{ forloop.index }} from {{ page.title }}"
-                           class="w-full object-contain transition-transform duration-300 hover:scale-105"
-                           loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                           decoding="async">
+                       class="block">
+                      <picture>
+                        <source srcset="{{ image | replace: '.png', '.webp' | replace: '.jpeg', '.webp' | relative_url }}" type="image/webp">
+                        <img src="{{ image | relative_url }}"
+                             alt="Screen {{ forloop.index }} from {{ page.title }}"
+                             class="w-full object-contain"
+                             loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                             decoding="async">
+                      </picture>
                     </a>
-                  </div>
-                </figure>
-                {% endfor %}
-              {% endif %}
+                  </figure>
+                  {% endfor %}
+                {% endif %}
+              </div>
             </div>
 
-            <!-- Carousel dots indicator -->
-            {% assign screen_count = page.screens.size | default: page.images.size %}
+            <!-- Prev/Next arrows -->
             {% if screen_count > 1 %}
-            <div class="mt-3 flex items-center justify-center gap-2" aria-label="Screen indicators">
-              {% for i in (1..screen_count) %}
-              <span class="h-2 w-2 rounded-full bg-brand-cloud dark:bg-gray-600
-                          {% if forloop.first %}bg-brand-sky dark:bg-brand-sky{% endif %}"
-                    data-dot-index="{{ forloop.index0 }}"></span>
-              {% endfor %}
-            </div>
+            <button type="button"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 z-10
+                           flex items-center justify-center w-10 h-10 rounded-full
+                           bg-white/80 dark:bg-gray-800/80 backdrop-blur
+                           border border-brand-sky/20 dark:border-gray-600
+                           text-brand-navy dark:text-white shadow-md
+                           hover:bg-white dark:hover:bg-gray-700 transition
+                           disabled:opacity-30 disabled:cursor-default"
+                    data-screen-prev
+                    disabled
+                    aria-label="Previous screen">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button type="button"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 z-10
+                           flex items-center justify-center w-10 h-10 rounded-full
+                           bg-white/80 dark:bg-gray-800/80 backdrop-blur
+                           border border-brand-sky/20 dark:border-gray-600
+                           text-brand-navy dark:text-white shadow-md
+                           hover:bg-white dark:hover:bg-gray-700 transition
+                           disabled:opacity-30 disabled:cursor-default"
+                    data-screen-next
+                    aria-label="Next screen">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
             {% endif %}
           </div>
+
+          <!-- Dot indicators -->
+          {% if screen_count > 1 %}
+          <div class="flex items-center justify-center gap-2" aria-label="Screen indicators">
+            {% for i in (1..screen_count) %}
+            <button type="button"
+                    class="flex items-center justify-center w-8 h-8 rounded-full transition-colors"
+                    data-dot-index="{{ forloop.index0 }}"
+                    aria-label="Go to screen {{ forloop.index }}">
+              <span class="block h-2.5 w-2.5 rounded-full
+                           {% if forloop.first %}bg-brand-sky{% else %}bg-brand-cloud dark:bg-gray-600{% endif %}"
+                    data-dot-visual></span>
+            </button>
+            {% endfor %}
+          </div>
+          {% endif %}
         </section>
         {% endif %}
 
         <!-- Description/content -->
         {% if content and content != "" %}
-        <div class="prose prose-brand max-w-none dark:prose-invert">
+        <div class="prose prose-brand max-w-none dark:prose-invert break-words">
           {{ content }}
         </div>
         {% endif %}
@@ -239,16 +281,19 @@ layout: default
       </div>
 
       <!-- Right column: Sidebar -->
-      <aside class="space-y-6 lg:sticky lg:top-24 lg:self-start">
+      <aside class="space-y-6 lg:sticky lg:top-24 lg:self-start order-first lg:order-none">
         <!-- Thumbnail/Hero image -->
         {% if page.thumbnail or page.cover_image %}
         {% assign hero_img = page.cover_image | default: page.thumbnail %}
         <div class="overflow-hidden rounded-2xl border border-brand-sky/10 bg-white
                     shadow-[0_8px_30px_rgba(34,37,78,0.12)]
                     dark:border-gray-700 dark:bg-gray-800">
-          <img src="{{ hero_img | relative_url }}"
-               alt="{{ page.thumbnail_alt | default: page.title }}"
-               class="aspect-[16/10] w-full object-cover">
+          <picture>
+            <source srcset="{{ hero_img | replace: '.png', '.webp' | replace: '.jpeg', '.webp' | relative_url }}" type="image/webp">
+            <img src="{{ hero_img | relative_url }}"
+                 alt="{{ page.thumbnail_alt | default: page.title }}"
+                 class="aspect-[16/10] w-full object-cover">
+          </picture>
         </div>
         {% endif %}
 
@@ -368,7 +413,7 @@ layout: default
             </button>
             <button type="button" data-share-instagram
                     class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
-                           bg-white px-3 py-2 text-brand-navy transition
+                           bg-white px-3.5 py-2.5 text-brand-navy transition
                            hover:border-pink-400 hover:bg-pink-50
                            dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
                            dark:hover:border-pink-400 dark:hover:bg-pink-900/20"
@@ -379,7 +424,7 @@ layout: default
             </button>
             <button type="button" data-share-tiktok
                     class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
-                           bg-white px-3 py-2 text-brand-navy transition
+                           bg-white px-3.5 py-2.5 text-brand-navy transition
                            hover:border-gray-800 hover:bg-gray-100
                            dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
                            dark:hover:border-gray-400 dark:hover:bg-gray-600"
@@ -390,7 +435,7 @@ layout: default
             </button>
             <button type="button" data-share-threads
                     class="inline-flex items-center justify-center rounded-lg border border-brand-sky/20
-                           bg-white px-3 py-2 text-brand-navy transition
+                           bg-white px-3.5 py-2.5 text-brand-navy transition
                            hover:border-gray-800 hover:bg-gray-100
                            dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
                            dark:hover:border-gray-400 dark:hover:bg-gray-600"
@@ -400,7 +445,7 @@ layout: default
               </svg>
             </button>
           </div>
-          <p class="mt-2 text-[11px] text-brand-stone/60 dark:text-gray-500" data-share-hint hidden>
+          <p class="mt-2 text-xs text-brand-stone/60 dark:text-gray-500" data-share-hint hidden>
             Message copied — paste it in your post!
           </p>
         </div>
@@ -409,91 +454,90 @@ layout: default
   </div>
 </article>
 
-<!-- Screen carousel keyboard navigation -->
+<!-- Screen carousel navigation -->
 <script>
 (function() {
-  const track = document.querySelector('[data-screen-track]');
+  var track = document.querySelector('[data-screen-track]');
   if (!track) return;
 
-  const dots = document.querySelectorAll('[data-dot-index]');
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dots = document.querySelectorAll('[data-dot-index]');
+  var counter = document.querySelector('[data-screen-counter]');
+  var prevBtn = document.querySelector('[data-screen-prev]');
+  var nextBtn = document.querySelector('[data-screen-next]');
+  var figures = track.querySelectorAll('figure');
+  var total = figures.length;
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Update active dot based on scroll position
-  const updateDots = () => {
-    const figures = track.querySelectorAll('figure');
-    if (!figures.length || !dots.length) return;
-
-    const scrollLeft = track.scrollLeft;
-    let activeIndex = 0;
-    let minDist = Infinity;
-
-    figures.forEach((fig, i) => {
-      const dist = Math.abs(fig.offsetLeft - scrollLeft);
-      if (dist < minDist) {
-        minDist = dist;
-        activeIndex = i;
-      }
-    });
-
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('bg-brand-sky', i === activeIndex);
-      dot.classList.toggle('dark:bg-brand-sky', i === activeIndex);
-      dot.classList.toggle('bg-brand-cloud', i !== activeIndex);
-      dot.classList.toggle('dark:bg-gray-600', i !== activeIndex);
-    });
-  };
+  // Get current active index from scroll position
+  function getActiveIndex() {
+    var scrollLeft = track.scrollLeft;
+    var idx = 0;
+    var minDist = Infinity;
+    for (var i = 0; i < figures.length; i++) {
+      var dist = Math.abs(figures[i].offsetLeft - scrollLeft);
+      if (dist < minDist) { minDist = dist; idx = i; }
+    }
+    return idx;
+  }
 
   // Scroll to specific index
-  const scrollToIndex = (idx) => {
-    const figures = track.querySelectorAll('figure');
-    if (!figures.length) return;
-
-    const clamped = Math.max(0, Math.min(idx, figures.length - 1));
-    const target = figures[clamped];
-    if (!target) return;
-
-    target.scrollIntoView({
+  function scrollToIndex(idx) {
+    var clamped = Math.max(0, Math.min(idx, total - 1));
+    figures[clamped].scrollIntoView({
       behavior: prefersReducedMotion ? 'auto' : 'smooth',
       block: 'nearest',
       inline: 'start'
     });
-  };
+  }
 
-  // Keyboard navigation
-  track.addEventListener('keydown', (e) => {
-    const figures = track.querySelectorAll('figure');
-    if (!figures.length) return;
+  // Update all UI: dots, counter, arrow disabled state
+  function updateUI() {
+    var idx = getActiveIndex();
 
-    const scrollLeft = track.scrollLeft;
-    let currentIndex = 0;
-    let minDist = Infinity;
-
-    figures.forEach((fig, i) => {
-      const dist = Math.abs(fig.offsetLeft - scrollLeft);
-      if (dist < minDist) {
-        minDist = dist;
-        currentIndex = i;
-      }
-    });
-
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault();
-      scrollToIndex(currentIndex - 1);
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault();
-      scrollToIndex(currentIndex + 1);
+    // Dots (update the inner visual span)
+    for (var i = 0; i < dots.length; i++) {
+      var visual = dots[i].querySelector('[data-dot-visual]') || dots[i];
+      var isActive = i === idx;
+      visual.classList.toggle('bg-brand-sky', isActive);
+      visual.classList.toggle('dark:bg-brand-sky', isActive);
+      visual.classList.toggle('bg-brand-cloud', !isActive);
+      visual.classList.toggle('dark:bg-gray-600', !isActive);
     }
+
+    // Counter
+    if (counter) counter.textContent = (idx + 1) + ' / ' + total;
+
+    // Arrows
+    if (prevBtn) prevBtn.disabled = idx === 0;
+    if (nextBtn) nextBtn.disabled = idx === total - 1;
+  }
+
+  // Arrow click handlers
+  if (prevBtn) prevBtn.addEventListener('click', function() { scrollToIndex(getActiveIndex() - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { scrollToIndex(getActiveIndex() + 1); });
+
+  // Dot click handlers
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      scrollToIndex(parseInt(dot.getAttribute('data-dot-index'), 10));
+    });
   });
 
-  // Track scroll for dot updates
-  let raf = 0;
-  track.addEventListener('scroll', () => {
+  // Keyboard navigation
+  track.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); scrollToIndex(getActiveIndex() - 1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIndex(getActiveIndex() + 1); }
+  });
+
+  // Track scroll for UI updates
+  var raf = 0;
+  track.addEventListener('scroll', function() {
     cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(updateDots);
+    raf = requestAnimationFrame(updateUI);
   }, { passive: true });
 
   // Initial state
-  updateDots();
+  updateUI();
 })();
 
 // Scroll-to-remix CTA (delegated to avoid inline onclick)
