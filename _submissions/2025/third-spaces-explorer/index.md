@@ -1,6 +1,6 @@
 ---
 layout: submission
-title: "Third Spaces Explorer"
+title: "Explore Pick Go"
 slug: third-spaces-explorer
 year: 2025
 
