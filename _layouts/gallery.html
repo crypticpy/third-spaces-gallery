@@ -114,7 +114,7 @@ layout: default
     </p>
 
     <!-- Grid -->
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-submissions-grid>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-submissions-grid data-shuffle-grid>
       {% assign sorted_submissions = site.submissions | sort: "created_at" | reverse %}
       {% for submission in sorted_submissions %}
         {% include submission-card.html submission=submission %}

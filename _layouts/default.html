@@ -313,5 +313,25 @@
 
   <!-- Quick Look Modal -->
   {% include quick-look-modal.html %}
+
+  <!-- Shuffle design grids so no student is always first -->
+  <script>
+  (function() {
+    document.querySelectorAll('[data-shuffle-grid]').forEach(function(grid) {
+      var children = Array.from(grid.children);
+      // Fisher-Yates shuffle
+      for (var i = children.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = children[i]; children[i] = children[j]; children[j] = tmp;
+      }
+      // Optional limit (homepage shows 6 of 14)
+      var limit = parseInt(grid.getAttribute('data-shuffle-limit'), 10) || 0;
+      children.forEach(function(child, idx) {
+        grid.appendChild(child);
+        if (limit && idx >= limit) child.style.display = 'none';
+      });
+    });
+  })();
+  </script>
 </body>
 </html>

@@ -28,9 +28,8 @@ title: Home
     </div>
 
     <!-- Grid -->
-    <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2">
-      {% assign featured = site.submissions | sort: "created_at" | reverse %}
-      {% for submission in featured limit: 6 %}
+    <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-2" data-shuffle-grid data-shuffle-limit="6">
+      {% for submission in site.submissions %}
         {% include submission-card.html submission=submission %}
       {% endfor %}
     </div>
