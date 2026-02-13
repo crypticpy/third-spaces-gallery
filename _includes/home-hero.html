@@ -105,10 +105,11 @@
             if (text.length > 140) {
               text = text.substring(0, 137).replace(/\s+\S*$/, '') + '...';
             }
-            textEl.innerHTML = '\u201c' + text.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '\u201d';
-            attrEl.innerHTML = '\u2014 ' + q.designer + ', <a href="' + q.url +
+            function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+            textEl.innerHTML = '\u201c' + esc(text) + '\u201d';
+            attrEl.innerHTML = '\u2014 ' + esc(q.designer) + ', <a href="' + encodeURI(q.url) +
               '" class="font-semibold underline decoration-dotted hover:decoration-solid" style="color: #009CDE;">' +
-              q.title + '</a>';
+              esc(q.title) + '</a>';
             idx = (idx + 1) % quotes.length;
           }
 
