@@ -136,6 +136,19 @@ description: Build your dream app by collecting features from student designs
         </div>
       </div>
 
+      <!-- Composition guidance -->
+      <div data-remix-progress class="mb-4 hidden">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-brand-stone dark:text-gray-400" data-remix-progress-label></span>
+          <span class="font-medium text-brand-navy dark:text-gray-300" data-remix-progress-count></span>
+        </div>
+        <div class="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+          <div data-remix-progress-bar
+               class="h-full rounded-full transition-all duration-500 ease-out"
+               style="width: 0%; background: linear-gradient(90deg, #009F4D, #009CDE);"></div>
+        </div>
+      </div>
+
       <!-- Grouped Feature List -->
       <div class="space-y-6" data-remix-list>
         <!-- Groups populated by JS -->
@@ -540,23 +553,33 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ── Modal helpers ───────────────────────────────────────────────
+  var closingViaPopstate = false;
+
   function openModal(el) {
     if (!el) return;
     previousFocus = document.activeElement;
     el.classList.remove('hidden');
     el.classList.add('flex');
+    document.body.classList.add('overflow-hidden');
     trapFocus(el);
     var focusable = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
     if (focusable) focusable.focus();
+    history.pushState({ modal: true }, '');
   }
   function closeModal(el) {
     if (!el) return;
+    // Guard: only close if the modal is actually open
+    if (el.classList.contains('hidden')) return;
     releaseFocusTrap();
     el.classList.add('hidden');
     el.classList.remove('flex');
-    if (previousFocus) {
+    document.body.classList.remove('overflow-hidden');
+    if (previousFocus && typeof previousFocus.focus === 'function') {
       previousFocus.focus();
       previousFocus = null;
+    }
+    if (!closingViaPopstate) {
+      history.back();
     }
   }
 
@@ -940,6 +963,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update tab badge for My Remixes
     updateMyRemixesTabBadge();
+
+    // Update composition guidance progress bar
+    var progressEl = document.querySelector('[data-remix-progress]');
+    var progressLabel = document.querySelector('[data-remix-progress-label]');
+    var progressCount = document.querySelector('[data-remix-progress-count]');
+    var progressBar = document.querySelector('[data-remix-progress-bar]');
+
+    if (progressEl && progressLabel && progressCount && progressBar) {
+      if (count === 0) {
+        progressEl.classList.add('hidden');
+      } else {
+        progressEl.classList.remove('hidden');
+        var sources = countUniqueSources(items);
+        progressCount.textContent = count + ' feature' + (count !== 1 ? 's' : '') + ' from ' + sources + ' design' + (sources !== 1 ? 's' : '');
+
+        var pct, label;
+        if (count <= 2) {
+          pct = count * 12;
+          label = 'Getting started';
+        } else if (count <= 5) {
+          pct = 25 + (count - 2) * 13;
+          label = 'Nice start';
+        } else if (count <= 8) {
+          pct = 65 + (count - 5) * 12;
+          label = 'Looking great';
+        } else {
+          pct = 100;
+          label = 'Big build! Submit when ready.';
+        }
+
+        progressLabel.textContent = label;
+        progressBar.style.width = Math.min(pct, 100) + '%';
+      }
+    }
   }
 
   // ── My Remixes tab badge ────────────────────────────────────────
@@ -1477,6 +1534,19 @@ document.addEventListener('DOMContentLoaded', function() {
       closeModal(remixAgainModal);
       pendingRemixAgainRef = null;
     }
+  });
+
+  // ── History popstate handler for modal back-button support ─────
+  window.addEventListener('popstate', function(e) {
+    // Only react to our modal state entries
+    if (!e.state || !e.state.modal) return;
+    closingViaPopstate = true;
+    [confirmModal, clearModal, vizModal, remixAgainModal].forEach(function(m) {
+      if (m && !m.classList.contains('hidden')) {
+        closeModal(m);
+      }
+    });
+    closingViaPopstate = false;
   });
 
   // ── Initial render ──────────────────────────────────────────────

@@ -262,7 +262,7 @@
 
   {% unless page.url contains '/remix' %}
   <!-- Remix FAB (Floating Action Button) -->
-  <a href="{{ '/remix/' | relative_url }}"
+  <button type="button"
      class="fixed right-4 z-40 flex items-center gap-2
             rounded-full bg-gradient-to-r from-brand-purple via-brand-indigo to-brand-sky
             px-5 py-3 text-sm font-bold text-white
@@ -274,6 +274,7 @@
             remix-fab-empty"
      style="bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px))"
      data-remix-fab
+     data-remix-fab-trigger
      aria-label="View your remix">
     <span aria-hidden="true">🎨</span>
     <span>My Remix</span>
@@ -281,7 +282,42 @@
                  bg-white/20 px-2 text-xs font-bold tabular-nums"
           data-remix-count
           aria-live="polite">0</span>
-  </a>
+  </button>
+
+  <!-- Build cart sheet -->
+  <div data-remix-sheet
+       class="fixed inset-0 z-50 hidden"
+       role="dialog" aria-modal="true" aria-label="Your build">
+    <!-- Backdrop -->
+    <div data-remix-sheet-backdrop
+         class="absolute inset-0 bg-black/30 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <!-- Panel -->
+    <div class="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-300 ease-out"
+         data-remix-sheet-panel
+         style="padding-bottom: env(safe-area-inset-bottom, 0px);">
+      <div class="mx-auto w-full max-w-lg rounded-t-2xl bg-white shadow-2xl dark:bg-gray-900 dark:border dark:border-gray-700">
+        <!-- Drag handle -->
+        <div class="flex justify-center py-2">
+          <div class="h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 pb-2">
+          <h3 class="text-base font-bold text-brand-navy dark:text-gray-100">
+            Your Build
+            <span class="ml-1 text-sm font-normal text-brand-stone dark:text-gray-400" data-remix-sheet-count></span>
+          </h3>
+          <a href="{{ '/remix/' | relative_url }}"
+             class="text-sm font-medium text-brand-indigo hover:underline dark:text-brand-sky">
+            Open full view →
+          </a>
+        </div>
+        <!-- Feature list (scrollable) -->
+        <div class="overflow-y-auto px-4 pb-4" style="max-height: 50vh;" data-remix-sheet-list>
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Remix onboarding tooltip (first visit only) -->
   <div class="fixed right-4 z-40 max-w-[260px] rounded-xl
@@ -332,6 +368,118 @@
       });
     });
   })();
+  </script>
+
+  <!-- Build cart sheet logic (runs after remix.js via DOMContentLoaded) -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var fab = document.querySelector('[data-remix-fab-trigger]');
+    var sheet = document.querySelector('[data-remix-sheet]');
+    if (!fab || !sheet) return;
+
+    var backdrop = sheet.querySelector('[data-remix-sheet-backdrop]');
+    var panel = sheet.querySelector('[data-remix-sheet-panel]');
+    var list = sheet.querySelector('[data-remix-sheet-list]');
+    var countEl = sheet.querySelector('[data-remix-sheet-count]');
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(String(str)));
+      return d.innerHTML;
+    }
+
+    function renderSheet() {
+      if (!window.TSGRemix) return;
+      var items = window.TSGRemix.getAll();
+      var count = items.length;
+      countEl.textContent = count ? '(' + count + ')' : '';
+
+      if (!count) {
+        list.innerHTML = '<p class="py-8 text-center text-sm text-brand-stone dark:text-gray-400">No features yet. Browse designs to start building.</p>';
+        return;
+      }
+
+      var groups = window.TSGRemix.groupBySource(items);
+      var html = '';
+      groups.forEach(function(g) {
+        html += '<div class="mb-3">';
+        html += '<p class="text-xs font-medium text-brand-stone dark:text-gray-400 mb-1">' + escapeHtml(g.sourceTitle || g.sourceSubmission) + '</p>';
+        g.items.forEach(function(item) {
+          html += '<div class="flex items-center justify-between py-1.5">';
+          html += '<span class="flex items-center gap-2 text-sm text-brand-navy dark:text-gray-200">';
+          html += '<span aria-hidden="true">' + escapeHtml(item.icon || '🎯') + '</span>';
+          html += '<span>' + escapeHtml(item.name) + '</span>';
+          html += '</span>';
+          html += '<button type="button" class="tsg-chip text-xs py-0.5 px-2 hover:bg-red-50 hover:border-red-300 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400" data-sheet-remove="' + escapeHtml(item.id) + '" aria-label="Remove ' + escapeHtml(item.name) + '">';
+          html += '✕';
+          html += '</button>';
+          html += '</div>';
+        });
+        html += '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    var closeTimer = null;
+
+    function openSheet() {
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      renderSheet();
+      sheet.classList.remove('hidden');
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          backdrop.classList.add('opacity-100');
+          backdrop.classList.remove('opacity-0');
+          panel.classList.remove('translate-y-full');
+          panel.classList.add('translate-y-0');
+        });
+      });
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeSheet() {
+      backdrop.classList.remove('opacity-100');
+      backdrop.classList.add('opacity-0');
+      panel.classList.add('translate-y-full');
+      panel.classList.remove('translate-y-0');
+      closeTimer = setTimeout(function() {
+        sheet.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+        closeTimer = null;
+      }, 300);
+    }
+
+    // FAB click → open sheet
+    fab.addEventListener('click', function(e) {
+      e.preventDefault();
+      openSheet();
+    });
+
+    // Backdrop click → close
+    backdrop.addEventListener('click', closeSheet);
+
+    // Escape key → close
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !sheet.classList.contains('hidden')) {
+        closeSheet();
+      }
+    });
+
+    // Remove feature from sheet
+    list.addEventListener('click', function(e) {
+      var removeBtn = e.target.closest('[data-sheet-remove]');
+      if (removeBtn && window.TSGRemix) {
+        window.TSGRemix.remove(removeBtn.dataset.sheetRemove);
+        window.TSGRemix.updateUI();
+        renderSheet();
+        // Close sheet if cart is now empty
+        if (window.TSGRemix.count() === 0) {
+          closeSheet();
+        }
+      }
+    });
+  });
   </script>
 </body>
 </html>

@@ -2554,3 +2554,8 @@ button, a, [role="button"], input, select, textarea, label {
     -webkit-backdrop-filter: none;
   }
 }
+
+/* Build sheet transitions */
+[data-remix-sheet-panel] {
+  will-change: transform;
+}

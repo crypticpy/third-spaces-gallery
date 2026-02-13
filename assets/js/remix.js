@@ -226,6 +226,28 @@
       }
     });
 
+    // Update gallery card badges
+    const sourceCounts = {};
+    cart.forEach(function (item) {
+      var key = item.sourceSubmission;
+      if (key) sourceCounts[key] = (sourceCounts[key] || 0) + 1;
+    });
+    document
+      .querySelectorAll("[data-remix-card-badge]")
+      .forEach(function (badge) {
+        var source = badge.dataset.remixCardSource;
+        var count = sourceCounts[source] || 0;
+        var countEl = badge.querySelector("[data-remix-card-badge-count]");
+        if (count > 0) {
+          badge.classList.remove("hidden");
+          badge.classList.add("flex");
+          if (countEl) countEl.textContent = count;
+        } else {
+          badge.classList.add("hidden");
+          badge.classList.remove("flex");
+        }
+      });
+
     // Update dashboard if on that page
     updateDashboard();
   };

@@ -51,6 +51,19 @@
     {% endif %}
     <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/70 via-brand-navy/20 to-transparent"></div>
 
+    <!-- Build cart badge -->
+    <div class="absolute top-3 right-3 hidden items-center gap-1 rounded-full
+                bg-brand-sea/90 backdrop-blur-sm px-2.5 py-1
+                text-[11px] font-bold text-white shadow-sm
+                pointer-events-none"
+         data-remix-card-badge
+         data-remix-card-source="{{ include.submission.slug }}"
+         aria-label="Features from this design in your build">
+      <span aria-hidden="true">🧩</span>
+      <span data-remix-card-badge-count aria-live="polite">0</span>
+      <span>added</span>
+    </div>
+
     <!-- Designer badge -->
     <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between">
       <span class="inline-flex items-center gap-1.5 rounded-full
