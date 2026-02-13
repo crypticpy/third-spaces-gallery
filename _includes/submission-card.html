@@ -132,6 +132,37 @@
     </ul>
   </div>
 
+  <!-- Feature-Add Chips (Remix) -->
+  {% if include.submission.features and include.submission.features.size > 0 %}
+  <div class="border-t border-brand-sky/10 px-5 pb-1 pt-3 dark:border-gray-700">
+    <p class="text-xs font-medium text-brand-stone dark:text-gray-500 mb-1.5">Add to your build</p>
+    <div class="flex flex-wrap gap-1.5">
+      {% for feature in include.submission.features limit:4 %}
+      <button type="button"
+              class="tsg-chip text-xs py-1 px-2 hover:bg-brand-sea/15 hover:border-brand-sea"
+              data-remix-add="{{ feature.id }}"
+              data-remix-name="{{ feature.name }}"
+              data-remix-icon="{{ feature.icon | default: '🎯' }}"
+              data-remix-source="{{ include.submission.slug }}"
+              data-remix-source-title="{{ include.submission.title }}"
+              data-remix-source-thumbnail="{{ include.submission.cover_image | default: include.submission.thumbnail | relative_url }}"
+              data-remix-source-designer="{{ include.submission.designer }}"
+              data-remix-source-url="{{ include.submission.url | relative_url }}"
+              aria-pressed="false">
+        <span aria-hidden="true">{{ feature.icon | default: '🎯' }}</span>
+        <span data-remix-label>{{ feature.name }}</span>
+      </button>
+      {% endfor %}
+      {% if include.submission.features.size > 4 %}
+      <a href="{{ include.submission.url | relative_url }}"
+         class="tsg-chip text-xs py-1 px-2 text-brand-indigo dark:text-brand-sky">
+        +{{ include.submission.features.size | minus: 4 }} more
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
   <!-- Card Actions -->
   <div class="border-t border-brand-sky/10 p-3 dark:border-gray-700">
     <button type="button"

@@ -4,11 +4,15 @@
  * Mobile-native bottom sheet (swipeable preview + vote) that opens from gallery cards.
  * Desktop: centered modal.
  *
+ * Uses TSGModal (modal-controller.js) for generic modal lifecycle (open/close,
+ * focus trap, Escape, backdrop click, history state). This file handles all
+ * Quick Look-specific logic: carousel, voting, remix chips, share, etc.
+ *
  * Features:
  * - Zero-latency open (reads JSON from card, no network fetch)
  * - Screen carousel with swipe + arrow key navigation
  * - Integrated voting (uses existing voting system)
- * - Focus trap for accessibility
+ * - Focus trap for accessibility (via TSGModal)
  * - Respects prefers-reduced-motion
  */
 
@@ -17,7 +21,6 @@
   if (!modal) return;
 
   // Element references
-  const panel = modal.querySelector("[data-ql-panel]");
   const titleEl = modal.querySelector("[data-ql-title]");
   const metaEl = modal.querySelector("[data-ql-meta]");
   const summaryEl = modal.querySelector("[data-ql-summary]");
@@ -28,10 +31,8 @@
   const nextBtn = modal.querySelector("[data-ql-next]");
   const openLink = modal.querySelector("[data-ql-open]");
   const demoLink = modal.querySelector("[data-ql-demo]");
-  const shareBtn = modal.querySelector("[data-ql-share]");
   const toastEl = modal.querySelector("[data-ql-toast]");
   const closeBtn = modal.querySelector("[data-ql-close]");
-  const backdrop = modal.querySelector("[data-ql-backdrop]");
   const voteContainer = modal.querySelector("[data-ql-vote-container]");
   const remixSection = modal.querySelector("[data-ql-remix-section]");
   const remixChips = modal.querySelector("[data-ql-remix-chips]");
@@ -40,14 +41,50 @@
   const prefersReducedMotion =
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const focusableSelector =
-    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
-  let lastActive = null;
   let currentData = null;
   let currentIndex = 0;
-  let unbindKeydown = null;
+  let arrowKeyHandler = null;
   let scrollHandler = null;
+
+  // --- TSGModal integration ---
+  // Create the shared modal controller instance, with an onClose callback
+  // for Quick Look-specific cleanup. Falls back to manual handling if
+  // TSGModal is not available (e.g., script load failure).
+
+  const modalCtrl =
+    typeof window.TSGModal === "function"
+      ? new window.TSGModal(modal, {
+          onClose: function () {
+            cleanupQuickLook();
+          },
+        })
+      : null;
+
+  /**
+   * Quick Look-specific cleanup (called on close).
+   * Removes carousel listeners, resets state, clears remix chips.
+   */
+  const cleanupQuickLook = () => {
+    // Unbind arrow key navigation
+    if (arrowKeyHandler) {
+      document.removeEventListener("keydown", arrowKeyHandler);
+      arrowKeyHandler = null;
+    }
+
+    // Unbind scroll sync
+    if (scrollHandler) {
+      track.removeEventListener("scroll", scrollHandler);
+      scrollHandler = null;
+    }
+
+    // Clean up remix chips
+    if (remixSection) remixSection.classList.add("hidden");
+    if (remixChips) remixChips.innerHTML = "";
+
+    currentData = null;
+    currentIndex = 0;
+  };
 
   /**
    * Show a toast message
@@ -282,41 +319,16 @@
   };
 
   /**
-   * Trap focus within the modal
-   */
-  const trapFocus = (e) => {
-    if (e.key !== "Tab") return;
-
-    const focusables = Array.from(
-      panel.querySelectorAll(focusableSelector),
-    ).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1);
-
-    if (!focusables.length) return;
-
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
-
-  /**
    * Open the modal with design data
    */
   const openModal = (data, triggerEl) => {
     currentData = data;
-    lastActive = triggerEl || document.activeElement;
 
     // Populate content
     titleEl.textContent = data.title || "Quick Look";
     metaEl.textContent = [data.designer, data.grade]
       .filter(Boolean)
-      .join(" • ");
+      .join(" \u2022 ");
     summaryEl.textContent = data.summary || "";
 
     renderTags(data.feature_focus || []);
@@ -391,9 +403,24 @@
       }
     }
 
-    // Show modal + lock scroll
-    modal.classList.remove("hidden");
-    document.body.classList.add("overflow-hidden");
+    // Open modal via TSGModal (handles: show, body scroll lock, focus trap,
+    // Escape key, backdrop click, history state, focus save/restore)
+    if (modalCtrl) {
+      modalCtrl.open();
+
+      // Override TSGModal's default previousFocus (document.activeElement at
+      // time of open) with the actual trigger element, so focus restores to
+      // the card button that opened the Quick Look.
+      modalCtrl.previousFocus = triggerEl || modalCtrl.previousFocus;
+
+      // Override default focus: focus the close button specifically
+      if (closeBtn) closeBtn.focus();
+    } else {
+      // Fallback: manual open if TSGModal not available
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+      if (closeBtn) closeBtn.focus();
+    }
 
     // Ensure carousel starts at first screen now that modal is visible
     requestAnimationFrame(function () {
@@ -411,30 +438,16 @@
       window.TSGVoting.hydrate(modal);
     }
 
-    // Focus management
-    closeBtn?.focus();
-
-    // Keydown bindings
-    const onKeydown = (e) => {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        closeModal();
-        return;
-      }
-
-      // Arrow key navigation for carousel
+    // Arrow key navigation for carousel (Quick Look-specific, not in TSGModal)
+    arrowKeyHandler = (e) => {
       if (e.key === "ArrowLeft") {
         scrollToIndex(currentIndex - 1);
       }
       if (e.key === "ArrowRight") {
         scrollToIndex(currentIndex + 1);
       }
-
-      trapFocus(e);
     };
-
-    document.addEventListener("keydown", onKeydown);
-    unbindKeydown = () => document.removeEventListener("keydown", onKeydown);
+    document.addEventListener("keydown", arrowKeyHandler);
 
     // Keep dots in sync with scroll
     let raf = 0;
@@ -460,31 +473,17 @@
    * Close the modal
    */
   const closeModal = () => {
-    modal.classList.add("hidden");
-    document.body.classList.remove("overflow-hidden");
-
-    if (unbindKeydown) {
-      unbindKeydown();
-      unbindKeydown = null;
+    if (modalCtrl) {
+      // TSGModal.close() handles: hide, body scroll unlock, focus trap release,
+      // event listener cleanup, focus restore, history.back, and calls onClose
+      // callback which runs cleanupQuickLook()
+      modalCtrl.close();
+    } else {
+      // Fallback: manual close if TSGModal not available
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+      cleanupQuickLook();
     }
-
-    if (scrollHandler) {
-      track.removeEventListener("scroll", scrollHandler);
-      scrollHandler = null;
-    }
-
-    // Clean up remix chips
-    if (remixSection) remixSection.classList.add("hidden");
-    if (remixChips) remixChips.innerHTML = "";
-
-    // Restore focus
-    if (lastActive && typeof lastActive.focus === "function") {
-      lastActive.focus();
-    }
-
-    lastActive = null;
-    currentData = null;
-    currentIndex = 0;
   };
 
   /**
@@ -502,8 +501,8 @@
     ).toString();
 
     const blurb = designer
-      ? `${title} by ${designer} — a student-designed feature for the Third Spaces app.`
-      : `${title} — a student-designed feature for the Third Spaces app.`;
+      ? `${title} by ${designer} \u2014 a student-designed feature for the Third Spaces app.`
+      : `${title} \u2014 a student-designed feature for the Third Spaces app.`;
 
     const payload = {
       title,
@@ -523,7 +522,7 @@
       }
     } catch (err) {
       if (err.name !== "AbortError") {
-        setToast("Could not copy — try manually.");
+        setToast("Could not copy \u2014 try manually.");
       }
     }
   };
@@ -554,13 +553,14 @@
       return;
     }
 
-    // Close handlers
+    // Close button
     if (e.target.closest("[data-ql-close]")) {
       closeModal();
       return;
     }
 
-    if (e.target.closest("[data-ql-backdrop]")) {
+    // Backdrop click (only needed for fallback; TSGModal handles this when available)
+    if (!modalCtrl && e.target.closest("[data-ql-backdrop]")) {
       closeModal();
       return;
     }
@@ -586,8 +586,12 @@
   window.TSGQuickLook = {
     open: openModal,
     close: closeModal,
-    isOpen: () => !modal.classList.contains("hidden"),
+    isOpen: () =>
+      modalCtrl ? modalCtrl.isOpen() : !modal.classList.contains("hidden"),
   };
 
-  console.log("[QuickLook] Modal controller initialized");
+  console.log(
+    "[QuickLook] Modal controller initialized" +
+      (modalCtrl ? " (using TSGModal)" : " (standalone fallback)"),
+  );
 })();
