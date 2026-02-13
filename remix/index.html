@@ -1,6 +1,6 @@
 ---
 layout: default
-title: My Remix
+title: My Build
 description: Build your dream app by collecting features from student designs
 ---
 
@@ -13,7 +13,7 @@ description: Build your dream app by collecting features from student designs
           <a href="{{ '/' | relative_url }}" class="text-brand-stone hover:text-brand-navy transition dark:text-gray-400 dark:hover:text-white">Home</a>
         </li>
         <li class="text-brand-cloud dark:text-gray-600">/</li>
-        <li class="text-brand-navy font-medium dark:text-gray-100" aria-current="page">My Remix</li>
+        <li class="text-brand-navy font-medium dark:text-gray-100" aria-current="page">My Build</li>
       </ol>
     </nav>
 
@@ -25,13 +25,13 @@ description: Build your dream app by collecting features from student designs
         🎨
       </div>
       <h1 class="text-3xl font-extrabold text-brand-navy dark:text-gray-100 sm:text-4xl">
-        Your Remix
+        Your Build
       </h1>
       <p class="mt-2 text-base text-brand-stone dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
-        <strong class="text-brand-navy dark:text-gray-200">What's a Remix?</strong>
+        <strong class="text-brand-navy dark:text-gray-200">What's a Build?</strong>
         Browse student-designed features for the Third Spaces app,
         pick your favorites, and combine them into your dream app concept.
-        Your Remix shows the City of Austin which ideas matter most to you.
+        Your Build shows the City of Austin which ideas matter most to you.
       </p>
       <!-- Stats Line -->
       <p class="mt-2 hidden text-sm font-medium text-brand-indigo dark:text-brand-sky"
@@ -39,12 +39,12 @@ description: Build your dream app by collecting features from student designs
         <span data-remix-total>0</span> feature(s) from
         <span data-remix-source-count>0</span> design(s)
         <span class="mx-1">&middot;</span>
-        <span data-remix-submitted-stat>0/2 remixes submitted</span>
+        <span data-remix-submitted-stat>0/2 builds submitted</span>
       </p>
     </header>
 
     <!-- Tab Bar -->
-    <div class="mb-6 border-b border-brand-sky/10 dark:border-gray-700 overflow-x-auto" role="tablist" aria-label="Remix sections">
+    <div class="mb-6 border-b border-brand-sky/10 dark:border-gray-700 overflow-x-auto" role="tablist" aria-label="Build sections">
       <div class="flex min-w-max">
         <button type="button" role="tab"
                 class="px-4 py-3 text-sm transition border-b-2 border-brand-sky text-brand-navy font-semibold dark:text-gray-100 dark:border-brand-sky"
@@ -60,7 +60,7 @@ description: Build your dream app by collecting features from student designs
                 aria-selected="false"
                 aria-controls="panel-my-remixes"
                 id="tab-my-remixes">
-          <span aria-hidden="true">📦</span> My Remixes
+          <span aria-hidden="true">📦</span> My Builds
           <span class="ml-1 hidden rounded-full bg-brand-indigo/10 px-1.5 py-0.5 text-[11px] font-semibold text-brand-indigo dark:bg-brand-sky/20 dark:text-brand-sky"
                 data-remix-tab-count></span>
         </button>
@@ -99,7 +99,7 @@ description: Build your dream app by collecting features from student designs
           <p class="mt-3 text-sm leading-relaxed text-brand-stone dark:text-gray-400">
             Browse student-designed features for the Third Spaces app and collect the
             ones you love. Mix and match ideas from different designers to create
-            your perfect remix!
+            your perfect build!
           </p>
 
           <div class="mt-4 rounded-xl bg-white/60 p-3 dark:bg-gray-800/60">
@@ -113,12 +113,12 @@ description: Build your dream app by collecting features from student designs
               <li class="flex items-start gap-2">
                 <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
                              bg-brand-indigo/20 text-[10px] font-bold text-brand-indigo dark:bg-brand-indigo/30">2</span>
-                Tap "Add to Remix" on features you like
+                Tap "Add" on features you like
               </li>
               <li class="flex items-start gap-2">
                 <span class="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full
                              bg-brand-sea/20 text-[10px] font-bold text-brand-sea">3</span>
-                Come back here to visualize and share your remix
+                Come back here to visualize and share your build
               </li>
             </ol>
           </div>
@@ -170,11 +170,11 @@ description: Build your dream app by collecting features from student designs
                   class="w-full rounded-xl border border-brand-sky/20 bg-white p-3 text-sm text-brand-navy placeholder-brand-stone/50 focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500 resize-none"
                   rows="3" maxlength="500"
                   placeholder="What would your dream app do? How do these features fit together?"></textarea>
-        <p class="mt-1 text-xs text-brand-stone/60 dark:text-gray-500">This will be included when you submit your remix.</p>
+        <p class="mt-1 text-xs text-brand-stone/60 dark:text-gray-500">This will be included when you submit your build.</p>
       </div>
 
       <!-- Inline submit form -->
-      <div data-remix-inline-submit role="form" aria-label="Submit your remix" class="mt-6 hidden rounded-2xl border border-brand-purple/20 bg-gradient-to-br from-brand-indigo/5 to-brand-purple/5 p-5 dark:from-brand-indigo/10 dark:to-brand-purple/10 dark:border-brand-purple/30">
+      <div data-remix-inline-submit role="form" aria-label="Submit your build" class="mt-6 hidden rounded-2xl border border-brand-purple/20 bg-gradient-to-br from-brand-indigo/5 to-brand-purple/5 p-5 dark:from-brand-indigo/10 dark:to-brand-purple/10 dark:border-brand-purple/30">
         <h3 class="text-base font-bold text-brand-navy dark:text-gray-100">Ready to submit?</h3>
         <p class="mt-1 text-xs text-brand-stone dark:text-gray-400" data-remix-submit-remaining></p>
         <div class="mt-3 flex items-center gap-2">
@@ -192,7 +192,7 @@ description: Build your dream app by collecting features from student designs
         <div class="mt-3 flex justify-end">
           <button type="button" data-remix-submit-btn
                   class="rounded-full bg-brand-sea px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-brand-sea/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-sea/50 disabled:opacity-50 disabled:cursor-not-allowed">
-            Submit My Remix
+            Submit My Build
           </button>
         </div>
       </div>
@@ -233,7 +233,7 @@ description: Build your dream app by collecting features from student designs
       <div class="hidden" data-my-remixes-empty>
         <div class="text-center py-12">
           <span class="text-4xl block mb-3" aria-hidden="true">📦</span>
-          <h3 class="text-lg font-bold text-brand-navy dark:text-gray-100">No remixes submitted yet</h3>
+          <h3 class="text-lg font-bold text-brand-navy dark:text-gray-100">No builds submitted yet</h3>
           <p class="mt-2 text-sm text-brand-stone dark:text-gray-400 max-w-xs mx-auto">
             Build your dream app in the Build tab, then submit it!
           </p>
@@ -255,13 +255,13 @@ description: Build your dream app by collecting features from student designs
     <!-- COMMUNITY PANEL                                                 -->
     <!-- ════════════════════════════════════════════════════════════════ -->
     <div data-remix-panel="community" class="hidden" role="tabpanel" id="panel-community" aria-labelledby="tab-community">
-      <section data-community-remixes aria-label="Community remixes">
+      <section data-community-remixes aria-label="Community builds">
         <div class="flex items-center gap-2 mb-4">
           <span class="text-xl" aria-hidden="true">🌟</span>
-          <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Community Remixes</h2>
+          <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Community Builds</h2>
         </div>
         <p class="text-sm text-brand-stone dark:text-gray-400 mb-4">
-          See what other visitors have built by mixing features from student designs.
+          See what other visitors have created by mixing features from student designs.
         </p>
         <div data-community-remix-list class="space-y-4">
           <!-- Populated by remix-community.js -->
@@ -304,7 +304,7 @@ description: Build your dream app by collecting features from student designs
           </button>
         </div>
         <p class="mt-1 text-[11px] text-brand-stone/70 dark:text-gray-500">
-          Share this link so others can see your remix
+          Share this link so others can see your build
         </p>
 
         <!-- Share button (Web Share API with clipboard fallback) -->
@@ -350,7 +350,7 @@ description: Build your dream app by collecting features from student designs
        data-remix-clear-modal>
     <div class="mx-4 w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800">
       <h3 class="text-lg font-semibold text-brand-navy dark:text-gray-100">
-        Clear your remix?
+        Clear your build?
       </h3>
       <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
         This will remove all features from your collection. This can't be undone.
@@ -378,7 +378,7 @@ description: Build your dream app by collecting features from student designs
         <div class="bg-gradient-to-r from-brand-purple via-brand-indigo to-brand-sky
                     px-6 py-5 text-center text-white">
           <p class="text-xs font-semibold uppercase tracking-widest opacity-80">Third Spaces Gallery</p>
-          <h3 class="mt-1 text-xl font-bold">My Third Spaces Remix</h3>
+          <h3 class="mt-1 text-xl font-bold">My Third Spaces Build</h3>
         </div>
 
         <!-- Card body -->
@@ -469,7 +469,7 @@ description: Build your dream app by collecting features from student designs
         Replace current cart?
       </h3>
       <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
-        This will replace all features currently in your Build tab with the features from this submitted remix.
+        This will replace all features currently in your Build tab with the features from this submitted build.
       </p>
       <div class="mt-5 flex justify-end gap-2">
         <button type="button" class="tsg-chip" data-remix-again-cancel>Cancel</button>
@@ -818,7 +818,7 @@ document.addEventListener('DOMContentLoaded', function() {
         removeBtn.type = 'button';
         removeBtn.className = 'ml-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-brand-stone/60 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/40 dark:hover:text-red-400';
         removeBtn.dataset.remixRemove = item.id;
-        removeBtn.setAttribute('aria-label', 'Remove ' + escapeHtml(item.name) + ' from remix');
+        removeBtn.setAttribute('aria-label', 'Remove ' + escapeHtml(item.name) + ' from build');
         removeBtn.innerHTML = '<svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>';
         chip.appendChild(removeBtn);
 
@@ -847,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     summaryEl.classList.remove('hidden');
     var sourceCount = countUniqueSources(items);
-    headingEl.textContent = 'This remix brings together ' + items.length + ' feature' + (items.length !== 1 ? 's' : '') + ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '') + ':';
+    headingEl.textContent = 'This build brings together ' + items.length + ' feature' + (items.length !== 1 ? 's' : '') + ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '') + ':';
 
     listEl.innerHTML = '';
     groups.forEach(function(group) {
@@ -914,7 +914,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Submitted stat with color coding
     if (submittedStatEl) {
-      submittedStatEl.textContent = submittedCount + '/2 remixes submitted';
+      submittedStatEl.textContent = submittedCount + '/2 builds submitted';
       submittedStatEl.classList.remove('text-amber-600', 'text-red-600', 'dark:text-amber-400', 'dark:text-red-400');
       if (submittedCount >= 2) {
         submittedStatEl.classList.add('text-red-600', 'dark:text-red-400');
@@ -940,9 +940,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (submitRemainingEl) {
         var remaining = 2 - submittedCount;
         if (remaining <= 0) {
-          submitRemainingEl.textContent = 'You have used all 2 remix submissions. Thank you for contributing!';
+          submitRemainingEl.textContent = 'You have used all 2 build submissions. Thank you for contributing!';
         } else {
-          submitRemainingEl.textContent = 'You have ' + remaining + '/2 remix submission' + (remaining !== 1 ? 's' : '') + ' remaining.';
+          submitRemainingEl.textContent = 'You have ' + remaining + '/2 build submission' + (remaining !== 1 ? 's' : '') + ' remaining.';
         }
       }
 
@@ -1024,7 +1024,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Count indicator
     if (countEl) {
       var c = remixes.length;
-      countEl.textContent = c + '/2 remixes submitted';
+      countEl.textContent = c + '/2 builds submitted';
       countEl.classList.remove('text-amber-600', 'text-red-600', 'dark:text-amber-400', 'dark:text-red-400');
       if (c >= 2) {
         countEl.classList.add('text-red-600', 'dark:text-red-400');
@@ -1056,7 +1056,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var headerLeft = document.createElement('div');
       var h3 = document.createElement('h3');
       h3.className = 'text-sm font-semibold text-brand-navy dark:text-gray-200';
-      h3.innerHTML = '<span aria-hidden="true">📦</span> Remix #' + escapeHtml(remix.reference || 'N/A');
+      h3.innerHTML = '<span aria-hidden="true">📦</span> Build #' + escapeHtml(remix.reference || 'N/A');
       headerLeft.appendChild(h3);
 
       var datePara = document.createElement('p');
@@ -1108,7 +1108,7 @@ document.addEventListener('DOMContentLoaded', function() {
       remixAgainBtn.type = 'button';
       remixAgainBtn.className = 'inline-flex items-center gap-2 rounded-full border border-brand-sky/20 px-4 py-2 text-sm font-medium text-brand-indigo transition-all hover:bg-brand-light-blue/30 hover:border-brand-sky dark:border-gray-600 dark:text-brand-sky dark:hover:border-brand-sky/50 dark:hover:bg-gray-700';
       remixAgainBtn.dataset.remixAgain = remix.reference || '';
-      remixAgainBtn.innerHTML = '<span aria-hidden="true">🔄</span> Remix Again';
+      remixAgainBtn.innerHTML = '<span aria-hidden="true">🔄</span> Build Again';
       body.appendChild(remixAgainBtn);
 
       card.appendChild(body);
@@ -1188,7 +1188,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     switchTab('build');
-    showToast('Features loaded! Edit and submit a new remix.', 'success');
+    showToast('Features loaded! Edit and submit a new build.', 'success');
   }
 
   // ── Submit remix (inline form) ──────────────────────────────────
@@ -1216,14 +1216,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!result.success) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit My Remix';
+      submitBtn.textContent = 'Submit My Build';
       showToast(result.error || 'Something went wrong. Please try again.', 'error');
       return;
     }
 
     // Reset button
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit My Remix';
+    submitBtn.textContent = 'Submit My Build';
 
     // Save author name for next time
     try {
@@ -1239,7 +1239,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Populate confirmation modal
     var summaryEl = document.querySelector('[data-remix-confirm-summary]');
     if (summaryEl) {
-      summaryEl.textContent = 'Your remix has been submitted for review! ' +
+      summaryEl.textContent = 'Your build has been submitted for review! ' +
         featureCount + ' feature' + (featureCount !== 1 ? 's' : '') +
         ' from ' + sourceCount + ' design' + (sourceCount !== 1 ? 's' : '') +
         (result.reference ? '. Reference: ' + result.reference : '') + '.';

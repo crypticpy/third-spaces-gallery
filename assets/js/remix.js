@@ -291,7 +291,7 @@
         <button type="button"
                 class="tsg-chip hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/30"
                 data-remix-remove="${escapeHtml(item.id)}"
-                aria-label="Remove ${escapeHtml(item.name)} from remix">
+                aria-label="Remove ${escapeHtml(item.name)} from build">
           <span aria-hidden="true">✕</span>
           <span class="hidden sm:inline">Remove</span>
         </button>
@@ -470,7 +470,7 @@
         return {
           success: false,
           error:
-            "You've reached the maximum of 2 remix submissions. Thank you for contributing!",
+            "You've reached the maximum of 2 build submissions. Thank you for contributing!",
         };
       }
     } catch (e) {}
@@ -604,7 +604,7 @@
       const handled = !document.dispatchEvent(event);
       if (!handled) {
         // Fallback for pages without a custom handler
-        if (confirm("Remove all features from your remix?")) {
+        if (confirm("Remove all features from your build?")) {
           clear();
         }
       }

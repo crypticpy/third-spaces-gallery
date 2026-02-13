@@ -70,9 +70,9 @@
       },
     },
     remix: {
-      label: "Remix Cart",
+      label: "Build Cart",
       icon: "\uD83C\uDFA8",
-      description: "Features you collected for your remix",
+      description: "Features you collected for your build",
       keys: ["tsg_remix_cart", "tsg_remix_onboarding_seen"],
       cookie: null,
       storage: "Your browser only",
@@ -91,7 +91,7 @@
               " saved"
             );
           } catch (e) {
-            return "Remix data stored";
+            return "Build data stored";
           }
         }
         return "Onboarding flag only";
@@ -186,9 +186,9 @@
       },
     },
     published_remixes: {
-      label: "Published Remixes",
+      label: "Published Builds",
       icon: "\uD83D\uDCE4",
-      description: "Remixes you submitted for community display",
+      description: "Builds you submitted for community display",
       keys: ["ts:published_remixes:v1"],
       cookie: null,
       storage: "Your browser + our server (if connected)",
@@ -202,19 +202,19 @@
             var prData = JSON.parse(prItem.value);
             var prCount = Object.keys(prData).length;
             return (
-              prCount + " remix" + (prCount !== 1 ? "es" : "") + " published"
+              prCount + " build" + (prCount !== 1 ? "s" : "") + " published"
             );
           } catch (e) {
-            return "Remix data stored";
+            return "Build data stored";
           }
         }
-        return "Remix data stored";
+        return "Build data stored";
       },
     },
     remix_upvotes: {
-      label: "Remix Upvotes",
+      label: "Build Upvotes",
       icon: "\u2B50",
-      description: "Which community remixes you upvoted",
+      description: "Which community builds you upvoted",
       keys: ["ts:remix_upvotes:v1"],
       cookie: null,
       storage: "Your browser + our server (if connected)",
@@ -227,9 +227,7 @@
           try {
             var ruData = JSON.parse(ruItem.value);
             var ruCount = Object.keys(ruData).length;
-            return (
-              ruCount + " remix" + (ruCount !== 1 ? "es" : "") + " upvoted"
-            );
+            return ruCount + " build" + (ruCount !== 1 ? "s" : "") + " upvoted";
           } catch (e) {
             return "Upvote data stored";
           }

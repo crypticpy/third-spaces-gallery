@@ -354,7 +354,7 @@
     const upvoteBtn = document.createElement("button");
     upvoteBtn.type = "button";
     upvoteBtn.dataset.upvoteRemix = remix.id;
-    upvoteBtn.setAttribute("aria-label", `Upvote this remix (${upvoteCount})`);
+    upvoteBtn.setAttribute("aria-label", `Upvote this build (${upvoteCount})`);
     upvoteBtn.className = [
       "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5",
       "text-sm font-medium transition-all duration-200",
@@ -415,7 +415,7 @@
 
     // Show loading state
     list.textContent = "";
-    list.appendChild(createStatusMessage("Loading community remixes..."));
+    list.appendChild(createStatusMessage("Loading community builds..."));
 
     try {
       // Fetch remixes and upvote counts in parallel
@@ -436,7 +436,7 @@
         list.textContent = "";
         list.appendChild(
           createStatusMessage(
-            "Could not load community remixes. Please try again later.",
+            "Could not load community builds. Please try again later.",
           ),
         );
         return;
@@ -448,7 +448,7 @@
         list.textContent = "";
         list.appendChild(
           createStatusMessage(
-            "No community remixes yet. Be the first to publish yours!",
+            "No community builds yet. Be the first to publish yours!",
           ),
         );
         return;
@@ -488,7 +488,7 @@
       list.textContent = "";
       list.appendChild(
         createStatusMessage(
-          "Could not load community remixes. Please try again later.",
+          "Could not load community builds. Please try again later.",
         ),
       );
     }

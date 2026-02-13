@@ -91,9 +91,9 @@ title: Your Data
           <!-- Remix Cart -->
           <div class="rounded-xl border border-purple-200 bg-purple-50/50 p-4
                       dark:border-purple-800/50 dark:bg-purple-950/20">
-                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Remix Cart</h3>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Build Cart</h3>
                 <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
-                  Features you collect for your remix are saved in your browser so
+                  Features you collect for your build are saved in your browser so
                   they're still there when you come back. This never leaves your device.
                 </p>
                 <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
@@ -147,9 +147,9 @@ title: Your Data
           <!-- Published Remixes -->
           <div class="rounded-xl border border-purple-200 bg-purple-50/50 p-4
                       dark:border-purple-800/50 dark:bg-purple-950/20">
-                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Published Remixes</h3>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Published Builds</h3>
                 <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
-                  Remixes you submitted for community display. These go through moderation
+                  Builds you submitted for community display. These go through moderation
                   before appearing on the site. Stored on the server with your author name
                   (or "Anonymous" if you didn't provide one).
                 </p>
@@ -162,9 +162,9 @@ title: Your Data
           <!-- Remix Upvotes -->
           <div class="rounded-xl border border-amber-200 bg-amber-50/50 p-4
                       dark:border-amber-800/50 dark:bg-amber-950/20">
-                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Remix Upvotes</h3>
+                <h3 class="font-semibold text-brand-navy dark:text-gray-100">Build Upvotes</h3>
                 <p class="mt-1 text-sm text-brand-stone dark:text-gray-400">
-                  Which community remixes you upvoted. Tracked in your browser and stored
+                  Which community builds you upvoted. Tracked in your browser and stored
                   anonymously on the server so the count is accurate.
                 </p>
                 <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-brand-stone/80 dark:text-gray-500">
@@ -218,8 +218,8 @@ title: Your Data
                     dark:border-red-800/50 dark:bg-red-950/20">
           <h3 class="text-xl font-bold text-brand-navy dark:text-gray-100">Delete All My Data</h3>
           <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
-            This removes everything &mdash; your votes, feedback, upvotes, published remixes,
-            remix cart, theme choice, viewing history, and device ID. If connected, it also
+            This removes everything &mdash; your votes, feedback, upvotes, published builds,
+            build cart, theme choice, viewing history, and device ID. If connected, it also
             removes your data from our server. This cannot be undone.
           </p>
           <button type="button"
@@ -676,7 +676,7 @@ title: Your Data
   deleteAllBtn?.addEventListener('click', function() {
     pendingAction = 'all';
     if (messageEl) {
-      messageEl.textContent = 'This will permanently remove all your data — votes, feedback, remix cart, preferences, and viewing history. This cannot be undone.';
+      messageEl.textContent = 'This will permanently remove all your data — votes, feedback, build cart, preferences, and viewing history. This cannot be undone.';
     }
     openModal();
   });

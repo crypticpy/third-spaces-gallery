@@ -96,26 +96,26 @@ layout: default
         <section class="rounded-2xl border-2 border-dashed border-teal-400/40 bg-teal-50/30 p-6
                         shadow-[0_0_20px_rgba(20,184,166,0.1)]
                         dark:border-teal-400/50 dark:bg-teal-950/15
-                        dark:shadow-[0_0_20px_rgba(20,184,166,0.15)]" aria-label="Features to remix">
+                        dark:shadow-[0_0_20px_rgba(20,184,166,0.15)]" aria-label="Features to build with">
           <div class="flex items-center justify-between mb-1">
             <div class="flex items-center gap-2">
               <span class="text-2xl" aria-hidden="true">🎨</span>
-              <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Remix These Features</h2>
+              <h2 class="text-lg font-bold text-brand-navy dark:text-gray-100">Build With These Features</h2>
             </div>
             <a href="{{ '/remix/' | relative_url }}"
                class="text-xs font-medium text-teal-600 hover:text-teal-700 dark:text-teal-400 dark:hover:text-teal-300 transition">
-              View your Remix →
+              View your Build →
             </a>
           </div>
           <p class="text-sm text-brand-stone dark:text-gray-400 mb-3">
-            Here are this design's features. Tap the ones you like to add them to your remix.
+            Here are this design's features. Tap the ones you like to add them to your build.
           </p>
           <details class="mb-4 text-xs text-brand-stone/70 dark:text-gray-500">
             <summary class="cursor-pointer hover:text-brand-stone dark:hover:text-gray-400 transition inline-flex items-center gap-1">
-              What is Remix?
+              What is Build?
             </summary>
             <p class="mt-1 pl-0.5">
-              Your Remix is like a wishlist — collect features from any design, then share your ideal combo.
+              Your Build is like a wishlist — collect features from any design, then share your ideal combo.
             </p>
           </details>
           <div class="flex flex-wrap gap-2">
@@ -508,7 +508,7 @@ layout: default
 // Scroll-to-remix CTA (delegated to avoid inline onclick)
 document.addEventListener('click', function(e) {
   if (e.target.closest('[data-scroll-to-remix]')) {
-    var target = document.querySelector('[aria-label="Features to remix"]');
+    var target = document.querySelector('[aria-label="Features to build with"]');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }

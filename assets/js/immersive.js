@@ -394,9 +394,9 @@ class ImmersiveGallery {
           submission.features && submission.features.length > 0
             ? `
         <button type="button" class="quick-remix-btn" data-immersive-remix-btn
-                aria-label="Remix features">
+                aria-label="Build features">
           <span class="vote-emoji">🎨</span>
-          <span class="vote-label">Remix</span>
+          <span class="vote-label">Build</span>
           <span class="remix-count" data-remix-footer-count></span>
         </button>
         `
@@ -1540,16 +1540,16 @@ class ImmersiveGallery {
       "/remix/";
 
     return `
-      <div class="remix-panel" data-remix-panel role="dialog" aria-modal="true" aria-label="Remix features">
+      <div class="remix-panel" data-remix-panel role="dialog" aria-modal="true" aria-label="Build features">
         <div class="remix-panel-backdrop" data-remix-panel-close></div>
         <div class="remix-panel-sheet">
           <div class="remix-panel-handle" aria-hidden="true"></div>
           <header class="remix-panel-header">
             <h3 class="remix-panel-title">
-              <span aria-hidden="true">🎨</span> Remix
+              <span aria-hidden="true">🎨</span> Build
             </h3>
             <button type="button" class="remix-panel-close-btn" data-remix-panel-close
-                    aria-label="Close remix panel">
+                    aria-label="Close build panel">
               ✕
             </button>
           </header>
@@ -1601,11 +1601,11 @@ class ImmersiveGallery {
           <footer class="remix-panel-footer">
             <div class="remix-panel-cart-info">
               <span class="remix-panel-cart-count" data-remix-panel-count>${cartCount}</span>
-              feature${cartCount !== 1 ? "s" : ""} in your remix
+              feature${cartCount !== 1 ? "s" : ""} in your build
             </div>
             <a href="${this.escapeHtml(remixUrl)}" class="remix-panel-view-link"
                data-remix-panel-link ${cartCount === 0 ? "hidden" : ""}>
-              View Your Remix
+              View Your Build
               <span aria-hidden="true">→</span>
             </a>
           </footer>
@@ -1708,7 +1708,7 @@ class ImmersiveGallery {
           node.nodeType === Node.TEXT_NODE &&
           node.textContent.includes("feature")
         ) {
-          node.textContent = ` feature${count !== 1 ? "s" : ""} in your remix`;
+          node.textContent = ` feature${count !== 1 ? "s" : ""} in your build`;
         }
       }
     }
