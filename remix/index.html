@@ -160,6 +160,30 @@ description: Build your dream app by collecting features from student designs
         <p class="mt-1 text-xs text-brand-stone/60 dark:text-gray-500">This will be included when you submit your remix.</p>
       </div>
 
+      <!-- Inline submit form -->
+      <div data-remix-inline-submit role="form" aria-label="Submit your remix" class="mt-6 hidden rounded-2xl border border-brand-purple/20 bg-gradient-to-br from-brand-indigo/5 to-brand-purple/5 p-5 dark:from-brand-indigo/10 dark:to-brand-purple/10 dark:border-brand-purple/30">
+        <h3 class="text-base font-bold text-brand-navy dark:text-gray-100">Ready to submit?</h3>
+        <p class="mt-1 text-xs text-brand-stone dark:text-gray-400" data-remix-submit-remaining></p>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="text-sm text-brand-stone dark:text-gray-400">By</span>
+          <input type="text" data-remix-author
+                 aria-label="Your name"
+                 autocapitalize="words"
+                 class="flex-1 rounded-lg border border-brand-sky/20 bg-white px-3 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                 placeholder="Anonymous" maxlength="50" autocomplete="given-name">
+        </div>
+        <textarea data-remix-note
+                  aria-label="Additional note"
+                  class="mt-3 w-full rounded-lg border border-brand-sky/20 bg-white px-3 py-2 text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200"
+                  placeholder="Anything to add? (optional)" rows="2" maxlength="500"></textarea>
+        <div class="mt-3 flex justify-end">
+          <button type="button" data-remix-submit-btn
+                  class="rounded-full bg-brand-sea px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-brand-sea/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-sea/50 disabled:opacity-50 disabled:cursor-not-allowed">
+            Submit My Remix
+          </button>
+        </div>
+      </div>
+
       <!-- Actions -->
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3 hidden" data-remix-actions>
         <!-- Visualize Button -->
@@ -168,19 +192,6 @@ description: Build your dream app by collecting features from student designs
                 data-remix-visualize>
           <span aria-hidden="true">🖼️</span>
           <span>Visualize</span>
-        </button>
-
-        <!-- Submit Button -->
-        <button type="button"
-                class="inline-flex items-center gap-2 rounded-full
-                       bg-gradient-to-r from-brand-sea to-brand-indigo
-                       px-6 py-3 text-sm font-semibold text-white
-                       shadow-lg shadow-brand-sea/25 transition-all
-                       hover:-translate-y-0.5 hover:shadow-xl
-                       focus:outline-none focus:ring-4 focus:ring-brand-sea/50"
-                data-remix-submit-btn>
-          <span aria-hidden="true">🚀</span>
-          <span>Submit My Remix</span>
         </button>
 
         <!-- Clear Button -->
@@ -251,56 +262,6 @@ description: Build your dream app by collecting features from student designs
   <!-- MODALS (outside tab panels, always accessible)                    -->
   <!-- ══════════════════════════════════════════════════════════════════ -->
 
-  <!-- Submission Modal -->
-  <div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
-       data-remix-modal>
-    <div class="mx-4 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl
-                dark:bg-gray-800">
-      <h3 class="text-lg font-semibold text-brand-navy dark:text-gray-100">
-        Share Your Remix
-      </h3>
-      <p class="mt-2 text-sm text-brand-stone dark:text-gray-400">
-        Your remix will be submitted for review before appearing in the community section.
-      </p>
-      <p class="mt-1 text-xs font-medium dark:text-gray-400" data-remix-modal-remaining></p>
-
-      <input type="text"
-             class="mt-4 w-full rounded-xl border border-brand-sky/20 bg-white p-3
-                    text-sm text-brand-navy placeholder-brand-stone/50
-                    focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
-                    dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
-                    dark:placeholder-gray-500"
-             placeholder="Your name (optional)"
-             maxlength="50"
-             aria-label="Your name"
-             data-remix-author>
-
-      <textarea class="mt-3 w-full rounded-xl border border-brand-sky/20 bg-white p-3
-                       text-sm text-brand-navy placeholder-brand-stone/50
-                       focus:border-brand-sky focus:outline-none focus:ring-2 focus:ring-brand-sky/20
-                       dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100
-                       dark:placeholder-gray-500"
-                rows="3"
-                placeholder="Tell us about your app idea..."
-                aria-label="Describe your app idea"
-                data-remix-note></textarea>
-
-      <div class="mt-4 flex justify-end gap-2">
-        <button type="button"
-                class="tsg-chip"
-                data-remix-modal-close>
-          Cancel
-        </button>
-        <button type="button"
-                class="rounded-full bg-brand-sea px-4 py-2 text-sm font-semibold text-white
-                       transition-all hover:bg-brand-indigo disabled:opacity-50 disabled:cursor-not-allowed"
-                data-remix-modal-submit>
-          Submit
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Confirmation Modal (shown after submit) -->
   <div class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm"
        data-remix-confirm-modal>
@@ -308,8 +269,7 @@ description: Build your dream app by collecting features from student designs
                 dark:bg-gray-800">
       <!-- Gradient header -->
       <div class="bg-gradient-to-r from-brand-sea via-brand-indigo to-brand-sky px-6 py-6 text-center text-white">
-        <div class="mb-2 text-4xl">🎉</div>
-        <h3 class="text-xl font-bold">Your Remix is ready to share!</h3>
+        <h3 class="text-xl font-bold">Your build is live.</h3>
       </div>
 
       <div class="px-6 py-5">
@@ -334,35 +294,11 @@ description: Build your dream app by collecting features from student designs
           Share this link so others can see your remix
         </p>
 
-        <!-- Social sharing buttons -->
+        <!-- Share button (Web Share API with clipboard fallback) -->
         <div class="mt-4 flex items-center justify-center gap-3">
-          <button type="button"
-                  class="inline-flex items-center gap-1.5 rounded-full border border-pink-300
-                         bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400
-                         px-4 py-2 text-xs font-semibold text-white
-                         transition-all hover:shadow-md hover:brightness-110
-                         dark:border-pink-700"
-                  data-remix-share-instagram>
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-            Instagram
-          </button>
-          <button type="button"
-                  class="inline-flex items-center gap-1.5 rounded-full border border-gray-300
-                         bg-gray-900 px-4 py-2 text-xs font-semibold text-white
-                         transition-all hover:bg-black hover:shadow-md
-                         dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  data-remix-share-tiktok>
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.18 8.18 0 004.77 1.52V6.84a4.86 4.86 0 01-1-.15z"/></svg>
-            TikTok
-          </button>
-          <button type="button"
-                  class="inline-flex items-center gap-1.5 rounded-full border border-gray-300
-                         bg-gray-800 px-4 py-2 text-xs font-semibold text-white
-                         transition-all hover:bg-gray-900 hover:shadow-md
-                         dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  data-remix-share-threads>
-            <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.187.408-2.26 1.33-3.017.88-.724 2.104-1.139 3.446-1.17 1.076-.024 2.055.138 2.91.467.023-.937-.093-1.748-.35-2.387-.345-.853-.99-1.307-1.865-1.312-.596 0-1.108.158-1.48.456-.336.268-.553.653-.636 1.13l-2.074-.283c.174-1.011.698-1.847 1.517-2.42.866-.606 1.978-.918 3.308-.93h.013c1.628.018 2.89.607 3.751 1.749.658.87 1.053 2.072 1.172 3.573l.009.134c1.047.596 1.88 1.416 2.414 2.382.855 1.544.96 4.147-1.168 6.237-1.838 1.806-4.062 2.58-7.206 2.604zM10.205 14.9c.012.22.14.6.574.87.484.302 1.16.452 1.9.415.994-.054 1.726-.395 2.244-1.04.39-.488.67-1.123.832-1.89-.64-.178-1.325-.27-2.04-.258-.96.022-1.747.238-2.278.627-.466.343-.63.76-.623 1.03z"/></svg>
-            Threads
+          <button type="button" data-remix-share-native
+                  class="tsg-chip flex-1 justify-center hover:bg-brand-indigo/10">
+            <span aria-hidden="true">&#x2934;</span> Share
           </button>
         </div>
 
@@ -381,7 +317,7 @@ description: Build your dream app by collecting features from student designs
                          hover:border-red-300 hover:bg-red-50
                          dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20"
                   data-remix-start-fresh>
-            Start Fresh
+            Start a new build
           </button>
           <button type="button"
                   class="flex-1 rounded-full bg-brand-indigo px-4 py-2.5
@@ -538,12 +474,13 @@ description: Build your dream app by collecting features from student designs
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var modal = document.querySelector('[data-remix-modal]');
   var vizModal = document.querySelector('[data-remix-viz-modal]');
   var confirmModal = document.querySelector('[data-remix-confirm-modal]');
   var clearModal = document.querySelector('[data-remix-clear-modal]');
   var remixAgainModal = document.querySelector('[data-remix-again-modal]');
+  var inlineSubmitForm = document.querySelector('[data-remix-inline-submit]');
   var noteInput = document.querySelector('[data-remix-note]');
+  var authorInput = document.querySelector('[data-remix-author]');
   var vizConstellation = document.querySelector('[data-remix-viz-constellation]');
   var vizCount = document.querySelector('[data-remix-viz-count]');
   var descriptionTextarea = document.querySelector('[data-remix-user-description]');
@@ -595,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function releaseFocusTrap() {
     if (activeTrapListener) {
       // Remove from all modals that might have it
-      [modal, confirmModal, remixAgainModal].forEach(function(m) {
+      [confirmModal, clearModal, vizModal, remixAgainModal].forEach(function(m) {
         if (m) m.removeEventListener('keydown', activeTrapListener);
       });
       activeTrapListener = null;
@@ -969,6 +906,38 @@ document.addEventListener('DOMContentLoaded', function() {
     if (summaryEl && count === 0) summaryEl.classList.add('hidden');
     if (descSection) descSection.classList.toggle('hidden', count === 0);
 
+    // Show/hide inline submit form
+    if (inlineSubmitForm) {
+      var hasItems = count > 0;
+      var hasRemaining = submittedCount < 2;
+      inlineSubmitForm.classList.toggle('hidden', !(hasItems && hasRemaining));
+
+      // Update remaining count text
+      var submitRemainingEl = inlineSubmitForm.querySelector('[data-remix-submit-remaining]');
+      if (submitRemainingEl) {
+        var remaining = 2 - submittedCount;
+        if (remaining <= 0) {
+          submitRemainingEl.textContent = 'You have used all 2 remix submissions. Thank you for contributing!';
+        } else {
+          submitRemainingEl.textContent = 'You have ' + remaining + '/2 remix submission' + (remaining !== 1 ? 's' : '') + ' remaining.';
+        }
+      }
+
+      // Pre-fill author from localStorage
+      if (authorInput && !authorInput.value) {
+        try {
+          var savedAuthor = localStorage.getItem('tsg_remix_author');
+          if (savedAuthor) authorInput.value = savedAuthor;
+        } catch (e) {}
+      }
+
+      // Pre-fill note from on-page description
+      if (noteInput && descriptionTextarea && !noteInput.value.trim()) {
+        var desc = descriptionTextarea.value.trim();
+        if (desc) noteInput.value = desc;
+      }
+    }
+
     // Update tab badge for My Remixes
     updateMyRemixesTabBadge();
   }
@@ -1165,65 +1134,16 @@ document.addEventListener('DOMContentLoaded', function() {
     showToast('Features loaded! Edit and submit a new remix.', 'success');
   }
 
-  // ── Open submit modal ───────────────────────────────────────────
-  document.querySelector('[data-remix-submit-btn]')?.addEventListener('click', function() {
-    var submittedCount = getSubmittedCount();
-    var remainingEl = document.querySelector('[data-remix-modal-remaining]');
-    var submitBtn = document.querySelector('[data-remix-modal-submit]');
-
-    // Update remaining count
-    if (remainingEl) {
-      var remaining = 2 - submittedCount;
-      if (remaining <= 0) {
-        remainingEl.textContent = 'You have used all 2 remix submissions. Thank you for contributing!';
-        remainingEl.className = 'mt-1 text-xs font-medium text-red-600 dark:text-red-400';
-      } else {
-        remainingEl.textContent = 'You have ' + remaining + '/2 remix submission' + (remaining !== 1 ? 's' : '') + ' remaining.';
-        remainingEl.className = 'mt-1 text-xs font-medium text-brand-stone dark:text-gray-400';
-      }
-    }
-
-    // Disable submit if at limit
-    if (submitBtn) {
-      if (submittedCount >= 2) {
-        submitBtn.disabled = true;
-      } else {
-        submitBtn.disabled = false;
-      }
-    }
-
-    // Pre-fill author from localStorage
-    var authorInput = document.querySelector('[data-remix-author]');
-    if (authorInput) {
-      try {
-        var savedAuthor = localStorage.getItem('tsg_remix_author');
-        if (savedAuthor) authorInput.value = savedAuthor;
-      } catch (e) {}
-    }
-
-    // Pre-fill note from on-page description
-    if (noteInput && descriptionTextarea) {
-      var desc = descriptionTextarea.value.trim();
-      if (desc && !noteInput.value.trim()) {
-        noteInput.value = desc;
-      }
-    }
-
-    openModal(modal);
-    if (noteInput) noteInput.focus();
-  });
-
-  // ── Close submit modal ──────────────────────────────────────────
-  document.querySelector('[data-remix-modal-close]')?.addEventListener('click', function() {
-    closeModal(modal);
-  });
-
-  // ── Submit remix ────────────────────────────────────────────────
-  document.querySelector('[data-remix-modal-submit]')?.addEventListener('click', async function() {
-    var note = noteInput?.value?.trim() || '';
-    var authorInput = document.querySelector('[data-remix-author]');
-    var authorName = authorInput?.value?.trim() || 'Anonymous';
+  // ── Submit remix (inline form) ──────────────────────────────────
+  document.querySelector('[data-remix-submit-btn]')?.addEventListener('click', async function() {
+    var note = noteInput ? noteInput.value.trim() : '';
+    var authorName = authorInput ? authorInput.value.trim() : '';
+    if (!authorName) authorName = 'Anonymous';
     var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
+    if (!items.length) {
+      showToast('Add some features before submitting.', 'error');
+      return;
+    }
     var featureCount = items.length;
     var sourceCount = countUniqueSources(items);
     var submitBtn = this;
@@ -1239,17 +1159,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!result.success) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit';
+      submitBtn.textContent = 'Submit My Remix';
       showToast(result.error || 'Something went wrong. Please try again.', 'error');
       return;
     }
 
     // Reset button
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit';
-
-    // Close submit modal
-    closeModal(modal);
+    submitBtn.textContent = 'Submit My Remix';
 
     // Save author name for next time
     try {
@@ -1279,7 +1196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show confirmation modal
     openModal(confirmModal);
 
-    // Clear form
+    // Clear inline form fields
     if (noteInput) noteInput.value = '';
     if (authorInput) authorInput.value = '';
 
@@ -1302,10 +1219,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var url = document.querySelector('[data-remix-share-url]')?.textContent || '';
     if (!url) return;
 
-    var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
-    var n = items.length;
-    var blurb = 'Check out my Third Spaces Remix — I collected ' + n +
-      ' feature' + (n !== 1 ? 's' : '') + ' from student designs:\n' + url;
+    var blurb = getRemixBlurb() + '\n' + url;
 
     var btn = this;
     safeCopyToClipboard(blurb, function() {
@@ -1334,47 +1248,41 @@ document.addEventListener('DOMContentLoaded', function() {
   function getRemixBlurb() {
     var items = window.TSGRemix ? window.TSGRemix.getAll() : [];
     var n = items.length;
-    var url = getShareURL();
-    return 'I remixed ' + n + ' feature' + (n !== 1 ? 's' : '') +
-      ' from student designs for the Third Spaces app! Check it out:\n' + url;
+    return 'I built my dream Third Spaces app with ' + n +
+      ' feature' + (n !== 1 ? 's' : '') +
+      ' from student designs! Check it out:';
   }
 
   /** Flash feedback on a share button */
-  function flashShareBtn(btn, feedbackText, origText) {
+  function flashShareBtn(btn, feedbackText, originalHTML) {
     if (!btn) return;
-    var textNode = btn.lastChild;
-    if (textNode && textNode.nodeType === 3) {
-      textNode.textContent = ' ' + feedbackText;
-      setTimeout(function() { textNode.textContent = ' ' + origText; }, 2000);
-    }
+    btn.textContent = feedbackText;
+    setTimeout(function() { btn.innerHTML = originalHTML; }, 2000);
   }
 
-  // ── Share on Instagram (copy blurb + open) ────────────────────
-  document.querySelector('[data-remix-share-instagram]')?.addEventListener('click', function() {
-    var blurb = getRemixBlurb();
-    var btn = this;
-    safeCopyToClipboard(blurb, function() {
-      flashShareBtn(btn, 'Copied!', 'Instagram');
+  // ── Share via Web Share API (with clipboard fallback) ─────────
+  var shareNativeBtn = confirmModal ? confirmModal.querySelector('[data-remix-share-native]') : null;
+  if (shareNativeBtn) {
+    shareNativeBtn.addEventListener('click', function() {
+      var blurb = getRemixBlurb();
+      var shareUrl = getShareURL();
+      var btn = shareNativeBtn;
+      var origHTML = btn.innerHTML;
+      if (navigator.share) {
+        navigator.share({ title: 'My Third Spaces Build', text: blurb, url: shareUrl }).catch(function(err) {
+          if (err.name !== 'AbortError') {
+            safeCopyToClipboard(blurb + '\n' + shareUrl, function() {
+              flashShareBtn(btn, 'Copied!', origHTML);
+            });
+          }
+        });
+      } else {
+        safeCopyToClipboard(blurb + '\n' + shareUrl, function() {
+          flashShareBtn(btn, 'Copied!', origHTML);
+        });
+      }
     });
-    window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer');
-  });
-
-  // ── Share on TikTok (copy blurb + open) ───────────────────────
-  document.querySelector('[data-remix-share-tiktok]')?.addEventListener('click', function() {
-    var blurb = getRemixBlurb();
-    var btn = this;
-    safeCopyToClipboard(blurb, function() {
-      flashShareBtn(btn, 'Copied!', 'TikTok');
-    });
-    window.open('https://www.tiktok.com/', '_blank', 'noopener,noreferrer');
-  });
-
-  // ── Share on Threads ──────────────────────────────────────────
-  document.querySelector('[data-remix-share-threads]')?.addEventListener('click', function() {
-    var blurb = getRemixBlurb();
-    var shareUrl = 'https://www.threads.net/intent/post?text=' + encodeURIComponent(blurb);
-    window.open(shareUrl, '_blank', 'noopener,noreferrer,width=600,height=500');
-  });
+  }
 
   // ── Start Fresh from confirmation modal ─────────────────────────
   document.querySelector('[data-remix-start-fresh]')?.addEventListener('click', function() {
@@ -1389,11 +1297,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // ── Close confirmation modal ────────────────────────────────────
   document.querySelector('[data-remix-confirm-close]')?.addEventListener('click', function() {
     closeModal(confirmModal);
-  });
-
-  // ── Close submit modal on backdrop click ────────────────────────
-  modal?.addEventListener('click', function(e) {
-    if (e.target === modal) closeModal(modal);
   });
 
   // ── Close confirmation modal on backdrop click ──────────────────
@@ -1568,7 +1471,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // ── Escape key closes all modals ────────────────────────────────
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      closeModal(modal);
       closeModal(vizModal);
       closeModal(confirmModal);
       closeModal(clearModal);

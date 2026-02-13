@@ -147,7 +147,9 @@
     "screens": {% if include.submission.screens %}[{% for screen in include.submission.screens %}{"src": {{ screen.src | relative_url | jsonify }}, "alt": {{ screen.alt | default: include.submission.title | append: " screen" | jsonify }}, "caption": {{ screen.caption | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% elsif include.submission.images %}[{% for img in include.submission.images %}{"src": {{ img | relative_url | jsonify }}, "alt": {{ include.submission.title | append: " screen" | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% else %}[]{% endif %},
     "cover_image": {{ include.submission.cover_image | default: include.submission.thumbnail | relative_url | jsonify }},
     "creator_note": {{ include.submission.creator_note | jsonify }},
-    "voteKey": {{ include.submission.slug | jsonify }}
+    "voteKey": {{ include.submission.slug | jsonify }},
+    "slug": {{ include.submission.slug | jsonify }},
+    "features": {% if include.submission.features %}{{ include.submission.features | jsonify }}{% else %}[]{% endif %}
   }
   </script>
 </article>

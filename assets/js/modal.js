@@ -33,6 +33,8 @@
   const closeBtn = modal.querySelector("[data-ql-close]");
   const backdrop = modal.querySelector("[data-ql-backdrop]");
   const voteContainer = modal.querySelector("[data-ql-vote-container]");
+  const remixSection = modal.querySelector("[data-ql-remix-section]");
+  const remixChips = modal.querySelector("[data-ql-remix-chips]");
 
   // State
   const prefersReducedMotion =
@@ -58,6 +60,16 @@
         toastEl.textContent = "";
       }, 2500);
     }
+  };
+
+  /**
+   * Escape HTML special characters to prevent XSS
+   */
+  const escapeHtml = (str) => {
+    if (!str) return "";
+    const div = document.createElement("div");
+    div.appendChild(document.createTextNode(String(str)));
+    return div.innerHTML;
   };
 
   /**
@@ -330,6 +342,55 @@
       }
     }
 
+    // Render remix (build) feature chips
+    if (remixSection && remixChips) {
+      remixChips.innerHTML = "";
+      if (data.features && data.features.length > 0) {
+        remixSection.classList.remove("hidden");
+        data.features.forEach((f) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className =
+            "tsg-chip transition-all hover:bg-teal-500/15 hover:border-teal-400";
+          btn.setAttribute("data-remix-add", f.id);
+          btn.setAttribute("data-remix-name", f.name);
+          btn.setAttribute("data-remix-icon", f.icon || "\uD83C\uDFAF");
+          btn.setAttribute(
+            "data-remix-source",
+            data.slug || data.voteKey || "",
+          );
+          btn.setAttribute("data-remix-source-title", data.title || "");
+          btn.setAttribute(
+            "data-remix-source-thumbnail",
+            data.cover_image || "",
+          );
+          btn.setAttribute("data-remix-source-designer", data.designer || "");
+          btn.setAttribute("data-remix-source-url", data.url || "");
+          btn.setAttribute("aria-pressed", "false");
+
+          // Check if feature is already in the remix cart
+          const alreadyAdded = window.TSGRemix && window.TSGRemix.has(f.id);
+          if (alreadyAdded) {
+            btn.classList.add("is-added");
+            btn.setAttribute("aria-pressed", "true");
+          }
+
+          const icon = escapeHtml(f.icon || "\uD83C\uDFAF");
+          const name = escapeHtml(f.name);
+          const label = alreadyAdded ? "\u2713 Added" : "+ Add";
+
+          btn.innerHTML =
+            `<span aria-hidden="true">${icon}</span>` +
+            `<span class="font-medium">${name}</span>` +
+            `<span data-remix-label class="text-xs opacity-70">${label}</span>`;
+
+          remixChips.appendChild(btn);
+        });
+      } else {
+        remixSection.classList.add("hidden");
+      }
+    }
+
     // Show modal + lock scroll
     modal.classList.remove("hidden");
     document.body.classList.add("overflow-hidden");
@@ -411,6 +472,10 @@
       track.removeEventListener("scroll", scrollHandler);
       scrollHandler = null;
     }
+
+    // Clean up remix chips
+    if (remixSection) remixSection.classList.add("hidden");
+    if (remixChips) remixChips.innerHTML = "";
 
     // Restore focus
     if (lastActive && typeof lastActive.focus === "function") {
